@@ -11,8 +11,8 @@ services:
             - "5000"
         restart: always
     auth-db:
-        image: mysql:latests
-        env-file: ./auth/postgres.env
+        image: mysql:latest
+        env_file: ./auth/postgres.env
         restart: always
     # frontend:
     #     build: ./front
