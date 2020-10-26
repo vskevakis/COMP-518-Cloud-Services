@@ -14,35 +14,35 @@ services:
         ports:
             - "5000"
         restart: always
-    frontend:
-        build: ./front
-        image: front:latest
-        ports:
-            - "3000"
-        environment:
-            - NODE_ENV=development
-            - REACT_APP_SERVICE_URL=http://localhost:80
-            - CHOKIDAR_USEPOLLING=true
-        depends_on:
-            - auth
-        restart: always
-    backend:
-        build: ./backend
-        image: backend:latest
-        ports:
-            - "5001"
-        depends_on:
-            - backend-db
-        restart: always
-    backend-db:
-        image: redis:latest
-        restart: always
-    nginx:
-        build: ./nginx
-        image: nginx:latest
-        ports:
-            - 80:80
-        depends_on:
-            - auth
-            - front
-            - back
+    # frontend:
+    #     build: ./front
+    #     image: front:latest
+    #     ports:
+    #         - "3000"
+    #     environment:
+    #         - NODE_ENV=development
+    #         - REACT_APP_SERVICE_URL=http://localhost:80
+    #         - CHOKIDAR_USEPOLLING=true
+    #     depends_on:
+    #         - auth
+    #     restart: always
+    # backend:
+    #     build: ./backend
+    #     image: backend:latest
+    #     ports:
+    #         - "5001"
+    #     depends_on:
+    #         - backend-db
+    #     restart: always
+    # backend-db:
+    #     image: redis:latest
+    #     restart: always
+    # nginx:
+    #     build: ./nginx
+    #     image: nginx:latest
+    #     ports:
+    #         - 80:80
+    #     depends_on:
+    #         - auth
+    #         - front
+    #         - back
