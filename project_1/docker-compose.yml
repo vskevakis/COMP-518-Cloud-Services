@@ -1,10 +1,6 @@
 version: "3.4"
 
 services: 
-    auth-db:
-        image: mysql:latests
-        env-file: ./auth/postgres.env
-        restart: always
     auth:
         build: ./auth
         image: auth:latest
@@ -13,6 +9,10 @@ services:
             - auth-db
         ports:
             - "5000"
+        restart: always
+    auth-db:
+        image: mysql:latests
+        env-file: ./auth/postgres.env
         restart: always
     # frontend:
     #     build: ./front
