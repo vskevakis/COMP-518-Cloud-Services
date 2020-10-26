@@ -7,7 +7,7 @@ import enum
 
 from flask import Flask, jsonify, Response, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Enum, Boolean, expression
+from sqlalchemy import Enum, Boolean
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Initialize Application
@@ -48,7 +48,7 @@ class User(db.Model):
     password = db.Column(db.String(255))
     email = db.Column(db.String(255), unique=True, nullable=False)
     role = db.Column(db.Enum(RoleEnum))
-    is_confirmed = db.Column(db.Boolean, server_default=expression.false(), nullable=False)
+    is_confirmed = db.Column(db.Boolean, server_default=False, nullable=False)
 
     def json(self):
         return {"id": self.user_id, "username": self.username, "email": self.email, "password": self.password, "user_role": self.user_role}
