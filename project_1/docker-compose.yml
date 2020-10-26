@@ -9,11 +9,11 @@ services:
             - auth-db
         ports:
             - "5000"
-        restart: always
+        # restart: always
     auth-db:
         image: postgres:latest
         env_file: ./auth/postgres.env
-        restart: always
+        # restart: always
     # frontend:
     #     build: ./front
     #     image: front:latest
@@ -37,12 +37,10 @@ services:
     # backend-db:
     #     image: redis:latest
     #     restart: always
-    # nginx:
-    #     build: ./nginx
-    #     image: nginx:latest
-    #     ports:
-    #         - 80:80
-    #     depends_on:
-    #         - auth
-    #         - front
-    #         - back
+    nginx:
+        build: ./nginx
+        image: nginx:latest
+        ports:
+            - 80:80
+        depends_on:
+            - auth
