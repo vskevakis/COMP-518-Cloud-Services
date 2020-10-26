@@ -3,7 +3,7 @@ version: "3.4"
 services: 
     auth-db:
         image: mysql:latests
-        env-file: /auth/postgres.env
+        env-file: ./auth/postgres.env
         restart: always
     auth:
         build: ./auth
