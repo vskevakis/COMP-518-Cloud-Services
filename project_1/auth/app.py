@@ -7,7 +7,7 @@ import enum
 
 from flask import Flask, jsonify, Response, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Enum, Boolean
+# from sqlalchemy import Enum
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Initialize Application
@@ -33,25 +33,38 @@ jwt_secret_key = "secret"
 db = SQLAlchemy(app)
 
 # User Roles Enumarator
+
+
 class RoleEnum(enum.Enum):
     admin = 'Admin'
     cinemaowner = 'CinemaOwner'
     user = 'User'
 
 # Database User Model
+
+
 class User(db.Model):
     __tablename__ = "user"
-    id = db.Column(db.Integer,unique=True, primary_key=True)
+    user_id = db.Column(db.Integer, unique=True, primary_key=True)
     name = db.Column(db.String(255))
     surname = db.Column(db.String(255))
     username = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255))
     email = db.Column(db.String(255), unique=True, nullable=False)
     role = db.Column(db.Enum(RoleEnum))
-    is_confirmed = db.Column(db.Boolean, server_default=False, nullable=False)
+    is_confirmed = db.Column(db.Boolean, default=False, nullable=False)
 
     def json(self):
-        return {"id": self.user_id, "username": self.username, "email": self.email, "password": self.password, "user_role": self.user_role}
+        return {
+            "id": self.user_id,
+            "name": self.name,
+            "surname": self.surname,
+            "username": self.username,
+            "password": self.password,
+            "email": self.email,
+            "role": self.role,
+            "is_confirmed": self.is_confirmed
+        }
 
 
 # Create Database Table and Model
@@ -60,10 +73,13 @@ db.session.commit()
 
 # Initializing an admin user
 admin_user = User(
-    username = 'admin',
-    email = 'admin@admin',
-    password = generate_password_hash('admin', method='sha256'),
-    user_role = RoleEnum.admin
+    name='Admin',
+    surname='Admin',
+    username='admin',
+    email='admin@admin',
+    password=generate_password_hash('admin', method='sha256'),
+    role=RoleEnum.admin,
+    is_confirmed=True
 )
 
 # If Admin User is created on our db, we create one
@@ -108,24 +124,28 @@ def register():
             error = 'A User with the same email already exists'
             return Response(error, status=400)
         user = User(
-            name = name,
-            surname = surname,
-            username = username,
-            email = email,
-            password = generate_password_hash(password, method='sha256'),
-            role = role ,
-            is_confirmed = False
+            name=name,
+            surname=surname,
+            username=username,
+            email=email,
+            password=generate_password_hash(password, method='sha256'),
+            role=role,
+            is_confirmed=False
         )
 
-        # Adding the User to the DB 
+        # Adding the User to the DB
         db.session.add(user)
         db.session.commit()
-        
-        token = encodeAuthToken(user.username, user.role)
-        # return token
-        # REMEMBER TO REMOVE DECODE FROM HERE BEFORE PRODUCTION
-        dec = decodeAuthToken(token)
-        return Response("User created with token"+str(dec), status=200)
+        if (user.role == RoleEnum.admin):
+            token = encodeAuthToken(user.username, "admin")
+        elif(user.role == RoleEnum.cinemaowner):
+            token = encodeAuthToken(user.username, "cinemaowner")
+        else:
+            token = encodeAuthToken(user.username, "user")
+        return token
+    # Only for Debugging Reasons
+    # dec = decodeAuthToken(token)
+    # return Response("User created with role "+str(user_role), status=200)
 
 
 @app.route("/auth/login", methods=["POST"])
@@ -140,14 +160,19 @@ def login():
     if not check_password:
         error = 'Password is incorrect'
         return Response(error, status=400)
-    token = encodeAuthToken(user.username, user.user_role)
+    if (user.role == RoleEnum.admin):
+        token = encodeAuthToken(user.username, "admin")
+    elif(user.role == RoleEnum.cinemaowner):
+        token = encodeAuthToken(user.username, "cinemaowner")
+    else:
+        token = encodeAuthToken(user.username, "user")
     return token
-    # REMEMBER TO REMOVE DECODE FROM HERE BEFORE PRODUCTION
+    # Only for Debugging Reasons
     # dec = decodeAuthToken(token)
     # return Response('User Authenticated with token ' + str(dec), status=200)
 
 
-@app.route("/auth/check_token", methods=["POST"])
+@app.route("/check_token", methods=["POST"])
 def check_token():
     token = request.json['token']
     dec = decodeAuthToken(token)
@@ -156,39 +181,67 @@ def check_token():
         return Response(error, status=400)
     response = {
         'username': dec['username'],
-        'user_role': dec['user_role'],
+        'role': dec['role'],
     }
     return jsonify(response)
+
+
+@app.route("/delete_user", methods=["POST"])
+def delete_user():
+    username = request.json['username']
+    user = db.session.query(User).filter_by(username=username).first()
+    if user.role != "admin":
+        error = "User [" + username + "] is admin and cannot be deleted"
+        return Response(error, status=400)
+    else:
+        db.session.delete(user)
+        db.session.commit()
+        return 'User Removed with Success'
+
+
+@app.route("/auth/accept_user", methods=["GET"])
+def accept_user():
+    username = request.json['username']
+    user = db.session.query(User).filter_by(username=username).first()
+    if user.is_confirmed:
+        error = "User [" + username + "] is already accepted"
+        return Response(error, status=400)
+    else:
+        user.is_confirmed = True
+        db.session.commit()
+    return 'User Accepted with Success'
 
 
 @app.route("/auth/change_role", methods=["POST"])
 def change_role():
     username = request.json['username']
-    user_role = request.json['user_role']
-    if user_role != "admin" and user_role != "official":
-        error = "This user role is not accepted: "+user_role
+    role = request.json['role']
+    if role != "admin" and role != "official":
+        error = "This user role is not accepted: "+role
         return Response(error, status=400)
     user = db.session.query(User).filter_by(username=username).first()
     if user is None:
         error = 'A User with that username does not exist'
         return Response(error, status=400)
-    if user.user_role == user_role:
+    if user.role == role:
         error = 'User already has this role'
         return Response(error, status=400)
-    user.user_role = user_role
+    user.role = role
     db.session.commit()
     # Generate New Token
-    token = encodeAuthToken(user.username, user.user_role)
+    token = encodeAuthToken(user.username, user.role)
     return token
 
 # JWT TOKEN
-def encodeAuthToken(username, user_role):
+
+
+def encodeAuthToken(username, role):
     try:
         payload = {
             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, minutes=60),
             'iat': datetime.datetime.utcnow(),
             'username': username,
-            'user_role': user_role
+            'role': role
         }
         token = jwt.encode(
             payload, jwt_secret_key, algorithm='HS256')
@@ -201,7 +254,7 @@ def encodeAuthToken(username, user_role):
 def decodeAuthToken(token):
     try:
         payload = jwt.decode(
-            token, jwt_secret_key, algorithms=['HS256'])
+            token, jwt_secret_key, algorithm='HS256')
         return payload
     except jwt.ExpiredSignatureError:
         return 'Signature expired. Login please'

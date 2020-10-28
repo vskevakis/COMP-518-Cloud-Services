@@ -14,18 +14,18 @@ services:
         image: postgres:latest
         env_file: ./auth/postgres.env
         # restart: always
-    # frontend:
-    #     build: ./front
-    #     image: front:latest
-    #     ports:
-    #         - "3000"
-    #     environment:
-    #         - NODE_ENV=development
-    #         - REACT_APP_SERVICE_URL=http://localhost:80
-    #         - CHOKIDAR_USEPOLLING=true
-    #     depends_on:
-    #         - auth
-    #     restart: always
+    front:
+        build: ./front
+        image: front:latest
+        ports:
+            - "3000"
+        environment:
+            - NODE_ENV=development
+            - REACT_APP_SERVICE_URL=http://localhost:80
+            - CHOKIDAR_USEPOLLING=true
+        depends_on:
+            - auth
+        # restart: always
     # backend:
     #     build: ./backend
     #     image: backend:latest
@@ -44,3 +44,4 @@ services:
             - 80:80
         depends_on:
             - auth
+            - front
