@@ -26,17 +26,19 @@ services:
         depends_on:
             - auth
         # restart: always
-    # backend:
-    #     build: ./backend
-    #     image: backend:latest
-    #     ports:
-    #         - "5001"
-    #     depends_on:
-    #         - backend-db
-    #     restart: always
-    # backend-db:
-    #     image: redis:latest
-    #     restart: always
+    back:
+        build: ./back
+        image: backend:latest
+        env_file: ./back/postgres.env
+        depends_on:
+            - back-db
+        ports:
+            - "5001"
+        # restart: always
+    back-db:
+        image: postgres:latest
+        env_file: ./back/postgres.env
+        # restart: always
     nginx:
         build: ./nginx
         image: nginx:latest
