@@ -7,6 +7,7 @@ import Login from "../pages/Login";
 import { Logout } from "../pages/Logout";
 
 import Home from "../pages/Home";
+import Movies from "../pages/Movies"
 import Admin from "../pages/Admin";
 
 // const NavRoute = ({ exact, path, component: Component }) => (
@@ -24,7 +25,7 @@ const Routes = () => (
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/logout" component={Logout} />
-        <PrivateRoute path="/home" component={Home} />
+        <PrivateRoute path="/home" component={Movies} />
         {/* <Route path="/admin" component={Admin} /> */}
     </Switch>
 );

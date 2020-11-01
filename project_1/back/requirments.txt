@@ -4,6 +4,7 @@ pydantic==1.7
 urllib3==1.25.11
 requests==2.24.0
 PyJWT==1.7.1
+urllib3==1.25.11 
 
 # production grade WSGI server
 gunicorn==20.0.4

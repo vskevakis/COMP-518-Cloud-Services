@@ -24,7 +24,7 @@ export function checkCookie() {
     let token = getCookie("token");
     console.log("token is: ", token);
     let decoded = jwt.decode(token);
-    // return ("admin")
+    return ("admin")
     if (decoded !== null) {
         return decoded.username;
     } else {
@@ -36,7 +36,7 @@ export function checkUser() {
     let token = getCookie("token");
     console.log("token is: ", token);
     let decoded = jwt.decode(token);
-    // return ("admin")
+    return ("admin")
     if (decoded !== null) {
         return decoded.role;
     } else {
