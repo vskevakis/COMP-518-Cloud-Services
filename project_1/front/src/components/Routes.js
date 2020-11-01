@@ -9,7 +9,7 @@ import { Logout } from "../pages/Logout";
 import Home from "../pages/Home";
 import Movies from "../pages/Movies"
 import Admin from "../pages/Admin";
-
+import CinemaOwner from "../pages/CinemaOwner";
 // const NavRoute = ({ exact, path, component: Component }) => (
 //     <Route exact={exact} path={path} render={(props) => (
 //         <div>
@@ -26,6 +26,7 @@ const Routes = () => (
         <Route exact path="/login" component={Login} />
         <Route exact path="/logout" component={Logout} />
         <PrivateRoute path="/home" component={Movies} />
+        <PrivateRoute path="/owner" component={CinemaOwner} />
         {/* <Route path="/admin" component={Admin} /> */}
     </Switch>
 );

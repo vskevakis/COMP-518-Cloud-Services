@@ -5,6 +5,7 @@ body {
     sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(19, 18, 18) !important;
 }
 
 code {
@@ -37,3 +38,10 @@ code {
   margin: 1% !important;
 }
 
+/* .search_text {
+  background: transparent;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  color: white;
+} */

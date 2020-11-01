@@ -20,10 +20,11 @@
   position: relative;
   width: 100%;
   display: inline-grid;
-  justify-items: center;
-}
+  justify-items: center;  
+  }
 
 .moviePoster {
+  border-radius: 15px;
   display: block;
   height: auto;
   width: 100%;
@@ -43,9 +44,11 @@
   flex-wrap: wrap;
   /* justify-content: center; */
   align-items: flex-end;
+  border-radius: 15px;
 }
 .container:hover .movieDetails {
-  opacity: 0.8;
+  opacity: 0.9;
+
 }
 
 .litext {
@@ -70,8 +73,65 @@ ul {
 }
 
 .search_form {
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
+
+.text_area {
+  background: transparent;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  color: white;
+}
+
+.styled_table {
+  position: relative;
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 200px;
+  width: 80vw;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  background-color: slategrey;
+}
+
+.styled_table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+}
+
+.styled_table th,
+.styled_table td {
+  padding: 12px 15px;
+}
+
+.styled_table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled_table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.styled_table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+.styled_table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+}
+
+.edit_container {
+  position: absolute;
   display: flex;
-  justify-content: center;
-  padding-top: 2%;
-  padding-bottom: 2%;
+}
+
+.edit_table {
+  position: relative !important;
+  justify-content: center !important;
+  justify-items: center !important;
 }

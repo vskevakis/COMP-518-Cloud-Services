@@ -88,6 +88,22 @@ if user is None:
     db.session.add(admin_user)
     db.session.commit()
 
+# Initializing an cinema owner user
+cinema_owner = User(
+    name='Makis',
+    surname='Cinemakis',
+    username='attikon',
+    email='attikon@cinema',
+    password=generate_password_hash('attikon', method='sha256'),
+    role=RoleEnum.cinemaowner,
+    is_confirmed=True
+)
+
+# If Admin User is created on our db, we create one
+user = db.session.query(User).filter_by(username=cinema_owner.username).first()
+if user is None:
+    db.session.add(cinema_owner)
+    db.session.commit()
 
 #------------Authentication API-----------#
 

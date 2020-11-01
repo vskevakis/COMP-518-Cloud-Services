@@ -210,5 +210,36 @@ def search_movies():
     return jsonify(movies_list)
 
 
+@app.route("/back/search_cinema_movies", methods=["POST"])
+def search_movies():
+    search_query = request.json['search']
+    cinema = request.json['cinema']
+    search_query = str("%"+search_query+"%")
+    movies = db.session.query(Movie).filter_by(cinema=cinema)
+    movies = movies.filter(or_(Movie.title.ilike(search_query),  Movie.category.ilike(
+        search_query)))
+    try:
+        search_date = request.json['date']
+        date = datetime.datetime.strptime(
+            search_date, '%a, %-d %b %Y ')
+        movies = movies.filter_by(start_date <= date)
+    except:
+        pass
+
+    movies = movies.order_by(Movie.title.asc()).all()
+    movies_list = []
+    for movie in movies:
+        # if movie.start_date >= date and movie.end_date <= date:
+        movies_list.append({'movie_id': movie.movie_id,
+                            'title': movie.title,
+                            'category': movie.category,
+                            'start_date': movie.start_date,
+                            'end_date': movie.end_date,
+                            'cinema_name': movie.cinema_name,
+                            'poster_path': movie.poster_path,
+                            })
+    return jsonify(movies_list)
+
+
 if __name__ == "__main__":
     app.run(debug=False)
