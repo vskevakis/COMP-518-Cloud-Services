@@ -3,13 +3,16 @@ import { Redirect } from "react-router-dom";
 import { Form, FormControl, Button, Col, Row, Container } from "react-bootstrap";
 import axios from "axios";
 import styles from "../styles/movies.module.css";
-import DatePicker from "../components/Datepicker";
+// import DatePicker from "../components/Datepicker";
 import moment from "moment";
 
 import { checkCookie, checkUser, setCookie } from "../components/Cookies";
 import { Movie } from "../components/Movie";
 import { SearchMovie } from "../components/SearchMovie";
 import EditMovieModal from "../components/EditMovieModal";
+import DeleteMovieModal from "../components/DeleteMovieModal";
+import AddMovieModal from "../components/AddMovieModal";
+
 
 
 const url = process.env.REACT_APP_SERVICE_URL;
@@ -22,7 +25,10 @@ class CinemaOwner extends Component {
             cinema: checkCookie(),
             date: moment(),
             modalShow: false,
+            modal2Show: false,
+            modal2Show: false,
             edit_movie: "",
+            deleteMovie: false,
             // setDate: moment(),
             // username: checkCookie(),
             // role: checkUser(),
@@ -32,40 +38,6 @@ class CinemaOwner extends Component {
         // this.setState = this.setState()
         // this.handleInputChange = this.handleInputChange.bind(this);
     }
-
-
-    // getMovies = () => {
-    //     axios.get(url + `/back/get_movies`)
-    //         .then(res => {
-    //             const movies_list = res.data;
-    //             this.setState({ movies_list: movies_list });
-    //             console.log("Movies fetched");
-    //             console.log(res.data);
-    //         },
-    //             err => {
-    //                 console.log("Movies API Call ERROR");
-    //                 // this.setState({
-    //                 //     movies_list: [{
-    //                 //         "category": "Horror",
-    //                 //         "cinema_name": "Attikon",
-    //                 //         "end_date": "Fri, 25 Sep 2015 00:00:00 GMT",
-    //                 //         "movie_id": 34,
-    //                 //         "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/7Eb1JWK0Cb0rbfsYjwfc9g0PbQH.jpg",
-    //                 //         "start_date": "Sun, 20 Sep 2015 00:00:00 GMT",
-    //                 //         "title": "Scary Movie 2"
-    //                 //     },
-    //                 //     {
-    //                 //         "category": "Horror",
-    //                 //         "cinema_name": "Attikon",
-    //                 //         "end_date": "Fri, 25 Sep 2015 00:00:00 GMT",
-    //                 //         "movie_id": 34,
-    //                 //         "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/7Eb1JWK0Cb0rbfsYjwfc9g0PbQH.jpg",
-    //                 //         "start_date": "Sun, 20 Sep 2015 00:00:00 GMT",
-    //                 //         "title": "Scary Movie 2",
-    //                 //     }]
-    //                 // });
-    //             });
-    // }
 
     searchMovies = () => {
         const search_query = {
@@ -117,34 +89,27 @@ class CinemaOwner extends Component {
         this.searchMovies();
     }
 
-    handleInputChange = (event) => {
-        this.setState({
-            query: event.target.value
-        }, () => {
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.modalShow !== this.state.modalShow) {
             this.searchMovies();
-        })
+        }
+        if (prevState.modal2Show !== this.state.modal2Show) {
+            this.searchMovies();
+        }
+        if (prevState.modal3Show !== this.state.modal3Show) {
+            this.searchMovies();
+        }
     }
-
-
-    editMovie = async (event) => {
-        event.preventDefault();
-        // const [modalShow, setModalShow] = React.useState(false);
-        this.setState({ modalShow: true });
-        <EditMovieModal
-            show={this.state.modalShow}
-            onHide={() => this.setState({ modalShow: false })}
-        />
-        console.log("edit movie");
-    };
-
 
     render() {
         return (
             <div className={styles.mycont}>
                 <div>
-                    <form class={styles.search_form} inline>
+                    <form class={styles.owner_search_form} inline>
                         <input class={styles.text_area} onChange={this.handleInputChange} type="text" placeholder="Search" />
-                        <DatePicker class="date_picker" date={this.state.date} onChange={e => this.setState({ date: e.target.value })} />
+                        <input type="date"></input>
+                        {/* <DatePicker class="date_picker" date={this.state.date} onChange={e => this.setState({ date: e.target.value })} /> */}
+
                     </form>
                 </div>
                 <div>
@@ -155,7 +120,7 @@ class CinemaOwner extends Component {
                                 <th>Category</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
-                                <th> </th>
+                                <th colspan="2"><button class={styles.add_button} onClick={e => this.setState({ modal2Show: true })} class="btn"><i class="fa fa-plus-circle"></i> Add Movie</button></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -166,7 +131,8 @@ class CinemaOwner extends Component {
                                         <td>{movie.category}</td>
                                         <td>{movie.start_date}</td>
                                         <td>{movie.end_date}</td>
-                                        <td><Button onClick={e => this.setState({ modalShow: true, edit_movie: movie })}>Edit</Button></td>
+                                        <td><button onClick={e => this.setState({ modalShow: true, edit_movie: movie })} class="btn"><i class="fa fa-edit"></i> Edit</button></td>
+                                        <td><button onClick={e => this.setState({ modal3Show: true, edit_movie: movie })} class="btn"><i class="fa fa-trash"></i> Delete</button></td>
                                     </tr>
                                 ))
                             }
@@ -175,11 +141,20 @@ class CinemaOwner extends Component {
                 </div>
                 {
                     this.state.movies_list.length == 0 &&
-                    <h3 className={styles.movie}> Sorry, no movies found</h3>
+                    <h3 className={styles.movie}> No movies found</h3>
                 }
                 <EditMovieModal
                     show={this.state.modalShow}
                     onHide={() => this.setState({ modalShow: false })}
+                    movie={this.state.edit_movie}
+                />
+                <AddMovieModal
+                    show={this.state.modal2Show}
+                    onHide={() => this.setState({ modal2Show: false })}
+                />
+                <DeleteMovieModal
+                    show={this.state.modal3Show}
+                    onHide={() => this.setState({ modal3Show: false })}
                     movie={this.state.edit_movie}
                 />
             </div >

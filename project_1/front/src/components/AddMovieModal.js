@@ -2,26 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Form, FormControl, Button, Col, Row, Container } from "react-bootstrap";
 import styles from "../styles/movies.module.css";
 import axios from "axios";
+import { checkCookie, checkUser } from './Cookies';
 
 const url = process.env.REACT_APP_SERVICE_URL;
 
 
-export default function EditMovieModal(props) {
+export default function AddMovieModal(props) {
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
     const [start_date, setStartDate] = useState("");
     const [end_date, setEndDate] = useState("");
 
-    const updateMovie = async (title, category, start_date, end_date) => {
+    const addMovie = async (title, category, start_date, end_date) => {
         const movie_data = {
-            movie_id: props.movie.movie_id,
+            cinema_name: checkCookie(),
+            user_role: checkUser(),
             title: title.value,
             category: category.value,
             start_date: start_date.value,
             end_date: end_date.value
         };
 
-        await axios.post(url + "/back/edit_movie", movie_data).then(
+        await axios.post(url + "/back/add_movie", movie_data).then(
             (response) => {
                 console.log("Movie Updated")
             },
@@ -32,6 +34,8 @@ export default function EditMovieModal(props) {
         props.onHide();
     };
 
+
+    console.log("Add Movie");
     return (
         <Modal
             {...props}
@@ -41,7 +45,7 @@ export default function EditMovieModal(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Edit Movie "{props.movie.title}"
+                    Add Movie
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body >
@@ -56,18 +60,20 @@ export default function EditMovieModal(props) {
                     </thead>
                     <tbody>
                         <tr >
-                            <td><input placeholder={props.movie.title} ref={title => (setTitle(title))} type="text"></input></td>
-                            <td><input style={{ width: "100%" }} placeholder={props.movie.category} type="text" ref={category => (setCategory(category))} ></input></td>
-                            <td><input placeholder={props.movie.start_date} type="date" ref={start_date => (setStartDate(start_date))}></input></td>
-                            <td><input placeholder={props.movie.end_date} type="date" ref={end_date => (setEndDate(end_date))}></input></td>
+                            <td><input placeholder="Title" ref={title => (setTitle(title))} type="text" required></input></td>
+                            <td><input style={{ width: "100%" }} placeholder="Category" type="text" ref={category => (setCategory(category))} required></input></td>
+                            <td><input placeholder="Start Date" type="date" ref={start_date => (setStartDate(start_date))} required></input></td>
+                            <td><input placeholder="End Date" type="date" ref={end_date => (setEndDate(end_date))} required></input ></td>
                         </tr>
                     </tbody>
                 </table>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={() => updateMovie(title, category, start_date, end_date)}>Save</Button>
+                <Button onClick={() => addMovie(title, category, start_date, end_date)}>Add</Button>
                 <Button onClick={props.onHide}>Close</Button>
             </Modal.Footer>
         </Modal >
+
     );
+
 }

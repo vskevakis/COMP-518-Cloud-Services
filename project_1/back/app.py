@@ -93,10 +93,14 @@ def add_movie():
     end_date = request.json['end_date']
     category = request.json['category']
     cinema_name = request.json['cinema_name']
+    user_role = request.json['user_role']
 
-    # Checking Username and Email to be unique and Acceptable before procceding
+    # if user_role is not ("CinemaOwner" or "Admin"):  # Need to remove Admin From Here
+    #     error = 'You do not have authorization to add movie'
+    #     return Response(error, status=400)
 
-    movie = db.session.query(Movie).filter_by(title=title).first()
+    movie = db.session.query(Movie).filter_by(
+        title=title).filter_by(cinema_name=cinema_name).first()
     if movie is not None:
         error = 'A movie with the same title already exists'
         return Response(error, status=400)
@@ -125,9 +129,9 @@ def add_movie():
 
 @app.route("/back/delete_movie", methods=["POST"])
 def delete_movie():
-    title = request.json['title']
-    movie = db.session.query(Movie).filter_by(title=title).first()
-    if title is None:
+    movie_id = request.json['movie_id']
+    movie = db.session.query(Movie).filter_by(movie_id=movie_id).first()
+    if movie is None:
         error = 'A movie with that title does not exist'
         return Response(error, status=400)
     else:
@@ -138,29 +142,37 @@ def delete_movie():
 
 @app.route("/back/edit_movie", methods=["POST"])
 def edit_movie():
-    title = request.json['title']
-    movie = db.session.query(Movie).filter_by(title=title).first()
-    if title is None:
-        error = 'A movie with that title does not exist'
+    id = request.json['movie_id']
+    movie = db.session.query(Movie).filter_by(movie_id=int(id)).first()
+    if id is None:
+        error = 'A movie with that id does not exist'
         return Response(error, status=400)
     else:
         try:
-            movie.title = request.json['new_title']
-            movie.poster_path = get_poster(movie.title)
+            title = request.json['title']
+            if title:
+                movie.title = title
+                movie.poster_path = get_poster(movie.title)
         except:
             movie.title = movie.title
         try:
-            movie.start_date = request.json['start_date']
+            start_date = request.json['start_date']
+            if start_date:
+                movie.start_date = start_date
         except:
             movie.start_date = movie.start_date
         try:
-            movie.end_date = request.json['end_date']
+            end_date = request.json['end_date']
+            if end_date:
+                movie.end_date = end_date
         except:
             movie.end_date = movie.end_date
         try:
-            movie.cinema_name = request.json['cinema_name']
+            category = request.json['category']
+            if category:
+                movie.category = category
         except:
-            movie.cinema_name = movie.cinema_name
+            movie.category = movie.category
         db.session.commit()
         return Response('Movie ' + str(movie.title) + ' edited with success', status=200)
 
@@ -211,11 +223,11 @@ def search_movies():
 
 
 @app.route("/back/search_cinema_movies", methods=["POST"])
-def search_movies():
+def search_cinema_movies():
     search_query = request.json['search']
     cinema = request.json['cinema']
     search_query = str("%"+search_query+"%")
-    movies = db.session.query(Movie).filter_by(cinema=cinema)
+    movies = db.session.query(Movie).filter_by(cinema_name=cinema)
     movies = movies.filter(or_(Movie.title.ilike(search_query),  Movie.category.ilike(
         search_query)))
     try:

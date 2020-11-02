@@ -154,7 +154,7 @@ class Movies extends Component {
                 <div>
                     <form class={styles.search_form} inline>
                         <input class={styles.text_area} onChange={this.handleInputChange} type="text" placeholder="Search" />
-                        <DatePicker class="date_picker" date={this.state.date} onChange={e => this.setState({ date: e.target.value })} />
+                        {/* <DatePicker class="date_picker" date={this.state.date} onChange={e => this.setState({ date: e.target.value })} /> */}
                     </form>
                 </div>
                 <div>

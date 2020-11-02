@@ -135,3 +135,19 @@ ul {
   justify-content: center !important;
   justify-items: center !important;
 }
+
+.owner_search_form {
+  padding-top: 5%;
+  padding-bottom: 5%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.add_button {
+  display: flex;
+  color: white;
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
