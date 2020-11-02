@@ -91,10 +91,10 @@ export default class HeaderNav extends React.Component {
                     />{' '}
                     </Navbar.Brand>
                     <Nav className="mr-auto">
-                        <Nav.Link href="/home">Home</Nav.Link>
-                        <Nav.Link href="#features">Now Playing</Nav.Link>
-                        <Nav.Link href="#pricing">Cinemas</Nav.Link>
-                        <Nav.Link href="#pricing">Platform Users</Nav.Link>
+                        <Nav.Link href="/movies">Home</Nav.Link>
+                        <Nav.Link href="/movies">Now Playing</Nav.Link>
+                        <Nav.Link href="/owner">Cinema Owner</Nav.Link>
+                        <Nav.Link href="/admin">Admin User</Nav.Link>
                     </Nav>
                     {/* <Form inline>
                             <FormControl type="text" placeholder="Search" className="mr-sm-2" />

@@ -8,7 +8,6 @@ from flask import Flask, jsonify, Response, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_, func, and_, cast, DATE
 # from sqlalchemy import Enum
-from werkzeug.security import generate_password_hash, check_password_hash
 
 
 # Initialize Application
@@ -95,7 +94,7 @@ def add_movie():
     cinema_name = request.json['cinema_name']
     user_role = request.json['user_role']
 
-    # if user_role is not ("CinemaOwner" or "Admin"):  # Need to remove Admin From Here
+    # if user_role is not ("cinemaowner" or "admin"):  # Need to remove Admin From Here
     #     error = 'You do not have authorization to add movie'
     #     return Response(error, status=400)
 

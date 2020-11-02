@@ -76,7 +76,7 @@ class Login extends Component {
 
     render() {
         if (this.state.isAuthenticated) {
-            return <Redirect to="/home" />;
+            return <Redirect to="/movies" />;
         }
         return (
             <div style={this.state.bgStyle} className="full-page-div bg">

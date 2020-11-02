@@ -24,9 +24,12 @@ class Register extends Component {
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
             },
+            name: "",
+            surname: "",
             username: "",
             password: "",
             email: "",
+            user_role: "",
             isAuthenticated: checkCookie(),
         };
         this.handleChange = this.handleChange.bind(this);
@@ -58,6 +61,9 @@ class Register extends Component {
         event.preventDefault();
 
         const user_data = {
+            name: this.state.name,
+            surname: this.state.surname,
+            user_role: this.state.user_role,
             username: this.state.username,
             email: this.state.email,
             password: this.state.password,
@@ -73,12 +79,12 @@ class Register extends Component {
                 alert("Registration Unsuccesful. Please check your credentials.");
             }
         );
-        this.setState({ username: "", email: "", password: "" });
+        this.setState({ username: "", email: "", password: "", name: "", surname: "", user_role: "" });
     };
 
     render() {
         if (this.state.isAuthenticated) {
-            return <Redirect to="/dashboard" />;
+            return <Redirect to="/movies" />;
         }
         return (
             <div style={this.state.bgStyle} className="full-page-div bg">
@@ -147,9 +153,9 @@ class Register extends Component {
                                 <Form.Group controlId="exampleForm.ControlSelect1">
                                     <Form.Label>Select Role</Form.Label>
                                     <Form.Control as="select">
-                                        <option>User</option>
-                                        <option>Cinema Owner</option>
-                                        <option>Admin</option>
+                                        <option onChange={this.handleChange}>User</option>
+                                        <option onChange={this.handleChange}>Cinema Owner</option>
+                                        <option onChange={this.handleChange}>Admin</option>
                                     </Form.Control>
                                 </Form.Group>
                                 <Row className="justify-content-md-center">

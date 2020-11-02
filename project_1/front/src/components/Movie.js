@@ -3,7 +3,7 @@ import * as React from "react";
 
 export function Movie(props) {
     const formatter = new Intl.DateTimeFormat("en-GB", {
-        year: "numeric",
+        weekday: "short",
         month: "short",
         day: "2-digit"
     });

@@ -147,6 +147,7 @@ ul {
 
 .add_button {
   display: flex;
+  align-items: center;
   color: white;
   padding-top: 5%;
   padding-bottom: 5%;

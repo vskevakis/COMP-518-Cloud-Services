@@ -25,9 +25,9 @@ const Routes = () => (
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/logout" component={Logout} />
-        <PrivateRoute path="/home" component={Movies} />
+        <PrivateRoute path="/movies" component={Movies} />
         <PrivateRoute path="/owner" component={CinemaOwner} />
-        {/* <Route path="/admin" component={Admin} /> */}
+        <PrivateRoute path="/admin" component={Admin} />
     </Switch>
 );
 

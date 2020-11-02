@@ -7,6 +7,7 @@ import enum
 
 from flask import Flask, jsonify, Response, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_, func, and_, cast, DATE
 # from sqlalchemy import Enum
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -45,7 +46,8 @@ class RoleEnum(enum.Enum):
 
 class User(db.Model):
     __tablename__ = "user"
-    user_id = db.Column(db.Integer, unique=True, primary_key=True)
+    user_id = db.Column(db.Integer, unique=True,
+                        primary_key=True, nullable=False, autoincrement=True)
     name = db.Column(db.String(255))
     surname = db.Column(db.String(255))
     username = db.Column(db.String(255), unique=True, nullable=False)
@@ -116,9 +118,9 @@ def register():
     password = request.json['password']
     email = request.json['email']
 
-    if request.json['role'] == 'admin':
+    if request.json['user_role'] == 'Admin':
         role = RoleEnum.admin
-    elif request.json['role'] == 'cinemaowner':
+    elif request.json['user_role'] == 'Cinema Owner':
         role = RoleEnum.cinemaowner
     else:
         role = RoleEnum.user
@@ -202,30 +204,58 @@ def check_token():
     return jsonify(response)
 
 
-@app.route("/delete_user", methods=["POST"])
+@app.route("/auth/delete_user", methods=["POST"])
 def delete_user():
-    username = request.json['username']
-    user = db.session.query(User).filter_by(username=username).first()
-    if user.role != "admin":
-        error = "User [" + username + "] is admin and cannot be deleted"
-        return Response(error, status=400)
+    user_id = request.json['user_id']
+    role = request.json['user_role']
+    if role != "admin":
+        error = "You don\'t have the authorization to delete users"
+        return Response(error, status=301)
+    user = db.session.query(User).filter_by(user_id=user_id).first()
+    if user.role == "admin":
+        error = "User [" + user.username + "] is admin and cannot be deleted"
+        return Response(error, status=302)
     else:
         db.session.delete(user)
         db.session.commit()
         return 'User Removed with Success'
 
 
-@app.route("/auth/accept_user", methods=["GET"])
+@app.route("/auth/accept_user", methods=["POST"])
 def accept_user():
-    username = request.json['username']
-    user = db.session.query(User).filter_by(username=username).first()
+    user_id = request.json['user_id']
+    role = request.json['user_role']
+    if role != "admin":
+        error = "You don\'t have the authorization to accept users"
+        return Response(error, status=301)
+    user = db.session.query(User).filter_by(user_id=user_id).first()
     if user.is_confirmed:
-        error = "User [" + username + "] is already accepted"
-        return Response(error, status=400)
+        error = "User [" + user.username + "] is already accepted"
+        return Response(error, status=302)
     else:
         user.is_confirmed = True
         db.session.commit()
     return 'User Accepted with Success'
+
+
+@app.route("/auth/get_users", methods=["POST"])
+def get_users():
+    search_query = request.json['search']
+    search_query = str("%"+search_query+"%")
+    users = db.session.query(User).filter(or_(User.username.ilike(search_query), User.name.ilike(
+        search_query), User.surname.ilike(search_query), User.email.ilike(search_query))).order_by(User.role.asc()).order_by(User.surname).all()
+    users_list = []
+    for user in users:
+        users_list.append({
+            'user_id': user.user_id,
+            'role': str(user.role.value),
+            'surname': user.surname,
+            'name': user.name,
+            'username': user.username,
+            'email': user.email,
+            'is_confirmed': user.is_confirmed
+        })
+    return jsonify(users_list)
 
 
 @app.route("/auth/change_role", methods=["POST"])

@@ -26,18 +26,20 @@ class CinemaOwner extends Component {
             date: moment(),
             modalShow: false,
             modal2Show: false,
-            modal2Show: false,
+            modal3Show: false,
             edit_movie: "",
             deleteMovie: false,
-            // setDate: moment(),
-            // username: checkCookie(),
-            // role: checkUser(),
-            // isAuthenticated: checkCookie(),
             movies_list: []
         };
         // this.setState = this.setState()
         // this.handleInputChange = this.handleInputChange.bind(this);
     }
+    formatter = new Intl.DateTimeFormat("en-GB", {
+        weekday: "short",
+        year: "numeric",
+        month: "short",
+        day: "2-digit"
+    });
 
     searchMovies = () => {
         const search_query = {
@@ -85,6 +87,14 @@ class CinemaOwner extends Component {
                 });
     }
 
+    handleInputChange = (event) => {
+        this.setState({
+            query: event.target.value
+        }, () => {
+            this.searchMovies();
+        })
+    }
+
     componentDidMount() {
         this.searchMovies();
     }
@@ -109,7 +119,6 @@ class CinemaOwner extends Component {
                         <input class={styles.text_area} onChange={this.handleInputChange} type="text" placeholder="Search" />
                         <input type="date"></input>
                         {/* <DatePicker class="date_picker" date={this.state.date} onChange={e => this.setState({ date: e.target.value })} /> */}
-
                     </form>
                 </div>
                 <div>
@@ -129,8 +138,8 @@ class CinemaOwner extends Component {
                                     <tr>
                                         <td>{movie.title}</td>
                                         <td>{movie.category}</td>
-                                        <td>{movie.start_date}</td>
-                                        <td>{movie.end_date}</td>
+                                        <td>{this.formatter.format(Date.parse(movie.start_date))}</td>
+                                        <td>{this.formatter.format(Date.parse(movie.end_date))}</td>
                                         <td><button onClick={e => this.setState({ modalShow: true, edit_movie: movie })} class="btn"><i class="fa fa-edit"></i> Edit</button></td>
                                         <td><button onClick={e => this.setState({ modal3Show: true, edit_movie: movie })} class="btn"><i class="fa fa-trash"></i> Delete</button></td>
                                     </tr>
