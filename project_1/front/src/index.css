@@ -45,3 +45,39 @@ code {
   border-left: none;
   color: white;
 } */
+
+input[type="date"] {
+  background: none;
+  color: darkgray;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+  /* -webkit-align-items: center;
+  display: -webkit-inline-flex;
+  font-family: monospace;
+  overflow: hidden;
+  padding: 0;
+  -webkit-padding-start: 1px; */
+}
+/*
+input::-webkit-datetime-edit {
+ -webkit-flex: 1;
+ -webkit-user-modify: read-only !important;
+ display: inline-block;
+ min-width: 0;
+ overflow: hidden;
+}
+
+input::-webkit-datetime-edit-fields-wrapper {
+ -webkit-user-modify: read-only !important;
+ display: inline-block;
+ padding: 1px 0;
+ white-space: pre;
+} */
+
+input[type=date]:required:invalid::-webkit-datetime-edit {
+  color: transparent;
+}
+input[type=date]:focus::-webkit-datetime-edit {
+  color: black !important;
+}

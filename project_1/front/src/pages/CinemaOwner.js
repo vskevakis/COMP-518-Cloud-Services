@@ -23,7 +23,7 @@ class CinemaOwner extends Component {
         this.state = {
             query: '',
             cinema: checkCookie(),
-            date: moment(),
+            date: moment().format('YYYY-MM-DD'),
             modalShow: false,
             modal2Show: false,
             modal3Show: false,
@@ -111,14 +111,21 @@ class CinemaOwner extends Component {
         }
     }
 
+    handleDateChange = (event) => {
+        this.setState({
+            date: event.target.value
+        }, () => {
+            this.searchMovies();
+        })
+    }
+
     render() {
         return (
             <div className={styles.mycont}>
                 <div>
                     <form class={styles.owner_search_form} inline>
                         <input class={styles.text_area} onChange={this.handleInputChange} type="text" placeholder="Search" />
-                        <input type="date"></input>
-                        {/* <DatePicker class="date_picker" date={this.state.date} onChange={e => this.setState({ date: e.target.value })} /> */}
+                        <input type="date" onChange={this.handleDateChange} value={this.state.date}></input>
                     </form>
                 </div>
                 <div>

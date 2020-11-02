@@ -18,7 +18,7 @@ class Movies extends Component {
         super();
         this.state = {
             query: '',
-            date: moment(),
+            date: moment().format('YYYY-MM-DD'),
             // setDate: moment(),
             // username: checkCookie(),
             // role: checkUser(),
@@ -65,17 +65,21 @@ class Movies extends Component {
 
     searchMovies = () => {
         const search_query = {
-            search: this.state.query
+            search: this.state.query,
+            date: this.state.date
         };
         axios.post(url + `/back/search_movies`, search_query)
             .then(res => {
                 console.log("Search Initialized");
+                console.log(search_query)
                 // console.log(res.data.movies_list);
                 const movies_list = res.data;
                 this.setState({ movies_list: movies_list });
             },
                 err => {
                     console.log("Movies API Call ERROR");
+                    console.log(search_query)
+
                     this.setState({
                         movies_list: [{
                             "category": "Action",
@@ -147,6 +151,14 @@ class Movies extends Component {
         })
     }
 
+    handleDateChange = (event) => {
+        this.setState({
+            date: event.target.value
+        }, () => {
+            this.searchMovies();
+        })
+    }
+
 
     render() {
         return (
@@ -154,7 +166,7 @@ class Movies extends Component {
                 <div>
                     <form class={styles.search_form} inline>
                         <input class={styles.text_area} onChange={this.handleInputChange} type="text" placeholder="Search" />
-                        {/* <DatePicker class="date_picker" date={this.state.date} onChange={e => this.setState({ date: e.target.value })} /> */}
+                        <input type="date" value={this.state.date} onChange={this.handleDateChange}></input>
                     </form>
                 </div>
                 <div>
