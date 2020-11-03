@@ -210,7 +210,7 @@ def search_movies():
             and_(Movie.start_date <= date, Movie.end_date >= date))
     except:
         pass
-    movies = movies.order_by(Movie.title.asc()).all()
+    movies = movies.order_by(Movie.title.asc()).limit(4).all()
     movies_list = []
     for movie in movies:
         # if movie.start_date >= date and movie.end_date <= date:

@@ -9,8 +9,7 @@ import moment from "moment";
 import { checkCookie, checkUser, setCookie, checkUserID } from "../components/Cookies";
 import { Movie } from "../components/Movie";
 import { SearchMovie } from "../components/SearchMovie";
-
-
+import InfiniteScroll from 'react-infinite-scroll-component';
 const url = process.env.REACT_APP_SERVICE_URL;
 
 class Movies extends Component {
@@ -26,8 +25,11 @@ class Movies extends Component {
             // role: checkUser(),
             // isAuthenticated: checkCookie(),
             movies_list: [],
+            chunk: [],
+            index: 0,
             fav_list: [],
-            favs_only: false
+            favs_only: false,
+            hasMore: true
         };
         // this.setState = this.setState()
         // this.handleInputChange = this.handleInputChange.bind(this);
@@ -123,8 +125,35 @@ class Movies extends Component {
                             "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
                             "start_date": "Fri, 23 Oct 2015 00:00:00 GMT",
                             "title": "The Godfather 3"
+                        }, {
+                            "category": "Action",
+                            "cinema_name": "Attikon",
+                            "end_date": "Fri, 20 Nov 2015 00:00:00 GMT",
+                            "movie_id": 4,
+                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
+                            "start_date": "Fri, 23 Oct 2015 00:00:00 GMT",
+                            "title": "Harry Potter 1"
+                        },
+                        {
+                            "category": "Action",
+                            "cinema_name": "Attikon",
+                            "end_date": "Fri, 20 Nov 2015 00:00:00 GMT",
+                            "movie_id": 5,
+                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg",
+                            "start_date": "Fri, 23 Oct 2015 00:00:00 GMT",
+                            "title": "Harry Potter 2"
+                        },
+                        {
+                            "category": "Crime",
+                            "cinema_name": "Attikon",
+                            "end_date": "Sun, 20 Nov 2016 00:00:00 GMT",
+                            "movie_id": 35,
+                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg",
+                            "start_date": "Sun, 23 Oct 2016 00:00:00 GMT",
+                            "title": "Rubber"
                         }]
                     });
+
                 });
 
     }
@@ -150,6 +179,7 @@ class Movies extends Component {
     }
 
 
+
     render() {
         return (
             <div className={styles.mycont}>
@@ -158,8 +188,8 @@ class Movies extends Component {
                         <input class={styles.text_area} onChange={this.handleInputChange} type="text" placeholder="Search" />
                         <input type="date" value={this.state.date} onChange={this.handleDateChange}></input>
                         <div>
-                            {this.state.favs_only && <button onClick={() => this.setState({ favs_only: !this.state.favs_only })} class={styles.checkbox}><i class="far fa-check-square"></i> Show All</button>}
-                            {!this.state.favs_only && <button onClick={() => this.setState({ favs_only: !this.state.favs_only })} class={styles.checkbox}><i class="far fa-square"></i> Show Favourites</button>}
+                            {this.state.favs_only && <button onClick={() => this.setState({ favs_only: !this.state.favs_only })} class={styles.checkbox}><i class="far fa-check-square"></i> Only Favourites</button>}
+                            {!this.state.favs_only && <button onClick={() => this.setState({ favs_only: !this.state.favs_only })} class={styles.checkbox}><i class="far fa-square"></i> Only Favourites</button>}
                         </div>
                     </div>
                 </div>

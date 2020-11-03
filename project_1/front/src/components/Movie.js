@@ -58,7 +58,7 @@ export function Movie(props) {
                                 </li>
                                 <li class={styles.movie_title}>{props.movies.title}</li>
                                 <li class={styles.cinema}>Cinema: {props.movies.cinema_name}</li>
-                                <li class={styles.date}> {formatter.format(Date.parse(props.movies.start_date))} to {formatter.format(Date.parse(props.movies.end_date))}</li>
+                                {/* <li class={styles.date}> {formatter.format(Date.parse(props.movies.start_date))} to {formatter.format(Date.parse(props.movies.end_date))}</li> */}
                             </ul>
                         </div>
                     </div>

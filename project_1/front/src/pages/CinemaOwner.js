@@ -82,6 +82,60 @@ class CinemaOwner extends Component {
                             "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg",
                             "start_date": "Sun, 23 Oct 2016 00:00:00 GMT",
                             "title": "Rubber"
+                        },
+                        {
+                            "category": "Action",
+                            "cinema_name": "Attikon",
+                            "end_date": "Fri, 20 Nov 2015 00:00:00 GMT",
+                            "movie_id": 5,
+                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg",
+                            "start_date": "Fri, 23 Oct 2015 00:00:00 GMT",
+                            "title": "Harry Potter 2"
+                        },
+                        {
+                            "category": "Crime",
+                            "cinema_name": "Attikon",
+                            "end_date": "Sun, 20 Nov 2016 00:00:00 GMT",
+                            "movie_id": 35,
+                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg",
+                            "start_date": "Sun, 23 Oct 2016 00:00:00 GMT",
+                            "title": "Rubber"
+                        },
+                        {
+                            "category": "Action",
+                            "cinema_name": "Attikon",
+                            "end_date": "Fri, 20 Nov 2015 00:00:00 GMT",
+                            "movie_id": 5,
+                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg",
+                            "start_date": "Fri, 23 Oct 2015 00:00:00 GMT",
+                            "title": "Harry Potter 2"
+                        },
+                        {
+                            "category": "Crime",
+                            "cinema_name": "Attikon",
+                            "end_date": "Sun, 20 Nov 2016 00:00:00 GMT",
+                            "movie_id": 35,
+                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg",
+                            "start_date": "Sun, 23 Oct 2016 00:00:00 GMT",
+                            "title": "Rubber"
+                        },
+                        {
+                            "category": "Action",
+                            "cinema_name": "Attikon",
+                            "end_date": "Fri, 20 Nov 2015 00:00:00 GMT",
+                            "movie_id": 5,
+                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg",
+                            "start_date": "Fri, 23 Oct 2015 00:00:00 GMT",
+                            "title": "Harry Potter 2"
+                        },
+                        {
+                            "category": "Crime",
+                            "cinema_name": "Attikon",
+                            "end_date": "Sun, 20 Nov 2016 00:00:00 GMT",
+                            "movie_id": 35,
+                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg",
+                            "start_date": "Sun, 23 Oct 2016 00:00:00 GMT",
+                            "title": "Rubber"
                         }]
                     });
                 });
