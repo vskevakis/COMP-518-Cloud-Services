@@ -23,9 +23,12 @@ class Home extends Component {
 
     render() {
         return (
-            <Container className="mycont">
-                <h1>This is home page</h1>
-            </Container>
+            <Container className="mycont" style={{ 'text-align': 'center' }}>
+                <h1 style={{ 'text-decoration': 'underline' }}>Welcome to theCinemaDB</h1>
+                <h3 style={{ 'text-align': 'center' }}>All users must be accepted by an admin in order to use this app. The following website is part of my project on Cloud Services course
+                at ECE Department of the Technical University of Crete.</h3>
+                <h5 style={{ 'text-align': 'center', 'color': 'gray', 'padding': '10%' }}>Feel free to use this for any non-commercial projects</h5>
+            </Container >
         );
     }
 }

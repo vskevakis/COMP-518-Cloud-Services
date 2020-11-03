@@ -200,12 +200,11 @@ def search_movies():
         search_query),  Movie.cinema_name.ilike(search_query)))
     try:
         search_date = request.json['date']
-        date = datetime.datetime.strptime(
-            search_date, '%a, %-d %b %Y ')
-        movies = movies.filter_by(start_date <= date)
+        date = datetime.datetime.strptime(search_date, '%Y-%m-%d')
+        movies = movies.filter(
+            and_(Movie.start_date <= date, Movie.end_date >= date))
     except:
         pass
-
     movies = movies.order_by(Movie.title.asc()).all()
     movies_list = []
     for movie in movies:

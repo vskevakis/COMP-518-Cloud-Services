@@ -155,11 +155,12 @@ def register():
         db.session.add(user)
         db.session.commit()
         if (user.role == RoleEnum.admin):
-            token = encodeAuthToken(user.username, "admin")
+            token = encodeAuthToken(user.username, "admin", user.is_confirmed)
         elif(user.role == RoleEnum.cinemaowner):
-            token = encodeAuthToken(user.username, "cinemaowner")
+            token = encodeAuthToken(
+                user.username, "cinemaowner", user.is_confirmed)
         else:
-            token = encodeAuthToken(user.username, "user")
+            token = encodeAuthToken(user.username, "user", user.is_confirmed)
         return token
     # Only for Debugging Reasons
     # dec = decodeAuthToken(token)
@@ -179,11 +180,12 @@ def login():
         error = 'Password is incorrect'
         return Response(error, status=400)
     if (user.role == RoleEnum.admin):
-        token = encodeAuthToken(user.username, "admin")
+        token = encodeAuthToken(user.username, "admin", user.is_confirmed)
     elif(user.role == RoleEnum.cinemaowner):
-        token = encodeAuthToken(user.username, "cinemaowner")
+        token = encodeAuthToken(
+            user.username, "cinemaowner", user.is_confirmed)
     else:
-        token = encodeAuthToken(user.username, "user")
+        token = encodeAuthToken(user.username, "user", user.is_confirmed)
     return token
     # Only for Debugging Reasons
     # dec = decodeAuthToken(token)
@@ -200,6 +202,7 @@ def check_token():
     response = {
         'username': dec['username'],
         'role': dec['role'],
+        'is_confirmed': dec['is_confirmed']
     }
     return jsonify(response)
 
@@ -275,19 +278,20 @@ def change_role():
     user.role = role
     db.session.commit()
     # Generate New Token
-    token = encodeAuthToken(user.username, user.role)
+    token = encodeAuthToken(user.username, user.role, user.is_confirmed)
     return token
 
 # JWT TOKEN
 
 
-def encodeAuthToken(username, role):
+def encodeAuthToken(username, role, is_confirmed):
     try:
         payload = {
             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, minutes=60),
             'iat': datetime.datetime.utcnow(),
             'username': username,
-            'role': role
+            'role': role,
+            'is_confirmed': is_confirmed
         }
         token = jwt.encode(
             payload, jwt_secret_key, algorithm='HS256')

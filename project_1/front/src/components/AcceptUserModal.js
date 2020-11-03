@@ -55,7 +55,7 @@ export default function AcceptUserModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body >
-                <h4> Are you sure you want to acccept user "{props.user.username}"" ?</h4>
+                <h4> Are you sure you want to accept user "{props.user.username}"" ?</h4>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={() => acceptUser()}>Accept</Button>

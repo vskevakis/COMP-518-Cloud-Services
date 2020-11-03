@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: rgb(19, 18, 18) !important;
+  
 }
 
 code {
@@ -30,8 +31,8 @@ code {
 }
 
 .mycont {
-  background: red !important;
-  z-index: 1 !important;
+  color: white;
+  padding-top: 10%;  
 }
 
 .logout-but {

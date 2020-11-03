@@ -42,5 +42,18 @@ export function checkUser() {
     } else {
         return null;
     }
-    // return ("RoleEnum.CinemaOwner")
+}
+
+export function checkConfirmed() {
+    let token = getCookie("token");
+    console.log("token is: ", token);
+    let decoded = jwt.decode(token);
+    return (true)
+    if (decoded !== null) {
+        console.log("IS Confirmed?");
+        console.log(decoded.is_confirmed);
+        return decoded.is_confirmed;
+    } else {
+        return null;
+    }
 }

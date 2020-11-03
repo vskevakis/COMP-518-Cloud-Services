@@ -19,6 +19,7 @@ class Movies extends Component {
         this.state = {
             query: '',
             date: moment().format('YYYY-MM-DD'),
+            update: false,
             // setDate: moment(),
             // username: checkCookie(),
             // role: checkUser(),
@@ -29,39 +30,6 @@ class Movies extends Component {
         // this.handleInputChange = this.handleInputChange.bind(this);
     }
 
-
-    // getMovies = () => {
-    //     axios.get(url + `/back/get_movies`)
-    //         .then(res => {
-    //             const movies_list = res.data;
-    //             this.setState({ movies_list: movies_list });
-    //             console.log("Movies fetched");
-    //             console.log(res.data);
-    //         },
-    //             err => {
-    //                 console.log("Movies API Call ERROR");
-    //                 // this.setState({
-    //                 //     movies_list: [{
-    //                 //         "category": "Horror",
-    //                 //         "cinema_name": "Attikon",
-    //                 //         "end_date": "Fri, 25 Sep 2015 00:00:00 GMT",
-    //                 //         "movie_id": 34,
-    //                 //         "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/7Eb1JWK0Cb0rbfsYjwfc9g0PbQH.jpg",
-    //                 //         "start_date": "Sun, 20 Sep 2015 00:00:00 GMT",
-    //                 //         "title": "Scary Movie 2"
-    //                 //     },
-    //                 //     {
-    //                 //         "category": "Horror",
-    //                 //         "cinema_name": "Attikon",
-    //                 //         "end_date": "Fri, 25 Sep 2015 00:00:00 GMT",
-    //                 //         "movie_id": 34,
-    //                 //         "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/7Eb1JWK0Cb0rbfsYjwfc9g0PbQH.jpg",
-    //                 //         "start_date": "Sun, 20 Sep 2015 00:00:00 GMT",
-    //                 //         "title": "Scary Movie 2",
-    //                 //     }]
-    //                 // });
-    //             });
-    // }
 
     searchMovies = () => {
         const search_query = {
@@ -174,6 +142,7 @@ class Movies extends Component {
                         this.state.movies_list.map((movie) => (
                             <Movie className={styles.movie}
                                 movies={movie}
+                                onFavUpdate={() => this.setState({ update: !this.state.update })}
                             />
                         ))
                     }

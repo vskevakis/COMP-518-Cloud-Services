@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import { checkCookie } from "./Cookies.js";
+import { checkConfirmed, checkCookie } from "./Cookies.js";
 import HeaderNav from './HeaderNav';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -10,7 +10,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         <Route
             {...rest}
             render={(props) =>
-                checkCookie() !== null ? (
+                (checkCookie() !== null && checkConfirmed()) ? (
                     <div>
                         <HeaderNav />
                         <Component {...props} />
@@ -19,7 +19,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
                         <div>
                             <HeaderNav />
                             <Component {...props} />
-                            {/* <Redirect to="/login" /> */}
+                            <Redirect to="/home" />
                         </div>
                     )
             }

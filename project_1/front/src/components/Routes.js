@@ -1,6 +1,8 @@
 import React, { Header } from "react";
 import { Link, Switch, Route } from "react-router-dom";
-import PrivateRoute from "./Helpers";
+import PrivateRoute from "./PrivateRoute";
+import OwnerRoute from "./OwnerRoute";
+import AdminRoute from "./AdminRoute";
 
 import Register from "../pages/Register";
 import Login from "../pages/Login";
@@ -25,9 +27,10 @@ const Routes = () => (
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/logout" component={Logout} />
+        <PrivateRoute path="/home" component={Home} />
         <PrivateRoute path="/movies" component={Movies} />
-        <PrivateRoute path="/owner" component={CinemaOwner} />
-        <PrivateRoute path="/admin" component={Admin} />
+        <OwnerRoute path="/owner" component={CinemaOwner} />
+        <AdminRoute path="/admin" component={Admin} />
     </Switch>
 );
 

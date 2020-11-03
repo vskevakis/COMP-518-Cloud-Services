@@ -70,6 +70,8 @@ class Register extends Component {
             isAuthenticated: false,
         };
 
+        console.log(user_data);
+
         await axios.post(url + "/auth/register", user_data).then(
             (response) => {
                 setCookie("token", response.data);
@@ -153,9 +155,9 @@ class Register extends Component {
                                 <Form.Group controlId="exampleForm.ControlSelect1">
                                     <Form.Label>Select Role</Form.Label>
                                     <Form.Control as="select">
-                                        <option onChange={this.handleChange}>User</option>
-                                        <option onChange={this.handleChange}>Cinema Owner</option>
-                                        <option onChange={this.handleChange}>Admin</option>
+                                        <option onClick={() => this.setState({ user_role: 'User' })}>User</option>
+                                        <option onClick={() => this.setState({ user_role: 'Cinema Owner' })}>Cinema Owner</option>
+                                        <option onClick={() => this.setState({ user_role: 'Admin' })}>Admin</option>
                                     </Form.Control>
                                 </Form.Group>
                                 <Row className="justify-content-md-center">
