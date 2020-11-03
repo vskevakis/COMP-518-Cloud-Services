@@ -29,15 +29,20 @@ services:
     back:
         build: ./back
         image: backend:latest
-        env_file: ./back/postgres.env
+        env_file: ./back/databases.env
         depends_on:
             - back-db
+            - fav-db
         ports:
             - "5001"
         # restart: always
     back-db:
         image: postgres:latest
-        env_file: ./back/postgres.env
+        env_file: ./back/databases.env
+        # restart: always
+    fav-db:
+        image: redis:latest
+        env_file: ./back/databases.env
         # restart: always
     nginx:
         build: ./nginx

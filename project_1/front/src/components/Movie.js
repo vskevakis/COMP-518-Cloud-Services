@@ -1,6 +1,6 @@
 import styles from "../styles/movies.module.css";
 import React, { useState, useEffect } from 'react';
-import { checkCookie } from "./Cookies";
+import { checkUserID } from "./Cookies";
 import axios from "axios";
 
 const url = process.env.REACT_APP_SERVICE_URL;
@@ -8,29 +8,60 @@ const url = process.env.REACT_APP_SERVICE_URL;
 
 export function Movie(props) {
     const [fav, setFav] = useState(false);
+    const [favList, setFavList] = useState(props.favs);
     const formatter = new Intl.DateTimeFormat("en-GB", {
         weekday: "short",
         month: "short",
         day: "2-digit"
     });
+    // console.log('Fav: ', props.favs.indexOf(props.movie.movie_id))
+
 
     const addFavourite = async (movie_id) => {
         const favourite_data = {
-            // movie_id: props.movie.movie_id,
-            user: checkCookie()
+            movie_id: movie_id,
+            user_id: checkUserID()
         };
 
-        await axios.post(url + "/back/add_favourite", favourite_data).then(
+        await axios.post(url + "/back/modify_fav", favourite_data).then(
             (response) => {
                 console.log("Favourites Updated")
+                // Updating cached fav list to avoid API Calls
+                if (response.data) {
+                    favList.splice(favList.indexOf(movie_id))
+                }
+                else {
+                    favList.push(movie_id)
+                }
             },
             (error) => {
                 console.log("Favourites Update Unsuccesful. Please check your movie_data.");
-                setFav(!fav);
+                // Updating cached fav list to avoid API Calls
+                // if (favList.indexOf(movie_id) >= 0) {
+                //     favList.splice(favList.indexOf(movie_id))
+                // }
+                // else
+                //     favList.push(movie_id)
             }
         );
         props.onFavUpdate();
     };
+
+    // const isFav = async () => {
+    //     for (const i = 0; i < props.favs.length; i++) {
+    //         if (fav[i].toString() == props.movie.movie_id.toString()) {
+    //             setFav(true);
+    //         }
+    //         console.log('movie_id', props.fav[i])
+    //         setFav(false);
+    //     }
+    // }
+
+    // const isFav = () => {
+    //     props.fav.map(movie_id => (
+
+    //     ))
+    // }
 
     return (
         <div className={styles.maincont}>
@@ -40,8 +71,8 @@ export function Movie(props) {
                     <div class={styles.movieEffect}>
                         <ul className={styles.litext}>
                             <li class={styles.category}>{props.movies.category}</li>
-                            <li class={styles.favourite}> {fav == false && <button onClick={() => addFavourite(props.movies.movie_id)} style={{ 'font-size': '25px', 'color': 'white' }} class='btn'><i class="fa fa-heart"></i></button>}
-                                {fav == true && <button onClick={() => addFavourite(props.movies.movie_id)} style={{ 'font-size': '25px', 'color': 'tomato' }} class='btn'><i class="fa fa-heart"></i></button>}
+                            <li class={styles.favourite}> {favList.indexOf(props.movies.movie_id) < 0 && <button onClick={() => addFavourite(props.movies.movie_id)} style={{ 'font-size': '30px', 'color': 'white' }} class='btn'><i class="fa fa-heart"></i></button>}
+                                {favList.indexOf(props.movies.movie_id) >= 0 && <button onClick={() => addFavourite(props.movies.movie_id)} style={{ 'font-size': '30px', 'color': 'tomato' }} class='btn'><i class="fa fa-heart"></i></button>}
                             </li>
                             <li class={styles.movie_title}>{props.movies.title}</li>
                             <li class={styles.cinema}>Cinema: {props.movies.cinema_name}</li>

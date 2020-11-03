@@ -12,3 +12,6 @@ gunicorn==20.0.4
 # Postgres connector
 Flask-SQLAlchemy==2.4.4
 psycopg2-binary==2.8.6
+
+# Redis DB
+redis==3.5.3 

@@ -155,12 +155,14 @@ def register():
         db.session.add(user)
         db.session.commit()
         if (user.role == RoleEnum.admin):
-            token = encodeAuthToken(user.username, "admin", user.is_confirmed)
+            token = encodeAuthToken(
+                user.username, "admin", user.is_confirmed, user.user_id)
         elif(user.role == RoleEnum.cinemaowner):
             token = encodeAuthToken(
-                user.username, "cinemaowner", user.is_confirmed)
+                user.username, "cinemaowner", user.is_confirmed, user.user_id)
         else:
-            token = encodeAuthToken(user.username, "user", user.is_confirmed)
+            token = encodeAuthToken(
+                user.username, "user", user.is_confirmed, user.user_id)
         return token
     # Only for Debugging Reasons
     # dec = decodeAuthToken(token)
@@ -180,12 +182,14 @@ def login():
         error = 'Password is incorrect'
         return Response(error, status=400)
     if (user.role == RoleEnum.admin):
-        token = encodeAuthToken(user.username, "admin", user.is_confirmed)
+        token = encodeAuthToken(user.username, "admin",
+                                user.is_confirmed, user.user_id)
     elif(user.role == RoleEnum.cinemaowner):
         token = encodeAuthToken(
-            user.username, "cinemaowner", user.is_confirmed)
+            user.username, "cinemaowner", user.is_confirmed, user.user_id)
     else:
-        token = encodeAuthToken(user.username, "user", user.is_confirmed)
+        token = encodeAuthToken(user.username, "user",
+                                user.is_confirmed, user.user_id)
     return token
     # Only for Debugging Reasons
     # dec = decodeAuthToken(token)
@@ -261,37 +265,38 @@ def get_users():
     return jsonify(users_list)
 
 
-@app.route("/auth/change_role", methods=["POST"])
-def change_role():
-    username = request.json['username']
-    role = request.json['role']
-    if role != "admin" and role != "official":
-        error = "This user role is not accepted: "+role
-        return Response(error, status=400)
-    user = db.session.query(User).filter_by(username=username).first()
-    if user is None:
-        error = 'A User with that username does not exist'
-        return Response(error, status=400)
-    if user.role == role:
-        error = 'User already has this role'
-        return Response(error, status=400)
-    user.role = role
-    db.session.commit()
-    # Generate New Token
-    token = encodeAuthToken(user.username, user.role, user.is_confirmed)
-    return token
+# @app.route("/auth/change_role", methods=["POST"])
+# def change_role():
+#     username = request.json['username']
+#     role = request.json['role']
+#     if role != "admin" and role != "official":
+#         error = "This user role is not accepted: "+role
+#         return Response(error, status=400)
+#     user = db.session.query(User).filter_by(username=username).first()
+#     if user is None:
+#         error = 'A User with that username does not exist'
+#         return Response(error, status=400)
+#     if user.role == role:
+#         error = 'User already has this role'
+#         return Response(error, status=400)
+#     user.role = role
+#     db.session.commit()
+#     # Generate New Token
+#     token = encodeAuthToken(user.username, user.role, user.is_confirmed)
+#     return token
 
 # JWT TOKEN
 
 
-def encodeAuthToken(username, role, is_confirmed):
+def encodeAuthToken(username, role, is_confirmed, user_id):
     try:
         payload = {
             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, minutes=60),
             'iat': datetime.datetime.utcnow(),
             'username': username,
             'role': role,
-            'is_confirmed': is_confirmed
+            'is_confirmed': is_confirmed,
+            'user_id': user_id
         }
         token = jwt.encode(
             payload, jwt_secret_key, algorithm='HS256')

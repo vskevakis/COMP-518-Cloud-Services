@@ -55,7 +55,7 @@
   position: relative;
   display: grid;
   grid-template-columns: 80px 80px 80px;
-  grid-template-rows: auto 350px auto; 
+  grid-template-rows: auto 330px auto; 
   column-gap: auto;
   row-gap: auto;
   grid-template-areas: 
@@ -82,6 +82,7 @@ ul {
   opacity: 1;
   align-self: center;
   padding: 0px 15px;
+  margin: 0px;
   justify-self: flex-start;
 
 }
@@ -104,6 +105,16 @@ ul {
 .search_form {
   padding-top: 5%;
   padding-bottom: 5%;
+  border-bottom: #dddddd !important;
+}
+
+.checkbox_cont {
+  text-align: center;
+}
+
+.checkbox {
+  color: darkgray;
+  text-emphasis: bold;
 }
 
 .text_area {
@@ -130,6 +141,7 @@ ul {
   background-color: #435f99;
   color: #ffffff;
   text-align: left;
+  
 }
 
 .styled_table th,

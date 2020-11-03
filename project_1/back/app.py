@@ -3,6 +3,8 @@ import requests
 import datetime
 import json
 import enum
+import redis
+import re
 from urllib.parse import urljoin
 from flask import Flask, jsonify, Response, request
 from flask_sqlalchemy import SQLAlchemy
@@ -14,6 +16,9 @@ from sqlalchemy import or_, func, and_, cast, DATE
 app = Flask(__name__)
 
 #---------Database Configuration-----------#
+
+redisDB = redis.Redis(host=os.environ['REDIS_HOST'],
+                      port=os.environ['REDIS_PORT'], db=os.environ['REDIS_DB'])
 
 # Configuration of postgreSQL Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://{user}:{password}@{host}:{port}/{db}'.format(
@@ -249,6 +254,35 @@ def search_cinema_movies():
                             'poster_path': movie.poster_path,
                             })
     return jsonify(movies_list)
+
+
+@app.route("/back/modify_fav", methods=["POST"])
+def modify_fav():
+    user_id = request.json['user_id']
+    movie_id = request.json['movie_id']
+    if (redisDB.srem(user_id, movie_id)):
+        response = True
+    else:
+        redisDB.sadd(user_id, movie_id)
+        response = False
+    return json.dumps(response)
+
+
+@app.route("/back/get_favs", methods=["POST"])
+def get_favs():
+    user_id = request.json['user_id']
+    movies = redisDB.smembers(user_id)
+    try:
+        results = re.split("[{' 'b,}]", str(movies))
+        response = []
+        for result in results:
+            if (result != ""):
+                response.append(int(result))
+        return json.dumps(response)
+    # movies = movies[1]
+    except:
+        response = []
+    return json.dumps(response)
 
 
 if __name__ == "__main__":
