@@ -6,8 +6,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: rgb(19, 18, 18) !important;
-  
 }
+
+.logo {
+  height: 25vh;
+}
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -18,9 +22,10 @@ code {
 .my-form {
   background: rgba(255, 255, 255, 1);
   box-shadow: 3px 3px 5px 6px rgb(0, 0, 0);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
-  margin: 10% 10%;
-  padding: 5% 5%;
+  margin: 5%;
+  padding: 30px 30px;
   border-radius: 25px;
+  height: 60vh;
 }
 
 .full-page-div {
@@ -37,6 +42,7 @@ code {
 
 .logout-but {
   margin: 1% !important;
+  /* background: darkgray !important; */
 }
 
 /* .search_text {

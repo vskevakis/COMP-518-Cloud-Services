@@ -36,7 +36,7 @@ export function checkUser() {
     let token = getCookie("token");
     console.log("token is: ", token);
     let decoded = jwt.decode(token);
-    return ("cinemaowner")
+    return ("admin")
     if (decoded !== null) {
         return decoded.role;
     } else {
@@ -62,7 +62,7 @@ export function checkUserID() {
     let token = getCookie("token");
     console.log("token is: ", token);
     let decoded = jwt.decode(token);
-    return (7)
+    return (1)
     if (decoded !== null) {
         console.log("IS Confirmed?");
         console.log(decoded.is_confirmed);

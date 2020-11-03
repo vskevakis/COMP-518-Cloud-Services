@@ -106,15 +106,20 @@ ul {
   padding-top: 5%;
   padding-bottom: 5%;
   border-bottom: #dddddd !important;
-}
-
-.checkbox_cont {
   text-align: center;
 }
 
 .checkbox {
   color: darkgray;
   text-emphasis: bold;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: 0px;
+  background: transparent;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  color: white;
 }
 
 .text_area {

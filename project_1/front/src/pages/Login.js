@@ -2,11 +2,19 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
 
-import background1 from '../assets/backgrounds/background-movie-2.jpg';
-import background2 from '../assets/backgrounds/background-movie-3.jpg';
-import background3 from '../assets/backgrounds/background-movie-6.jpg';
-import background4 from '../assets/backgrounds/background-movie-7.jpg';
-import background5 from '../assets/backgrounds/background-movie-8.jpg';
+import background1 from '../assets/backgrounds/background-movie-01.png';
+import background2 from '../assets/backgrounds/background-movie-02.png';
+import background3 from '../assets/backgrounds/background-movie-03.jpg';
+import background4 from '../assets/backgrounds/background-movie-04.jpg';
+import background5 from '../assets/backgrounds/background-movie-05.jpg';
+import background6 from '../assets/backgrounds/background-movie-06.jpg';
+import background7 from '../assets/backgrounds/background-movie-07.jpg';
+import background11 from '../assets/backgrounds/background-movie-11.jpg';
+import background12 from '../assets/backgrounds/background-movie-12.jpg';
+import background13 from '../assets/backgrounds/background-movie-13.jpg';
+
+
+
 import login_image from '../assets/illustrations/home_cinema_login.svg';
 import logo from '../logo.png';
 
@@ -38,7 +46,7 @@ class Login extends Component {
         this.setState({ [event.target.name]: event.target.value });
     }
     componentWillMount() {
-        const pictureArray = [background1, background2, background3, background4, background5];
+        const pictureArray = [background1, background2, background3, background4, background5, background6, background7, background12, background11, background13];
         const randomIndex = Math.floor(Math.random() * pictureArray.length);
         const selectedPicture = pictureArray[randomIndex];
 

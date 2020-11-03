@@ -36,51 +36,34 @@ export function Movie(props) {
             },
             (error) => {
                 console.log("Favourites Update Unsuccesful. Please check your movie_data.");
-                // Updating cached fav list to avoid API Calls
-                // if (favList.indexOf(movie_id) >= 0) {
-                //     favList.splice(favList.indexOf(movie_id))
-                // }
-                // else
-                //     favList.push(movie_id)
             }
         );
         props.onFavUpdate();
     };
 
-    // const isFav = async () => {
-    //     for (const i = 0; i < props.favs.length; i++) {
-    //         if (fav[i].toString() == props.movie.movie_id.toString()) {
-    //             setFav(true);
-    //         }
-    //         console.log('movie_id', props.fav[i])
-    //         setFav(false);
-    //     }
-    // }
-
-    // const isFav = () => {
-    //     props.fav.map(movie_id => (
-
-    //     ))
-    // }
-
-    return (
-        <div className={styles.maincont}>
-            <div className={styles.container}>
-                <img className={styles.moviePoster} src={props.movies.poster_path} alt={props.movies.title} />
-                <div class={styles.movieDetails}>
-                    <div class={styles.movieEffect}>
-                        <ul className={styles.litext}>
-                            <li class={styles.category}>{props.movies.category}</li>
-                            <li class={styles.favourite}> {favList.indexOf(props.movies.movie_id) < 0 && <button onClick={() => addFavourite(props.movies.movie_id)} style={{ 'font-size': '30px', 'color': 'white' }} class='btn'><i class="fa fa-heart"></i></button>}
-                                {favList.indexOf(props.movies.movie_id) >= 0 && <button onClick={() => addFavourite(props.movies.movie_id)} style={{ 'font-size': '30px', 'color': 'tomato' }} class='btn'><i class="fa fa-heart"></i></button>}
-                            </li>
-                            <li class={styles.movie_title}>{props.movies.title}</li>
-                            <li class={styles.cinema}>Cinema: {props.movies.cinema_name}</li>
-                            <li class={styles.date}> {formatter.format(Date.parse(props.movies.start_date))} to {formatter.format(Date.parse(props.movies.end_date))}</li>
-                        </ul>
+    if (props.favsOnly && (favList.indexOf(props.movies.movie_id)) < 0) {
+        return null;
+    }
+    else {
+        return (
+            <div className={styles.maincont}>
+                <div className={styles.container}>
+                    <img className={styles.moviePoster} src={props.movies.poster_path} alt={props.movies.title} />
+                    <div class={styles.movieDetails}>
+                        <div class={styles.movieEffect}>
+                            <ul className={styles.litext}>
+                                <li class={styles.category}>{props.movies.category}</li>
+                                <li class={styles.favourite}> {favList.indexOf(props.movies.movie_id) < 0 && <button onClick={() => addFavourite(props.movies.movie_id)} style={{ 'font-size': '30px', 'color': 'white' }} class='btn'><i class="fa fa-heart"></i></button>}
+                                    {favList.indexOf(props.movies.movie_id) >= 0 && <button onClick={() => addFavourite(props.movies.movie_id)} style={{ 'font-size': '30px', 'color': 'tomato' }} class='btn'><i class="fa fa-heart"></i></button>}
+                                </li>
+                                <li class={styles.movie_title}>{props.movies.title}</li>
+                                <li class={styles.cinema}>Cinema: {props.movies.cinema_name}</li>
+                                <li class={styles.date}> {formatter.format(Date.parse(props.movies.start_date))} to {formatter.format(Date.parse(props.movies.end_date))}</li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
+                </div >
             </div >
-        </div >
-    );
+        );
+    }
 }

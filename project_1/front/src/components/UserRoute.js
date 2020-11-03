@@ -3,14 +3,14 @@ import { Route, Redirect } from "react-router-dom";
 import { checkConfirmed, checkCookie } from "./Cookies.js";
 import HeaderNav from './HeaderNav';
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const UserRoute = ({ component: Component, ...rest }) => {
     return (
         // Show the component only when the user is logged in
         // Otherwise, redirect the user to /signin page
         <Route
             {...rest}
             render={(props) =>
-                (checkCookie() !== null) ? (
+                (checkCookie() !== null && checkConfirmed()) ? (
                     <div>
                         <HeaderNav />
                         <Component {...props} />
@@ -19,7 +19,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
                         <div>
                             <HeaderNav />
                             <Component {...props} />
-                            <Redirect to="/login" />
+                            <Redirect to="/home" />
                         </div>
                     )
             }
@@ -27,4 +27,4 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     );
 };
 
-export default PrivateRoute;
+export default UserRoute;

@@ -3,6 +3,7 @@ import { Link, Switch, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import OwnerRoute from "./OwnerRoute";
 import AdminRoute from "./AdminRoute";
+import UserRoute from "./UserRoute";
 
 import Register from "../pages/Register";
 import Login from "../pages/Login";
@@ -12,14 +13,7 @@ import Home from "../pages/Home";
 import Movies from "../pages/Movies"
 import Admin from "../pages/Admin";
 import CinemaOwner from "../pages/CinemaOwner";
-// const NavRoute = ({ exact, path, component: Component }) => (
-//     <Route exact={exact} path={path} render={(props) => (
-//         <div>
-//             <Nav />
-//             <Component {...props} />
-//         </div>
-//     )} />
-// )
+
 
 const Routes = () => (
     <Switch>
@@ -28,7 +22,7 @@ const Routes = () => (
         <Route exact path="/login" component={Login} />
         <Route exact path="/logout" component={Logout} />
         <PrivateRoute path="/home" component={Home} />
-        <PrivateRoute path="/movies" component={Movies} />
+        <UserRoute path="/movies" component={Movies} />
         <OwnerRoute path="/owner" component={CinemaOwner} />
         <AdminRoute path="/admin" component={Admin} />
     </Switch>

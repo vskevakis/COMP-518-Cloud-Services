@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, Button, Form, FormControl, Col } from "react-bootstrap"
 import { Redirect } from 'react-router-dom';
-import logo from '../logo.png'
+import logo from '../logo-bw.png'
 import { checkCookie, checkUser, setCookie, checkConfirmed } from './Cookies';
 
 import { Logout } from '../pages/Logout';
@@ -12,8 +12,10 @@ export default class HeaderNav extends React.Component {
         this.state = {
             username: checkCookie(),
             role: checkUser(),
+            is_shown: false
         };
         this.handleLogout = this.handleLogout.bind(this);
+        this.is_shown = false;
     }
 
     handleLogout(event) {
@@ -27,12 +29,12 @@ export default class HeaderNav extends React.Component {
         }
         if (!checkConfirmed()) {
             return (
-                <Navbar bg="dark" variant="dark">
+                <Navbar bg="black" variant="dark">
                     <Navbar.Brand href="/home"><img
                         alt=""
                         src={logo}
-                        width="100"
-                        height="80"
+                        width="120"
+                        height="auto"
                         className="d-inline-block align-top"
                     />{' '}
                     </Navbar.Brand>
@@ -43,19 +45,19 @@ export default class HeaderNav extends React.Component {
                         <Navbar.Text>
                             Signed in as: <a href="#login">{this.state.username}</a>
                         </Navbar.Text>
-                        <Button className="logout-but" onClick={this.handleLogout}>Logout</Button>
+                        <Button variant="light" className="logout-but" onClick={this.handleLogout}>Logout</Button>
                     </Navbar.Collapse>
                 </Navbar >
             );
         }
         else if (checkUser() == "user") {
             return (
-                <Navbar bg="dark" variant="dark">
+                <Navbar bg="black" variant="dark">
                     <Navbar.Brand href="/home"><img
                         alt=""
                         src={logo}
-                        width="100"
-                        height="80"
+                        width="120"
+                        height="auto"
                         className="d-inline-block align-top"
                     />{' '}
                     </Navbar.Brand>
@@ -67,19 +69,19 @@ export default class HeaderNav extends React.Component {
                         <Navbar.Text>
                             Signed in as: <a href="#login">{this.state.username}</a>
                         </Navbar.Text>
-                        <Button className="logout-but" onClick={this.handleLogout}>Logout</Button>
+                        <Button variant="light" className="logout-but" onClick={this.handleLogout}>Logout</Button>
                     </Navbar.Collapse>
                 </Navbar >
             );
         }
         else if (checkUser() == "cinemaowner") {
             return (
-                <Navbar bg="dark" variant="dark">
+                <Navbar bg="black" variant="dark">
                     <Navbar.Brand href="/home"><img
                         alt=""
                         src={logo}
-                        width="100"
-                        height="80"
+                        width="120"
+                        height="auto"
                         className="d-inline-block align-top"
                     />{' '}
                     </Navbar.Brand>
@@ -88,27 +90,23 @@ export default class HeaderNav extends React.Component {
                         <Nav.Link href="/movies">Movies</Nav.Link>
                         <Nav.Link href="/owner">My Cinema</Nav.Link>
                     </Nav>
-                    {/* <Form inline>
-                        <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                        <Button variant="outline-info">Search</Button>
-                    </Form> */}
                     <Navbar.Collapse className="justify-content-end">
                         <Navbar.Text>
                             Signed in as: <a href="#login">{this.state.username}</a>
                         </Navbar.Text>
-                        <Button className="logout-but" onClick={this.handleLogout}>Logout</Button>
+                        <Button variant="light" className="logout-but" onClick={this.handleLogout}>Logout</Button>
                     </Navbar.Collapse>
                 </Navbar >
             );
         }
         else if (checkUser() == "admin") {
             return (
-                <Navbar bg="dark" variant="dark">
+                <Navbar bg="black" variant="dark">
                     <Navbar.Brand href="/home"><img
                         alt=""
                         src={logo}
-                        width="100"
-                        height="80"
+                        width="120"
+                        height="auto"
                         className="d-inline-block align-top"
                     />{' '}
                     </Navbar.Brand>
@@ -125,7 +123,7 @@ export default class HeaderNav extends React.Component {
                         <Navbar.Text>
                             Signed in as: <a href="#login">{this.state.username}</a>
                         </Navbar.Text>
-                        <Button className="logout-but" onClick={this.handleLogout}>Logout</Button>
+                        <Button variant="light" className="logout-but" onClick={this.handleLogout}>Logout</Button>
                     </Navbar.Collapse>
                 </Navbar >
             );

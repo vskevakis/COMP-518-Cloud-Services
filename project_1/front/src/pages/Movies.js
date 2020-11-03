@@ -26,7 +26,8 @@ class Movies extends Component {
             // role: checkUser(),
             // isAuthenticated: checkCookie(),
             movies_list: [],
-            fav_list: []
+            fav_list: [],
+            favs_only: false
         };
         // this.setState = this.setState()
         // this.handleInputChange = this.handleInputChange.bind(this);
@@ -156,9 +157,9 @@ class Movies extends Component {
                     <div class={styles.search_form} inline>
                         <input class={styles.text_area} onChange={this.handleInputChange} type="text" placeholder="Search" />
                         <input type="date" value={this.state.date} onChange={this.handleDateChange}></input>
-                        <div class={styles.checkbox_cont}>
-                            <input class={styles.checkbox} type="checkbox" placeholder="Favourites"></input>
-                            <label class={styles.text_area}>Only Favourites</label>
+                        <div>
+                            {this.state.favs_only && <button onClick={() => this.setState({ favs_only: !this.state.favs_only })} class={styles.checkbox}><i class="far fa-check-square"></i> Show All</button>}
+                            {!this.state.favs_only && <button onClick={() => this.setState({ favs_only: !this.state.favs_only })} class={styles.checkbox}><i class="far fa-square"></i> Show Favourites</button>}
                         </div>
                     </div>
                 </div>
@@ -169,6 +170,7 @@ class Movies extends Component {
                                 movies={movie}
                                 favs={this.state.fav_list}
                                 onFavUpdate={() => this.setState({ update: !this.state.update })}
+                                favsOnly={this.state.favs_only}
                             />
                         ))
                     }
