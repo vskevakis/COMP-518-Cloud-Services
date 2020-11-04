@@ -9,7 +9,9 @@ body {
 }
 
 .logo {
-  height: 25vh;
+  height: 250px;
+  width: auto;
+  margin-top: 100px;
 }
 
 
@@ -20,24 +22,75 @@ code {
 }
 
 .my-form {
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 3px 3px 5px 6px rgb(0, 0, 0);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
-  margin: 5%;
-  padding: 30px 30px;
-  border-radius: 25px;
+  /* background: rgba(255, 255, 255, 1); */
+  /* box-shadow: 3px 3px 5px 6px rgb(0, 0, 0);  Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+  /* margin: 5%; */
+  padding: 20px 0px;
   height: 60vh;
+  background: transparent !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  color: white !important;
+  border-radius: 0% !important;
+  /* text-align: center !important; */
+  outline:0px !important;
+  -webkit-appearance:none;
+  box-shadow: none !important;
+}
+
+.edit-form {
+  background: transparent !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  color: black !important;
+  border-radius: 0% !important;
+  outline:0px !important;
+  -webkit-appearance:none;
+  box-shadow: none !important;
 }
 
 .full-page-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
+  background-color: rgb(44, 43, 43);
 }
 
 .mycont {
   color: white;
   padding-top: 10%;  
+}
+
+.fade-in {
+  animation: fadeIn ease 2s;
+  -webkit-animation: fadeIn ease 2s;
+  -moz-animation: fadeIn ease 2s;
+  -o-animation: fadeIn ease 2s;
+  -ms-animation: fadeIn ease 2s;
+}
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-moz-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-webkit-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-o-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-ms-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
 }
 
 .logout-but {

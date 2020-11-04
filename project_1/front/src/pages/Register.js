@@ -2,20 +2,22 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
 import axios from "axios";
+import { Animate } from 'react-animate-mount'
 
 import { checkCookie, setCookie } from "../components/Cookies";
 
-import background1 from '../assets/backgrounds/background-movie-01.png';
-import background2 from '../assets/backgrounds/background-movie-02.png';
-import background3 from '../assets/backgrounds/background-movie-03.jpg';
-import background4 from '../assets/backgrounds/background-movie-04.jpg';
-import background5 from '../assets/backgrounds/background-movie-05.jpg';
-import background6 from '../assets/backgrounds/background-movie-06.jpg';
-import background7 from '../assets/backgrounds/background-movie-07.jpg';
-import background11 from '../assets/backgrounds/background-movie-11.jpg';
-import background12 from '../assets/backgrounds/background-movie-12.jpg';
-import background13 from '../assets/backgrounds/background-movie-13.jpg';
-import login_image from '../assets/illustrations/home_cinema_login.svg';
+import background1 from '../assets/backgrounds/background-image-01.png';
+import background2 from '../assets/backgrounds/background-image-02.png';
+import background3 from '../assets/backgrounds/background-image-03.png';
+import background4 from '../assets/backgrounds/background-image-04.png';
+import background5 from '../assets/backgrounds/background-image-05.png';
+import background6 from '../assets/backgrounds/background-image-06.png';
+import background7 from '../assets/backgrounds/background-image-07.png';
+import background8 from '../assets/backgrounds/background-image-08.png';
+import background9 from '../assets/backgrounds/background-image-09.png';
+import background10 from '../assets/backgrounds/background-image-10.png';
+import background11 from '../assets/backgrounds/background-image-11.png';
+import background12 from '../assets/backgrounds/background-image-12.png';
 import logo from '../logo.png';
 
 
@@ -38,6 +40,7 @@ class Register extends Component {
             email: "",
             user_role: "",
             isAuthenticated: checkCookie(),
+            show: false
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -49,7 +52,11 @@ class Register extends Component {
     }
 
     componentWillMount() {
-        const pictureArray = [background1, background2, background3, background4, background5, background6, background7, background12, background11, background13];
+        this.setbgPic()
+    }
+
+    setbgPic() {
+        const pictureArray = [background1, background2, background3, background4, background5, background6, background7, background8, background9, background10, background11, background12];
         const randomIndex = Math.floor(Math.random() * pictureArray.length);
         const selectedPicture = pictureArray[randomIndex];
 
@@ -62,6 +69,13 @@ class Register extends Component {
                 backgroundSize: "cover",
             }
         })
+    }
+
+    componentDidMount() {
+        this.setState({ show: true })
+        setInterval(() => {
+            this.setbgPic()
+        }, 5000)
     }
 
     handleSubmit = async (event) => {
@@ -92,97 +106,102 @@ class Register extends Component {
     };
 
     render() {
-        if (this.state.isAuthenticated) {
+        if (checkCookie()) {
             return <Redirect to="/movies" />;
         }
         return (
-            <div style={this.state.bgStyle} className="full-page-div bg">
-                <Container className="container">
+            <Animate type='fade' duration="500" show={this.state.show}>
+                <Container fluid style={this.state.bgStyle} className="full-page-div bg">
                     <Row className="justify-content-md-center">
                         <img className="logo" src={logo}></img>
                     </Row>
-                    <Row className="my-form">
-                        <Col className="login_image">
-                            <img height="400px" src={login_image}></img>
-                        </Col>
-                        <Col>
-                            <Form onSubmit={this.handleSubmit}>
-                                <Form.Row className="justify-content-md-center">
-                                    <h3>Sign Up</h3>
-                                </Form.Row>
-                                <Form.Row>
-                                    <Form.Group as={Col} controlId="formBasicUsername">
-                                        <Form.Label>First Name</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            name="name"
-                                            placeholder="John"
-                                            onChange={this.handleChange}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group as={Col} controlId="formBasicUsername">
-                                        <Form.Label>Surname</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            name="surname"
-                                            placeholder="Doe"
-                                            onChange={this.handleChange}
-                                        />
-                                    </Form.Group>
-                                </Form.Row>
-                                <Form.Row>
-                                    <Form.Group as={Col} controlId="formBasicUsername">
-                                        <Form.Label>Username</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            name="username"
-                                            placeholder="johndoe"
-                                            onChange={this.handleChange}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group as={Col} controlId="formBasicPassword">
-                                        <Form.Label>Password</Form.Label>
-                                        <Form.Control
-                                            type="password"
-                                            name="password"
-                                            placeholder="password"
-                                            onChange={this.handleChange}
-                                        />
-                                    </Form.Group>
-                                </Form.Row>
-                                <Form.Group controlId="formBasicEmail">
-                                    <Form.Label>Email</Form.Label>
+                    <Row className="justify-content-md-center my-form">
+                        <Form className="my-form" onSubmit={this.handleSubmit}>
+                            <Form.Row className="justify-content-md-center">
+                                <h3>Sign Up</h3>
+                            </Form.Row>
+                            <Form.Row>
+                                <Form.Group as={Col} controlId="formBasicUsername">
+                                    {/* <Form.Label>First Name</Form.Label> */}
                                     <Form.Control
+                                        className="my-form"
+                                        type="text"
+                                        name="name"
+                                        placeholder="First Name"
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group as={Col} controlId="formBasicUsername">
+                                    {/* <Form.Label>Surname</Form.Label> */}
+                                    <Form.Control
+                                        className="my-form"
+                                        type="text"
+                                        name="surname"
+                                        placeholder="Surname"
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Group>
+                            </Form.Row>
+                            <Form.Row>
+                                <Form.Group as={Col} controlId="formBasicUsername">
+                                    {/* <Form.Label>Username</Form.Label> */}
+                                    <Form.Control
+                                        className="my-form"
+                                        type="text"
+                                        name="username"
+                                        placeholder="Username"
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group as={Col} controlId="formBasicPassword">
+                                    {/* <Form.Label>Password</Form.Label> */}
+                                    <Form.Control
+                                        className="my-form"
+                                        type="password"
+                                        name="password"
+                                        placeholder="Password"
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Group>
+                            </Form.Row>
+                            <Form.Row>
+                                <Form.Group as={Col} controlId="formBasicEmail">
+                                    {/* <Form.Label>Email</Form.Label> */}
+                                    <Form.Control
+                                        className="my-form"
                                         type="email"
                                         name="email"
-                                        placeholder="jdoe@email.com"
+                                        placeholder="Email"
                                         onChange={this.handleChange}
+                                        onKeyPress={(event) => {
+                                            if (event.key === 'Enter') {
+                                                this.handleSubmit(event)
+                                            }
+                                        }}
                                     />
                                     <Form.Text className="text-muted">
                                         We'll never share your email with anyone else.
                     </Form.Text>
                                 </Form.Group>
-                                <Form.Group controlId="exampleForm.ControlSelect1">
-                                    <Form.Label>Select Role</Form.Label>
-                                    <Form.Control as="select">
+                                <Form.Group as={Col} controlId="exampleForm.ControlSelect1">
+                                    {/* <Form.Label>Select Role</Form.Label> */}
+                                    <Form.Control className="my-form" as="select">
                                         <option onClick={() => this.setState({ user_role: 'User' })}>User</option>
                                         <option onClick={() => this.setState({ user_role: 'Cinema Owner' })}>Cinema Owner</option>
                                         <option onClick={() => this.setState({ user_role: 'Admin' })}>Admin</option>
                                     </Form.Control>
                                 </Form.Group>
-                                <Row className="justify-content-md-center">
-                                    <Button as={Col} variant="primary" type="submit" onClick={this.handleSubmit}>
-                                        Register
+                            </Form.Row>
+                            <Button as={Col} variant="dark" type="submit" onClick={this.handleSubmit}>
+                                Register
                             </Button>
-                                </Row>
-                                <Row className="justify-content-md-center">
-                                    <a href="./login"> I already have an account</a>
-                                </Row>
-                            </Form>
-                        </Col>
+                            <Row className="justify-content-md-center">
+                                <a style={{ 'color': "darkgray" }} href="./login"> I already have an account</a>
+                            </Row>
+                        </Form>
                     </Row >
                 </Container>
-            </div>
+            </Animate>
         );
     }
 }

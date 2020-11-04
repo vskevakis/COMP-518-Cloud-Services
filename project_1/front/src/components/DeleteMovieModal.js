@@ -28,26 +28,32 @@ export default function DeleteMovieModal(props) {
     };
 
     return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Delete Movie "{props.movie.title}"
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body >
-                <h2> Are you sure you want to delete movie {props.movie.title} ?</h2>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={() => deleteMovie()}>Yes</Button>
-                <Button onClick={props.onHide}>No</Button>
-            </Modal.Footer>
-        </Modal >
+        <div onKeyPress={(event) => {
+            if (event.key === 'Enter') {
+                deleteMovie()
+            }
+        }}>
+            <Modal
+                {...props}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
 
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Delete Movie "{props.movie.title}"
+                </Modal.Title>
+                </Modal.Header>
+                <Modal.Body  >
+                    <h5> Are you sure you want to delete movie {props.movie.title} ?</h5>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="dark" onClick={() => deleteMovie()}>Delete</Button>
+                    <Button variant="black" onClick={props.onHide}>Close</Button>
+                </Modal.Footer>
+            </Modal >
+        </div>
     );
 
 }

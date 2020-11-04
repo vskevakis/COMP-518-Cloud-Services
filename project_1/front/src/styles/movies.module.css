@@ -1,13 +1,21 @@
 /* Movies Display */
+
+.mycont {
+  display: flex; /* or inline-flex */
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.items {
+  flex-grow: 4 !important;
+  align-self: auto !important;
+}
+
 .maincont {
   width: 300px;
   margin: 10px;
   display: inline-grid;
-  justify-items: center;
-}
-
-.mycont {
-  display: grid;
   justify-items: center;
 }
 
@@ -30,8 +38,6 @@
   width: 100%;
 }
 
-.movieEffects {
-}
 
 .movieDetails {
   opacity: 0;
@@ -103,8 +109,8 @@ ul {
 }
 
 .search_form {
-  padding-top: 5%;
-  padding-bottom: 5%;
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-bottom: #dddddd !important;
   text-align: center;
 }
@@ -138,32 +144,38 @@ ul {
   /* font-family: sans-serif; */
   min-width: 200px;
   width: 80vw;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  background-color: slategrey;
+  /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); */
+  background-color:transparent;
 }
 
 .styled_table thead tr {
-  background-color: #435f99;
+  background-color: rgb(131, 128, 128);
   color: #ffffff;
   text-align: left;
+  border-bottom: 1px solid #dddddd;
+
   
 }
 
 .styled_table th,
 .styled_table td {
+  border-bottom: 1px solid #cec3c3;
+  color: #e2dada;
+
   padding: 12px 15px;
 }
 
 .styled_table tbody tr {
   border-bottom: 1px solid #dddddd;
+  
 }
 
 .styled_table tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
+  /* background-color: #f3f3f3; */
 }
 
 .styled_table tbody tr:last-of-type {
-  border-bottom: 2px solid #435f99;
+  border-bottom: 4px solid #676768;
 }
 
 .styled_table tbody tr.active-row {
@@ -183,8 +195,8 @@ ul {
 }
 
 .owner_search_form {
-  padding-top: 5%;
-  padding-bottom: 5%;
+  padding-top: 10px;
+  padding-bottom: 10px;
   color: white;
   display: flex;
   justify-content: center;

@@ -5,6 +5,8 @@ import axios from "axios";
 import styles from "../styles/movies.module.css";
 // import DatePicker from "../components/Datepicker";
 import moment from "moment";
+import { Animate } from 'react-animate-mount'
+
 
 import { checkCookie, checkUser, setCookie } from "../components/Cookies";
 import { Movie } from "../components/Movie";
@@ -24,7 +26,8 @@ class Admin extends Component {
             modalShow: false,
             modal2Show: false,
             edit_user: "",
-            users_list: []
+            users_list: [],
+            show: false
         };
         // this.setState = this.setState()
         // this.handleInputChange = this.handleInputChange.bind(this);
@@ -85,6 +88,7 @@ class Admin extends Component {
 
     componentDidMount() {
         this.searchUsers();
+        this.setState({ show: true });
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -98,58 +102,60 @@ class Admin extends Component {
 
     render() {
         return (
-            <div className={styles.mycont}>
+            <Animate type="fade" duration="1000" show={this.state.show}>
                 <div>
                     <form class={styles.owner_search_form} inline>
                         <input class={styles.text_area} onChange={this.handleInputChange} type="text" placeholder="Search" />
                     </form>
                 </div>
-                <div>
-                    <table class={styles.styled_table}>
-                        <thead>
-                            <tr>
-                                <th>Role</th>
-                                <th>User ID</th>
-                                <th>Surname</th>
-                                <th>Name</th>
-                                <th>Username</th>
-                                <th colSpan="2"></th>
-                                {/* <th colspan="2"><button class={styles.add_button} onClick={e => this.setState({ modal2Show: true })} class="btn"><i class="fa fa-plus-circle"></i> Add Movie</button></th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                this.state.users_list.map((user) => (
-                                    <tr>
-                                        <td>{user.role}</td>
-                                        <td>{user.user_id}</td>
-                                        <td>{user.surname}</td>
-                                        <td>{user.name}</td>
-                                        <td>{user.username}</td>
-                                        <td>{user.is_confirmed == false && <button onClick={e => this.setState({ modalShow: true, edit_user: user })} class="btn"><i class="fas fa-user-check"></i> Accept User</button>}
-                                            {user.is_confirmed == true && <button class="btn" disabled><i class="fas fa-user-check" ></i> Confirmed</button>}</td>
-                                        <td><button onClick={e => this.setState({ modal2Show: true, edit_user: user })} class="btn"><i class="fas fa-trash-alt"></i> Delete</button></td>
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                {
-                    this.state.users_list.length == 0 &&
-                    <h3 className={styles.movie}> No users found</h3>
-                }
-                <AcceptUserModal
-                    show={this.state.modalShow}
-                    onHide={() => this.setState({ modalShow: false })}
-                    user={this.state.edit_user}
-                />
-                <DeleteUserModal
-                    show={this.state.modal2Show}
-                    onHide={() => this.setState({ modal2Show: false })}
-                    user={this.state.edit_user}
-                />
-            </div >
+                <div className={styles.mycont}>
+                    <div>
+                        <table class={styles.styled_table}>
+                            <thead>
+                                <tr>
+                                    <th>Role</th>
+                                    <th>User ID</th>
+                                    <th>Surname</th>
+                                    <th>Name</th>
+                                    <th>Username</th>
+                                    <th colSpan="2"></th>
+                                    {/* <th colspan="2"><button class={styles.add_button} onClick={e => this.setState({ modal2Show: true })} class="btn"><i class="fa fa-plus-circle"></i> Add Movie</button></th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    this.state.users_list.map((user) => (
+                                        <tr>
+                                            <td>{user.role}</td>
+                                            <td>{user.user_id}</td>
+                                            <td>{user.surname}</td>
+                                            <td>{user.name}</td>
+                                            <td>{user.username}</td>
+                                            <td>{user.is_confirmed == false && <button style={{ 'color': 'lightgreen' }} onClick={e => this.setState({ modalShow: true, edit_user: user })} class="btn"><i class="fas fa-user-check"></i> Accept User</button>}
+                                                {user.is_confirmed == true && <button style={{ 'color': 'dark' }} class="btn" disabled><i class="fas fa-user-check" ></i> Confirmed</button>}</td>
+                                            <td><button style={{ 'color': 'tomato' }} onClick={e => this.setState({ modal2Show: true, edit_user: user })} class="btn"><i class="fas fa-trash-alt"></i> Delete</button></td>
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                        {
+                            this.state.users_list.length == 0 &&
+                            <h3 className={styles.movie}> No users found</h3>
+                        }
+                    </div>
+                    <AcceptUserModal
+                        show={this.state.modalShow}
+                        onHide={() => this.setState({ modalShow: false })}
+                        user={this.state.edit_user}
+                    />
+                    <DeleteUserModal
+                        show={this.state.modal2Show}
+                        onHide={() => this.setState({ modal2Show: false })}
+                        user={this.state.edit_user}
+                    />
+                </div >
+            </Animate>
         );
     }
 }

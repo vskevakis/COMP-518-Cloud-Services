@@ -50,8 +50,8 @@ export function checkConfirmed() {
     let decoded = jwt.decode(token);
     // return (true)
     if (decoded !== null) {
-        console.log("IS Confirmed?");
-        console.log(decoded.is_confirmed);
+        // console.log("IS Confirmed?");
+        // console.log(decoded.is_confirmed);
         return decoded.is_confirmed;
     } else {
         return null;
@@ -64,9 +64,9 @@ export function checkUserID() {
     let decoded = jwt.decode(token);
     // return (1)
     if (decoded !== null) {
-        console.log("IS Confirmed?");
-        console.log(decoded.is_confirmed);
-        return decoded.is_confirmed;
+        // console.log("IS?");
+        // console.log(decoded);
+        return decoded.user_id;
     } else {
         return null;
     }

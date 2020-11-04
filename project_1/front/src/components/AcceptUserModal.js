@@ -43,26 +43,31 @@ export default function AcceptUserModal(props) {
     };
 
     return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Accept User
+        <div onKeyPress={(event) => {
+            if (event.key === 'Enter') {
+                acceptUser()
+            }
+        }}>
+            <Modal
+                {...props}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Accept User
                 </Modal.Title>
-            </Modal.Header>
-            <Modal.Body >
-                <h4> Are you sure you want to accept user "{props.user.username}"" ?</h4>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={() => acceptUser()}>Accept</Button>
-                <Button onClick={() => deleteUser()}>Decline</Button>
-            </Modal.Footer>
-        </Modal >
-
+                </Modal.Header>
+                <Modal.Body >
+                    <h4> Are you sure you want to accept user "{props.user.username}"" ?</h4>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="dark" onClick={() => acceptUser()}>Accept</Button>
+                    <Button variant="dark" onClick={() => deleteUser()}>Decline</Button>
+                </Modal.Footer>
+            </Modal >
+        </div>
     );
 
 }

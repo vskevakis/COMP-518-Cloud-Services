@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, Button, Form, FormControl, Col } from "react-bootstrap"
 import { Redirect } from 'react-router-dom';
-import logo from '../logo-bw.png'
+import logo from '../logo-rev.png'
 import { checkCookie, checkUser, setCookie, checkConfirmed } from './Cookies';
 
 import { Logout } from '../pages/Logout';

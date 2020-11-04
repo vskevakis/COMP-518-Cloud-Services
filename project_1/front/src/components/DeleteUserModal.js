@@ -26,26 +26,31 @@ export default function DeleteUserModal(props) {
     };
 
     return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Delete User
+        <div onKeyPress={(event) => {
+            if (event.key === 'Enter') {
+                deleteUser()
+            }
+        }}>
+            <Modal
+                {...props}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Delete User
                 </Modal.Title>
-            </Modal.Header>
-            <Modal.Body >
-                <h4> Are you sure you want to delete user {props.user.username} ?</h4>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={() => deleteUser()}>Delete</Button>
-                <Button onClick={props.onHide}>Cancel</Button>
-            </Modal.Footer>
-        </Modal >
-
+                </Modal.Header>
+                <Modal.Body >
+                    <h4> Are you sure you want to delete user {props.user.username} ?</h4>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="dark" onClick={() => deleteUser()}>Delete</Button>
+                    <Button variant="black" onClick={props.onHide}>Cancel</Button>
+                </Modal.Footer>
+            </Modal >
+        </div>
     );
 
 }

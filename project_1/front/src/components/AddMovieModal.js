@@ -13,6 +13,7 @@ export default function AddMovieModal(props) {
     const [start_date, setStartDate] = useState("");
     const [end_date, setEndDate] = useState("");
 
+
     const addMovie = async (title, category, start_date, end_date) => {
         const movie_data = {
             cinema_name: checkCookie(),
@@ -60,17 +61,21 @@ export default function AddMovieModal(props) {
                     </thead>
                     <tbody>
                         <tr >
-                            <td><input placeholder="Title" ref={title => (setTitle(title))} type="text" required></input></td>
-                            <td><input style={{ width: "100%" }} placeholder="Category" type="text" ref={category => (setCategory(category))} required></input></td>
-                            <td><input placeholder="Start Date" type="date" ref={start_date => (setStartDate(start_date))} required></input></td>
-                            <td><input placeholder="End Date" type="date" ref={end_date => (setEndDate(end_date))} required></input ></td>
+                            <td><input className="edit-form" placeholder="Title" ref={title => (setTitle(title))} type="text" required></input></td>
+                            <td><input className="edit-form" style={{ width: "100%" }} placeholder="Category" type="text" ref={category => (setCategory(category))} required></input></td>
+                            <td><input class={styles.date} type="date" ref={start_date => (setStartDate(start_date))} required></input></td>
+                            <td><input onKeyPress={(event) => {
+                                if (event.key === 'Enter') {
+                                    addMovie(title, category, start_date, end_date)
+                                }
+                            }} class={styles.date} type="date" ref={end_date => (setEndDate(end_date))} required></input ></td>
                         </tr>
                     </tbody>
                 </table>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={() => addMovie(title, category, start_date, end_date)}>Add</Button>
-                <Button onClick={props.onHide}>Close</Button>
+                <Button variant="dark" onClick={() => addMovie(title, category, start_date, end_date)}>Add</Button>
+                <Button variant="black" onClick={props.onHide}>Close</Button>
             </Modal.Footer>
         </Modal >
 

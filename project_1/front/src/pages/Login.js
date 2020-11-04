@@ -1,21 +1,23 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
+import { Animate } from 'react-animate-mount'
 
-import background1 from '../assets/backgrounds/background-movie-01.png';
-import background2 from '../assets/backgrounds/background-movie-02.png';
-import background3 from '../assets/backgrounds/background-movie-03.jpg';
-import background4 from '../assets/backgrounds/background-movie-04.jpg';
-import background5 from '../assets/backgrounds/background-movie-05.jpg';
-import background6 from '../assets/backgrounds/background-movie-06.jpg';
-import background7 from '../assets/backgrounds/background-movie-07.jpg';
-import background11 from '../assets/backgrounds/background-movie-11.jpg';
-import background12 from '../assets/backgrounds/background-movie-12.jpg';
-import background13 from '../assets/backgrounds/background-movie-13.jpg';
+import background1 from '../assets/backgrounds/background-image-01.png';
+import background2 from '../assets/backgrounds/background-image-02.png';
+import background3 from '../assets/backgrounds/background-image-03.png';
+import background4 from '../assets/backgrounds/background-image-04.png';
+import background5 from '../assets/backgrounds/background-image-05.png';
+import background6 from '../assets/backgrounds/background-image-06.png';
+import background7 from '../assets/backgrounds/background-image-07.png';
+import background8 from '../assets/backgrounds/background-image-08.png';
+import background9 from '../assets/backgrounds/background-image-09.png';
+import background10 from '../assets/backgrounds/background-image-10.png';
+import background11 from '../assets/backgrounds/background-image-11.png';
+import background12 from '../assets/backgrounds/background-image-12.png';
 
 
 
-import login_image from '../assets/illustrations/home_cinema_login.svg';
 import logo from '../logo.png';
 
 import axios from "axios";
@@ -36,6 +38,8 @@ class Login extends Component {
             username: "",
             password: "",
             isAuthenticated: checkCookie(),
+            show: false
+
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -46,7 +50,11 @@ class Login extends Component {
         this.setState({ [event.target.name]: event.target.value });
     }
     componentWillMount() {
-        const pictureArray = [background1, background2, background3, background4, background5, background6, background7, background12, background11, background13];
+        this.setbgPic()
+    }
+
+    setbgPic() {
+        const pictureArray = [background1, background2, background3, background4, background5, background6, background7, background8, background9, background10, background11, background12];
         const randomIndex = Math.floor(Math.random() * pictureArray.length);
         const selectedPicture = pictureArray[randomIndex];
 
@@ -59,6 +67,13 @@ class Login extends Component {
                 backgroundSize: "cover",
             }
         })
+    }
+
+    componentDidMount() {
+        this.setState({ show: true })
+        setInterval(() => {
+            this.setbgPic()
+        }, 5000)
     }
 
     handleSubmit = async (event) => {
@@ -83,58 +98,60 @@ class Login extends Component {
     };
 
     render() {
-        if (this.state.isAuthenticated) {
+        if (checkCookie()) {
             return <Redirect to="/movies" />;
         }
         return (
-            <div style={this.state.bgStyle} className="full-page-div bg">
-                <Container className="container">
+            <Animate type='fade' duration="500" show={this.state.show}>
+                <Container fluid style={this.state.bgStyle} className="full-page-div bg">                <Row className="justify-content-md-center">
+                    <img className="logo" src={logo}></img>
+                </Row>
                     <Row className="justify-content-md-center">
-                        <img className="logo" src={logo}></img>
-                    </Row>
-                    <Row className="my-form">
-                        <Col className="login_image">
-                            <img height="400px" src={login_image}></img>
-                        </Col>
-                        <Col>
-                            <Form
-                                onSubmit={this.handleSubmit}
-                            >
-                                <Form.Row className="justify-content-md-center">
-                                    <h3>Sign In</h3>
-                                </Form.Row>
-                                <Form.Group controlId="formBasicUsername">
-                                    <Form.Label>Username</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="username"
-                                        placeholder="johndoe"
-                                        onChange={this.handleChange}
-                                    />
-                                </Form.Group>
+                        <Form className="my-form"
+                            onSubmit={this.handleSubmit}
+                        >
+                            <Form.Row className="justify-content-md-center">
+                                <h3>Sign In</h3>
+                            </Form.Row>
+                            <Form.Group controlId="formBasicUsername">
+                                {/* <Form.Label>Username</Form.Label> */}
+                                <Form.Control
+                                    className="my-form"
+                                    type="text"
+                                    name="username"
+                                    placeholder="Username"
+                                    onChange={this.handleChange}
+                                />
+                            </Form.Group>
 
-                                <Form.Group controlId="formBasicPassword">
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control
-                                        type="password"
-                                        name="password"
-                                        placeholder="password"
-                                        onChange={this.handleChange}
-                                    />
-                                </Form.Group>
-                                <Row className="justify-content-md-center">
-                                    <Button as={Col} variant="primary" type="submit" onClick={this.handleSubmit}>
-                                        Login
+                            <Form.Group controlId="formBasicPassword">
+                                {/* <Form.Label>Password</Form.Label> */}
+                                <Form.Control
+                                    className="my-form"
+                                    type="password"
+                                    name="password"
+                                    placeholder="Password"
+                                    onChange={this.handleChange}
+                                    onKeyPress={(event) => {
+                                        if (event.key === 'Enter') {
+                                            this.handleSubmit(event)
+                                        }
+                                    }}
+                                />
+                            </Form.Group>
+                            {/* <Row className="justify-content-md-center"> */}
+                            <Button as={Col} variant="dark" type="submit" onClick={this.handleSubmit}>
+                                Login
                                     </Button>
-                                </Row>
-                                <Row className="justify-content-md-center">
-                                    <a href="./register"> I don't have an account</a>
-                                </Row>
-                            </Form>
-                        </Col>
+                            {/* </Row> */}
+                            <Row className="justify-content-md-center">
+                                <a style={{ 'color': "darkgray" }} href="./register"> I don't have an account</a>
+                            </Row>
+                        </Form>
                     </Row>
                 </Container>
-            </div>
+            </Animate>
+
         );
     }
 }

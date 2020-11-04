@@ -7,7 +7,7 @@ const url = process.env.REACT_APP_SERVICE_URL;
 
 
 export function Movie(props) {
-    const [fav, setFav] = useState(false);
+    const [fav, setFav] = useState(true);
     const [favList, setFavList] = useState(props.favs);
     const formatter = new Intl.DateTimeFormat("en-GB", {
         weekday: "short",
@@ -58,7 +58,7 @@ export function Movie(props) {
                                 </li>
                                 <li class={styles.movie_title}>{props.movies.title}</li>
                                 <li class={styles.cinema}>Cinema: {props.movies.cinema_name}</li>
-                                {/* <li class={styles.date}> {formatter.format(Date.parse(props.movies.start_date))} to {formatter.format(Date.parse(props.movies.end_date))}</li> */}
+                                <li class={styles.date}> {formatter.format(Date.parse(props.movies.start_date))} to {formatter.format(Date.parse(props.movies.end_date))}</li>
                             </ul>
                         </div>
                     </div>

@@ -5,11 +5,13 @@ import axios from "axios";
 import styles from "../styles/movies.module.css";
 import DatePicker from "../components/Datepicker";
 import moment from "moment";
+import { Animate } from 'react-animate-mount'
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 
 import { checkCookie, checkUser, setCookie, checkUserID } from "../components/Cookies";
 import { Movie } from "../components/Movie";
 import { SearchMovie } from "../components/SearchMovie";
-import InfiniteScroll from 'react-infinite-scroll-component';
 const url = process.env.REACT_APP_SERVICE_URL;
 
 class Movies extends Component {
@@ -20,19 +22,13 @@ class Movies extends Component {
             date: moment().format('YYYY-MM-DD'),
             update: false,
             user_id: checkUserID(),
-            // setDate: moment(),
-            // username: checkCookie(),
-            // role: checkUser(),
-            // isAuthenticated: checkCookie(),
             movies_list: [],
-            chunk: [],
-            index: 0,
             fav_list: [],
             favs_only: false,
-            hasMore: true
+            show: false,
+            fetchCount: 0,
+
         };
-        // this.setState = this.setState()
-        // this.handleInputChange = this.handleInputChange.bind(this);
     }
 
 
@@ -157,9 +153,9 @@ class Movies extends Component {
                 });
 
     }
-
     componentDidMount() {
         this.searchMovies();
+        this.setState({ show: true });
     }
 
     handleInputChange = (event) => {
@@ -182,21 +178,19 @@ class Movies extends Component {
 
     render() {
         return (
-            <div className={styles.mycont}>
-                <div>
-                    <div class={styles.search_form} inline>
-                        <input class={styles.text_area} onChange={this.handleInputChange} type="text" placeholder="Search" />
-                        <input type="date" value={this.state.date} onChange={this.handleDateChange}></input>
-                        <div>
-                            {this.state.favs_only && <button onClick={() => this.setState({ favs_only: !this.state.favs_only })} class={styles.checkbox}><i class="far fa-check-square"></i> Only Favourites</button>}
-                            {!this.state.favs_only && <button onClick={() => this.setState({ favs_only: !this.state.favs_only })} class={styles.checkbox}><i class="far fa-square"></i> Only Favourites</button>}
-                        </div>
+            <Animate type='fade' duration="1000" show={this.state.show}>
+                <div class={styles.search_form} inline>
+                    <input class={styles.text_area} onChange={this.handleInputChange} type="text" placeholder="Search" />
+                    <input type="date" value={this.state.date} onChange={this.handleDateChange}></input>
+                    <div>
+                        {this.state.favs_only && <button onClick={() => this.setState({ favs_only: !this.state.favs_only })} class={styles.checkbox}><i class="far fa-check-square"></i> Only Favourites</button>}
+                        {!this.state.favs_only && <button onClick={() => this.setState({ favs_only: !this.state.favs_only })} class={styles.checkbox}><i class="far fa-square"></i> Only Favourites</button>}
                     </div>
                 </div>
-                <div>
+                <div className={styles.mycont}>
                     {
                         this.state.movies_list.map((movie) => (
-                            <Movie className={styles.movie}
+                            <Movie className={styles.items}
                                 movies={movie}
                                 favs={this.state.fav_list}
                                 onFavUpdate={() => this.setState({ update: !this.state.update })}
@@ -204,12 +198,12 @@ class Movies extends Component {
                             />
                         ))
                     }
+                    {
+                        this.state.movies_list.length == 0 &&
+                        <h3 className={styles.movie}> Sorry, no movies found</h3>
+                    }
                 </div>
-                {
-                    this.state.movies_list.length == 0 &&
-                    <h3 className={styles.movie}> Sorry, no movies found</h3>
-                }
-            </div >
+            </Animate >
         );
     }
 }

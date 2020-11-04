@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Form, FormControl, Button, Col, Row, Container } from "react-bootstrap";
 import styles from "../styles/movies.module.css";
 import axios from "axios";
+import moment from "moment";
+
 
 const url = process.env.REACT_APP_SERVICE_URL;
 
@@ -56,17 +58,33 @@ export default function EditMovieModal(props) {
                     </thead>
                     <tbody>
                         <tr >
-                            <td><input placeholder={props.movie.title} ref={title => (setTitle(title))} type="text"></input></td>
-                            <td><input style={{ width: "100%" }} placeholder={props.movie.category} type="text" ref={category => (setCategory(category))} ></input></td>
-                            <td><input placeholder={props.movie.start_date} type="date" ref={start_date => (setStartDate(start_date))}></input></td>
-                            <td><input placeholder={props.movie.end_date} type="date" ref={end_date => (setEndDate(end_date))}></input></td>
+                            <td><input onKeyPress={(event) => {
+                                if (event.key === 'Enter') {
+                                    updateMovie(title, category, start_date, end_date)
+                                }
+                            }} className="edit-form" placeholder={props.movie.title} ref={title => (setTitle(title))} type="text"></input></td>
+                            <td><input onKeyPress={(event) => {
+                                if (event.key === 'Enter') {
+                                    updateMovie(title, category, start_date, end_date)
+                                }
+                            }} className="edit-form" style={{ width: "100%" }} placeholder={props.movie.category} type="text" ref={category => (setCategory(category))} ></input></td>
+                            <td><input onKeyPress={(event) => {
+                                if (event.key === 'Enter') {
+                                    updateMovie(title, category, start_date, end_date)
+                                }
+                            }} class={styles.date} value={moment(props.movie.start_date).format('YYYY-MM-DD')} type="date" ref={start_date => (setStartDate(start_date))}></input></td>
+                            <td><input onKeyPress={(event) => {
+                                if (event.key === 'Enter') {
+                                    updateMovie(title, category, start_date, end_date)
+                                }
+                            }} class={styles.date} value={moment(props.movie.end_date).format('YYYY-MM-DD')} type="date" ref={end_date => (setEndDate(end_date))}></input></td>
                         </tr>
                     </tbody>
                 </table>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={() => updateMovie(title, category, start_date, end_date)}>Save</Button>
-                <Button onClick={props.onHide}>Close</Button>
+                <Button variant="dark" onClick={() => updateMovie(title, category, start_date, end_date)}>Save</Button>
+                <Button variant="black" onClick={props.onHide}>Close</Button>
             </Modal.Footer>
         </Modal >
     );

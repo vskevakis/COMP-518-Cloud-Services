@@ -200,17 +200,23 @@ def get_movies():
 @app.route("/back/search_movies", methods=["POST"])
 def search_movies():
     search_query = request.json['search']
+    search_date = request.json['date']
     search_query = str("%"+search_query+"%")
+    date = datetime.datetime.strptime(search_date, '%Y-%m-%d')
     movies = db.session.query(Movie).filter(or_(Movie.title.ilike(search_query),  Movie.category.ilike(
-        search_query),  Movie.cinema_name.ilike(search_query)))
-    try:
-        search_date = request.json['date']
-        date = datetime.datetime.strptime(search_date, '%Y-%m-%d')
-        movies = movies.filter(
-            and_(Movie.start_date <= date, Movie.end_date >= date))
-    except:
-        pass
-    movies = movies.order_by(Movie.title.asc()).limit(4).all()
+        search_query),  Movie.cinema_name.ilike(search_query)), (and_(Movie.start_date <= date, Movie.end_date >= date)))
+    # search_query = request.json['search']
+    # search_query = str("%"+search_query+"%")
+    # movies = db.session.query(Movie).filter(or_(Movie.title.ilike(search_query),  Movie.category.ilike(
+    #     search_query),  Movie.cinema_name.ilike(search_query)))
+    # try:
+    #     search_date = request.json['date']
+    #     date = datetime.datetime.strptime(search_date, '%Y-%m-%d')
+    #     movies = movies.filter(
+    #         and_(Movie.start_date <= date, Movie.end_date >= date))
+    # except:
+    #     pass
+    movies = movies.order_by(Movie.title.asc()).limit(10).all()
     movies_list = []
     for movie in movies:
         # if movie.start_date >= date and movie.end_date <= date:

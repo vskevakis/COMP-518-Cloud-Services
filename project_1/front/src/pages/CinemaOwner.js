@@ -5,10 +5,10 @@ import axios from "axios";
 import styles from "../styles/movies.module.css";
 // import DatePicker from "../components/Datepicker";
 import moment from "moment";
+import { Animate } from 'react-animate-mount'
+
 
 import { checkCookie, checkUser, setCookie } from "../components/Cookies";
-import { Movie } from "../components/Movie";
-import { SearchMovie } from "../components/SearchMovie";
 import EditMovieModal from "../components/EditMovieModal";
 import DeleteMovieModal from "../components/DeleteMovieModal";
 import AddMovieModal from "../components/AddMovieModal";
@@ -29,7 +29,8 @@ class CinemaOwner extends Component {
             modal3Show: false,
             edit_movie: "",
             deleteMovie: false,
-            movies_list: []
+            movies_list: [],
+            show: false
         };
         // this.setState = this.setState()
         // this.handleInputChange = this.handleInputChange.bind(this);
@@ -151,6 +152,7 @@ class CinemaOwner extends Component {
 
     componentDidMount() {
         this.searchMovies();
+        this.setState({ show: true })
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -175,59 +177,61 @@ class CinemaOwner extends Component {
 
     render() {
         return (
-            <div className={styles.mycont}>
-                <div>
-                    <form class={styles.owner_search_form} inline>
-                        <input class={styles.text_area} onChange={this.handleInputChange} type="text" placeholder="Search" />
-                        <input type="date" onChange={this.handleDateChange} value={this.state.date}></input>
-                    </form>
-                </div>
-                <div>
-                    <table class={styles.styled_table}>
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Category</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th colspan="2"><button class={styles.add_button} onClick={e => this.setState({ modal2Show: true })} class="btn"><i class="fa fa-plus-circle"></i> Add Movie</button></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                this.state.movies_list.map((movie) => (
-                                    <tr>
-                                        <td>{movie.title}</td>
-                                        <td>{movie.category}</td>
-                                        <td>{this.formatter.format(Date.parse(movie.start_date))}</td>
-                                        <td>{this.formatter.format(Date.parse(movie.end_date))}</td>
-                                        <td><button onClick={e => this.setState({ modalShow: true, edit_movie: movie })} class="btn"><i class="fa fa-edit"></i> Edit</button></td>
-                                        <td><button onClick={e => this.setState({ modal3Show: true, edit_movie: movie })} class="btn"><i class="fa fa-trash"></i> Delete</button></td>
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                {
-                    this.state.movies_list.length == 0 &&
-                    <h3 className={styles.movie}> No movies found</h3>
-                }
-                <EditMovieModal
-                    show={this.state.modalShow}
-                    onHide={() => this.setState({ modalShow: false })}
-                    movie={this.state.edit_movie}
-                />
-                <AddMovieModal
-                    show={this.state.modal2Show}
-                    onHide={() => this.setState({ modal2Show: false })}
-                />
-                <DeleteMovieModal
-                    show={this.state.modal3Show}
-                    onHide={() => this.setState({ modal3Show: false })}
-                    movie={this.state.edit_movie}
-                />
-            </div >
+            <Animate type="fade" duration="1000" show={this.state.show}>
+                <div className={styles.mycont}>
+                    <div>
+                        <form class={styles.owner_search_form} inline>
+                            <input class={styles.text_area} onChange={this.handleInputChange} type="text" placeholder="Search" />
+                            <input type="date" onChange={this.handleDateChange} value={this.state.date}></input>
+                        </form>
+                    </div>
+                    <div>
+                        <table class={styles.styled_table}>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th colspan="2"><button class={styles.add_button} onClick={e => this.setState({ modal2Show: true })} class="btn"><i class="fa fa-plus-circle"></i> Add Movie</button></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    this.state.movies_list.map((movie) => (
+                                        <tr>
+                                            <td>{movie.title}</td>
+                                            <td>{movie.category}</td>
+                                            <td>{this.formatter.format(Date.parse(movie.start_date))}</td>
+                                            <td>{this.formatter.format(Date.parse(movie.end_date))}</td>
+                                            <td><button style={{ 'color': 'lightblue' }} onClick={e => this.setState({ modalShow: true, edit_movie: movie })} class="btn"><i class="fa fa-edit"></i> Edit</button></td>
+                                            <td><button style={{ 'color': 'tomato' }} onClick={e => this.setState({ modal3Show: true, edit_movie: movie })} class="btn"><i class="fa fa-trash"></i> Delete</button></td>
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                        {
+                            this.state.movies_list.length == 0 &&
+                            <h3 className={styles.movie}> No movies found</h3>
+                        }
+                    </div>
+                    <EditMovieModal
+                        show={this.state.modalShow}
+                        onHide={() => this.setState({ modalShow: false })}
+                        movie={this.state.edit_movie}
+                    />
+                    <AddMovieModal
+                        show={this.state.modal2Show}
+                        onHide={() => this.setState({ modal2Show: false })}
+                    />
+                    <DeleteMovieModal
+                        show={this.state.modal3Show}
+                        onHide={() => this.setState({ modal3Show: false })}
+                        movie={this.state.edit_movie}
+                    />
+                </div >
+            </Animate>
         );
     }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
+import { Animate } from 'react-animate-mount'
 
 import { checkCookie, checkUser, setCookie } from "../components/Cookies";
 
@@ -11,6 +12,7 @@ class Home extends Component {
             username: checkCookie(),
             role: checkUser(),
             isAuthenticated: checkCookie(),
+            show: false
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -21,14 +23,20 @@ class Home extends Component {
         this.setState({ [event.target.name]: event.target.value });
     }
 
+    componentDidMount() {
+        this.setState({ show: true })
+    }
+
     render() {
         return (
-            <Container className="mycont" style={{ 'text-align': 'center' }}>
-                <h1 style={{ 'text-decoration': 'underline' }}>Welcome to theCinemaDB</h1>
-                <h3 style={{ 'text-align': 'center' }}>All users must be accepted by an admin in order to use this app. The following website is part of my project on Cloud Services course
+            <Animate type='fade' duration="500" show={this.state.show}>
+                <Container className="mycont" style={{ 'text-align': 'center' }}>
+                    <h1 style={{ 'text-decoration': 'underline' }}>Welcome to theCinemaDB</h1>
+                    <h3 style={{ 'text-align': 'center' }}>All users must be accepted by an admin in order to use this app. The following website is part of my project on Cloud Services course
                 at ECE Department of the Technical University of Crete.</h3>
-                <h5 style={{ 'text-align': 'center', 'color': 'gray', 'padding': '10%' }}>Feel free to use this for any non-commercial projects</h5>
-            </Container >
+                    <h5 style={{ 'text-align': 'center', 'color': 'gray', 'padding': '10%' }}>Feel free to use this for any non-commercial projects</h5>
+                </Container >
+            </Animate>
         );
     }
 }
