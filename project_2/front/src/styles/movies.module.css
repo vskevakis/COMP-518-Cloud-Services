@@ -1,0 +1,213 @@
+/* Movies Display */
+
+.mycont {
+  display: flex; /* or inline-flex */
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.items {
+  flex-grow: 4 !important;
+  align-self: auto !important;
+}
+
+.maincont {
+  width: 300px;
+  margin: 10px;
+  display: inline-grid;
+  justify-items: center;
+}
+
+.movie{
+  display: grid;
+  color: darkgray;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  display: inline-grid;
+  justify-items: center;  
+  }
+
+.moviePoster {
+  border-radius: 15px;
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+
+.movieDetails {
+  opacity: 0;
+  transition: .5s ease;
+  background-color: #000000;
+  border-radius: 15px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.container:hover .movieDetails {
+  opacity: 0.9;
+
+}
+
+.litext {
+  color: white;
+  position: relative;
+  display: grid;
+  grid-template-columns: 80px 80px 80px;
+  grid-template-rows: auto 330px auto; 
+  column-gap: auto;
+  row-gap: auto;
+  grid-template-areas: 
+    "category . favourite"
+    "title title title"
+    "cinema cinema cinema"
+    "date date date";
+  
+}
+
+ul {
+  list-style-type: none;
+}
+
+.movie_title {
+  grid-area: title;
+  place-self: center stretch;
+  font-size: 30px;
+}
+
+.category {
+  grid-area: category;
+  background-color: tomato;
+  opacity: 1;
+  align-self: center;
+  padding: 0px 15px;
+  margin: 0px;
+  justify-self: flex-start;
+
+}
+
+.favourite {
+  grid-area: favourite;
+  justify-self: flex-end;
+  /* background-color: tomato; */
+
+}
+
+.cinema {
+  grid-area: cinema;
+}
+
+.date {
+  grid-area: date;
+}
+
+.search_form {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: #dddddd !important;
+  text-align: center;
+}
+
+.checkbox {
+  color: darkgray;
+  text-emphasis: bold;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: 0px;
+  background: transparent;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  color: white;
+}
+
+.text_area {
+  background: transparent;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  color: white;
+}
+
+.styled_table {
+  position: relative;
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  /* font-family: sans-serif; */
+  min-width: 200px;
+  width: 80vw;
+  /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); */
+  background-color:transparent;
+}
+
+.styled_table thead tr {
+  background-color: rgb(131, 128, 128);
+  color: #ffffff;
+  text-align: left;
+  border-bottom: 1px solid #dddddd;
+
+  
+}
+
+.styled_table th,
+.styled_table td {
+  border-bottom: 1px solid #cec3c3;
+  color: #e2dada;
+
+  padding: 12px 15px;
+}
+
+.styled_table tbody tr {
+  border-bottom: 1px solid #dddddd;
+  
+}
+
+.styled_table tbody tr:nth-of-type(even) {
+  /* background-color: #f3f3f3; */
+}
+
+.styled_table tbody tr:last-of-type {
+  border-bottom: 4px solid #676768;
+}
+
+.styled_table tbody tr.active-row {
+  font-weight: bold;
+  color: #435f99;
+}
+
+.edit_container {
+  position: absolute;
+  display: flex;
+}
+
+.edit_table {
+  position: relative !important;
+  justify-content: center !important;
+  justify-items: center !important;
+}
+
+.owner_search_form {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.add_button {
+  display: flex;
+  align-items: center;
+  color: white;
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
+

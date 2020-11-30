@@ -3,10 +3,8 @@ import { Redirect } from "react-router-dom";
 import { Form, FormControl, Button, Col, Row, Container } from "react-bootstrap";
 import axios from "axios";
 import styles from "../styles/movies.module.css";
-import DatePicker from "../components/Datepicker";
 import moment from "moment";
 import { Animate } from 'react-animate-mount'
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 
 import { checkCookie, checkUser, setCookie, checkUserID } from "../components/Cookies";
@@ -26,8 +24,7 @@ class Movies extends Component {
             fav_list: [],
             favs_only: false,
             show: false,
-            fetchCount: 0,
-
+            // items: 10,
         };
     }
 
@@ -66,97 +63,24 @@ class Movies extends Component {
                 err => {
                     console.log("Movies API Call ERROR");
                     console.log(search_query)
-
-                    this.setState({
-                        movies_list: [{
-                            "category": "Action",
-                            "cinema_name": "Attikon",
-                            "end_date": "Fri, 20 Nov 2015 00:00:00 GMT",
-                            "movie_id": 4,
-                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
-                            "start_date": "Fri, 23 Oct 2015 00:00:00 GMT",
-                            "title": "Harry Potter 1"
-                        },
-                        {
-                            "category": "Action",
-                            "cinema_name": "Attikon",
-                            "end_date": "Fri, 20 Nov 2015 00:00:00 GMT",
-                            "movie_id": 5,
-                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg",
-                            "start_date": "Fri, 23 Oct 2015 00:00:00 GMT",
-                            "title": "Harry Potter 2"
-                        },
-                        {
-                            "category": "Crime",
-                            "cinema_name": "Attikon",
-                            "end_date": "Sun, 20 Nov 2016 00:00:00 GMT",
-                            "movie_id": 35,
-                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg",
-                            "start_date": "Sun, 23 Oct 2016 00:00:00 GMT",
-                            "title": "Rubber"
-                        },
-                        {
-                            "category": "Crime",
-                            "cinema_name": "Ellinis",
-                            "end_date": "Fri, 20 Nov 2015 00:00:00 GMT",
-                            "movie_id": 1,
-                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
-                            "start_date": "Fri, 23 Oct 2015 00:00:00 GMT",
-                            "title": "The Godfather"
-                        },
-                        {
-                            "category": "Crime",
-                            "cinema_name": "Ellinis",
-                            "end_date": "Fri, 20 Nov 2015 00:00:00 GMT",
-                            "movie_id": 2,
-                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
-                            "start_date": "Fri, 23 Oct 2015 00:00:00 GMT",
-                            "title": "The Godfather 2"
-                        },
-                        {
-                            "category": "Crime",
-                            "cinema_name": "Ellinis",
-                            "end_date": "Fri, 20 Nov 2015 00:00:00 GMT",
-                            "movie_id": 3,
-                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
-                            "start_date": "Fri, 23 Oct 2015 00:00:00 GMT",
-                            "title": "The Godfather 3"
-                        }, {
-                            "category": "Action",
-                            "cinema_name": "Attikon",
-                            "end_date": "Fri, 20 Nov 2015 00:00:00 GMT",
-                            "movie_id": 4,
-                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
-                            "start_date": "Fri, 23 Oct 2015 00:00:00 GMT",
-                            "title": "Harry Potter 1"
-                        },
-                        {
-                            "category": "Action",
-                            "cinema_name": "Attikon",
-                            "end_date": "Fri, 20 Nov 2015 00:00:00 GMT",
-                            "movie_id": 5,
-                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg",
-                            "start_date": "Fri, 23 Oct 2015 00:00:00 GMT",
-                            "title": "Harry Potter 2"
-                        },
-                        {
-                            "category": "Crime",
-                            "cinema_name": "Attikon",
-                            "end_date": "Sun, 20 Nov 2016 00:00:00 GMT",
-                            "movie_id": 35,
-                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg",
-                            "start_date": "Sun, 23 Oct 2016 00:00:00 GMT",
-                            "title": "Rubber"
-                        }]
-                    });
-
                 });
 
     }
     componentDidMount() {
         this.searchMovies();
         this.setState({ show: true });
+
     }
+
+    // loadMore() {
+    //     if (this.state.items === this.state.movies_list) {
+    //         this.setState({ hasMore: false });
+    //     } else {
+    //         setTimeout(() => {
+    //             this.setState({ items: this.state.items + 10 });
+    //         }, 1000);
+    //     }
+    // }
 
     handleInputChange = (event) => {
         this.setState({
@@ -189,6 +113,7 @@ class Movies extends Component {
                 </div>
                 <div className={styles.mycont}>
                     {
+                        // this.state.movies_list.slice(0, this.state.items).map((movie) => (
                         this.state.movies_list.map((movie) => (
                             <Movie className={styles.items}
                                 movies={movie}
@@ -198,9 +123,15 @@ class Movies extends Component {
                             />
                         ))
                     }
+                </div>
+                <div class={styles.search_form}>
+                    {/* {
+                        this.state.items < this.state.movies_list.length &&
+                        <Button class='justify-content-center' variant="dark" onClick={() => this.loadMore()} className={styles.movie}> Load More</Button>
+                    } */}
                     {
-                        this.state.movies_list.length == 0 &&
-                        <h3 className={styles.movie}> Sorry, no movies found</h3>
+                        this.state.movies_list.length === 0 &&
+                        <h3 className={styles.movie}> No movies found</h3>
                     }
                 </div>
             </Animate >

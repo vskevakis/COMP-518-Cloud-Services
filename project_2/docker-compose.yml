@@ -1,0 +1,134 @@
+version: "3.4"
+
+services: 
+    keyrock:
+        build: ./keyrock     
+        image: keyrock:latest
+        hostname: keyrock
+        depends_on:      
+            - mysql-db     
+        ports:      
+            - '3001:3001'      
+            - '443:443'    
+        networks:      
+            default-1:         
+                ipv4_address: 172.18.1.21
+        restart: always
+    mysql-db:
+        restart: always
+        image: mysql:5.7
+        hostname: mysql-db
+        container_name: db-mysql
+        expose:
+            - '3306'
+        ports:
+            - '3306:3306'
+        networks:
+            default-1:
+                ipv4_address: 172.18.1.20
+        environment:
+            # Development use only
+            # Use Docker Secrets for Sensitive Data
+            - 'MYSQL_ROOT_PASSWORD=secret'
+            - 'MYSQL_ROOT_HOST=172.18.1.21'
+        volumes:
+            - mysql-db:/var/lib/mysql
+    # pep-proxy:
+    #     build: ./pep-proxy
+    #     image: pep-proxy:latest
+    #     ports:
+    #         - "1027"
+    #     networks:
+    #         - default-1
+    #     restart: always
+    # mongo:
+    #     image: mongo:3.4
+    #     command: --nojournal
+    #     networks:
+    #         - default-1
+    # orion:
+    #     image: fiware/orion
+    #     links:
+    #         - mongo
+    #     ports:
+    #         - "1026:1026"
+    #     command: -dbhost mongo -logLevel DEBUG
+    #     dns:
+    #         - 208.67.222.222
+    #         - 208.67.220.220
+    #     networks:
+    #         - default-1
+    auth:
+        build: ./auth
+        image: auth:latest
+        env_file: ./auth/postgres.env
+        depends_on:
+            - auth-db
+        ports:
+            - "5000"
+        networks:
+            - default-1
+        # restart: always
+    auth-db:
+        image: postgres:latest
+        env_file: ./auth/postgres.env
+        networks:
+            - default-1
+        # restart: always
+    front:
+        build: ./front
+        image: front:latest
+        ports:
+            - "3000"
+        environment:
+            - NODE_ENV=development
+            - REACT_APP_SERVICE_URL=http://localhost:80
+            - IDM_APP_CLIENT_ID='02b213e7-f627-4ab5-9afb-886f8e89e756'
+            - IDM_APP_CLIENT_SEC='5b17f806-f37b-4804-a72d-e0c256e1f252'
+            - CHOKIDAR_USEPOLLING=true
+        depends_on:
+            - auth
+        networks:
+            - default-1
+        # restart: always
+    back:
+        build: ./back
+        image: backend:latest
+        env_file: ./back/databases.env
+        depends_on:
+            - back-db
+            - fav-db
+        ports:
+            - "5001"
+        networks:
+            - default-1
+        # restart: always
+    back-db:
+        image: postgres:latest
+        env_file: ./back/databases.env
+        networks:
+            - default-1
+        # restart: always
+    fav-db:
+        image: redis:latest
+        env_file: ./back/databases.env
+        networks:
+            - default-1
+        # restart: always
+    nginx:
+        build: ./nginx
+        image: nginx:latest
+        ports:
+            - 80:80
+        depends_on:
+            - auth
+            - front
+        networks:
+            - default-1
+networks:
+    default-1:
+        ipam:
+            config:
+                - subnet: 172.18.1.0/24
+volumes:
+    mysql-db: ~

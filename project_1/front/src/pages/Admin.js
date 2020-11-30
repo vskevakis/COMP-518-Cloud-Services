@@ -46,35 +46,6 @@ class Admin extends Component {
             },
                 err => {
                     console.log("Users API Call ERROR");
-                    this.setState({
-                        users_list: [{
-                            "user_id": 125,
-                            "username": "skevobillos",
-                            "name": "Vasilis",
-                            "surname": "Skevakis",
-                            "email": "vasilis@skevakis.com",
-                            "role": "Admin",
-                            "is_confirmed": false
-                        },
-                        {
-                            "user_id": 165,
-                            "username": "Ellinis",
-                            "name": "Takis",
-                            "surname": "Flevakis",
-                            "email": "takis@flevakis.com",
-                            "role": "CinemaOwner",
-                            "is_confirmed": false
-                        },
-                        {
-                            "user_id": 122,
-                            "username": "makis",
-                            "name": "Kanakis",
-                            "surname": "Akis",
-                            "email": "kanakis@akis.com",
-                            "role": "User",
-                            "is_confirmed": true
-                        }]
-                    });
                 });
     }
 
