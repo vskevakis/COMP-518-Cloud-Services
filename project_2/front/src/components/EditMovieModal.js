@@ -5,7 +5,7 @@ import axios from "axios";
 import moment from "moment";
 
 
-const url = process.env.REACT_APP_SERVICE_URL;
+const url_prefix = process.env.REACT_APP_SERVICE_URL;
 
 
 export default function EditMovieModal(props) {
@@ -23,9 +23,13 @@ export default function EditMovieModal(props) {
             end_date: end_date.value
         };
 
-        await axios.post(url + "/back/edit_movie", movie_data).then(
+        axios({
+            method: 'patch', //you can set what request you want to be
+            url: url_prefix + "/data-storage/movies",
+            data: movie_data
+        }).then(
             (response) => {
-                console.log("Movie Updated")
+                console.log("Movie Updated");
             },
             (error) => {
                 alert("Movie Update Unsuccesful. Please check your movie_data.");

@@ -25,7 +25,7 @@ import axios from "axios";
 import { checkUser, checkCookie, setCookie } from "../components/Cookies";
 
 // const client_id = "fd06208b-3a85-4296-b8f6-9d52c1127576";
-const base64key = "MDJiMjEzZTctZjYyNy00YWI1LTlhZmItODg2ZjhlODllNzU2OjViMTdmODA2LWYzN2ItNDgwNC1hNzJkLWUwYzI1NmUxZjI1Mg=="
+const base64key = "YmEwYjkyY2MtMzc1OC00MjI1LTkxNDctYWI5NjE0MjE1MDM2OjRhNzhkZjc3LTRjMzItNDM5Yy04N2MyLTJhZmE2MzhiMjQ3Yg=="
 const url_prefix = process.env.REACT_APP_SERVICE_URL;
 class Login extends Component {
     constructor() {
@@ -98,6 +98,7 @@ class Login extends Component {
                 this.setState({ isAuthenticated: true });
             },
             (error) => {
+                setCookie(0, 0);
                 console.log("You failed AGAIN");
                 console.log(error);
             }

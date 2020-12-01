@@ -10,7 +10,7 @@ const UserRoute = ({ component: Component, ...rest }) => {
         <Route
             {...rest}
             render={(props) =>
-                (checkCookie() == "unconfirmed") ? (
+                (checkCookie() === "User" || checkCookie() === "Cinema Owner" || checkCookie() === "Admin") ? (
                     <div>
                         <HeaderNav />
                         <Component {...props} />

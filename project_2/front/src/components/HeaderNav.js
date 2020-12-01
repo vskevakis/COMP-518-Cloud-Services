@@ -27,7 +27,7 @@ export default class HeaderNav extends React.Component {
         if (this.state.username == null) {
             return <Redirect to="/login" />;
         }
-        if (checkUser() == "unconfirmed") {
+        if (checkUser() === "unconfirmed") {
             return (
                 <Navbar bg="black" variant="dark">
                     <Navbar.Brand href="/home"><img
@@ -50,7 +50,7 @@ export default class HeaderNav extends React.Component {
                 </Navbar >
             );
         }
-        else if (checkUser() == "user") {
+        else if (checkUser() === "User") {
             return (
                 <Navbar bg="black" variant="dark">
                     <Navbar.Brand href="/home"><img
@@ -74,7 +74,7 @@ export default class HeaderNav extends React.Component {
                 </Navbar >
             );
         }
-        else if (checkUser() == "cinemaowner") {
+        else if (checkUser() === "Cinema Owner") {
             return (
                 <Navbar bg="black" variant="dark">
                     <Navbar.Brand href="/home"><img
@@ -99,7 +99,7 @@ export default class HeaderNav extends React.Component {
                 </Navbar >
             );
         }
-        else if (checkUser() == "admin") {
+        else if (checkUser() === "Admin") {
             return (
                 <Navbar bg="black" variant="dark">
                     <Navbar.Brand href="/home"><img

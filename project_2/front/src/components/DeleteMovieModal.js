@@ -4,7 +4,7 @@ import styles from "../styles/movies.module.css";
 import axios from "axios";
 import { checkCookie, checkUser } from './Cookies';
 
-const url = process.env.REACT_APP_SERVICE_URL;
+const url_prefix = process.env.REACT_APP_SERVICE_URL;
 
 export default function DeleteMovieModal(props) {
 
@@ -16,7 +16,10 @@ export default function DeleteMovieModal(props) {
             cinema_name: checkCookie()
         };
 
-        await axios.post(url + "/back/delete_movie", movie_data).then(
+        await axios({
+            method: 'delete', //you can set what request you want to be
+            url: url_prefix + "/data-storage/movies?movie_id=" + props.movie.title
+        }).then(
             (response) => {
                 console.log("Movie Deleted")
             },

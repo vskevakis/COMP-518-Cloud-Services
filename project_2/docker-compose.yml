@@ -41,40 +41,21 @@ services:
     #     networks:
     #         - default-1
     #     restart: always
-    # mongo:
-    #     image: mongo:3.4
-    #     command: --nojournal
-    #     networks:
-    #         - default-1
-    # orion:
-    #     image: fiware/orion
-    #     links:
-    #         - mongo
-    #     ports:
-    #         - "1026:1026"
-    #     command: -dbhost mongo -logLevel DEBUG
-    #     dns:
-    #         - 208.67.222.222
-    #         - 208.67.220.220
-    #     networks:
-    #         - default-1
-    auth:
-        build: ./auth
-        image: auth:latest
-        env_file: ./auth/postgres.env
-        depends_on:
-            - auth-db
+    orion-mongo:
+        image: mongo:3.4
+        command: --nojournal
+        networks:
+            - default-1
+    orion:
+        image: fiware/orion
         ports:
-            - "5000"
+            - "1026:1026"
+        command: -dbhost orion-mongo -logLevel DEBUG
+        # dns:
+        #     - 208.67.222.222
+        #     - 208.67.220.220
         networks:
             - default-1
-        # restart: always
-    auth-db:
-        image: postgres:latest
-        env_file: ./auth/postgres.env
-        networks:
-            - default-1
-        # restart: always
     front:
         build: ./front
         image: front:latest
@@ -87,42 +68,42 @@ services:
             - IDM_APP_CLIENT_SEC='5b17f806-f37b-4804-a72d-e0c256e1f252'
             - CHOKIDAR_USEPOLLING=true
         depends_on:
-            - auth
+            - keyrock
         networks:
             - default-1
         # restart: always
-    back:
-        build: ./back
-        image: backend:latest
-        env_file: ./back/databases.env
+    data-storage:
+        build: ./data-storage
+        image: data-storage:latest
+        env_file: ./data-storage/databases.env
         depends_on:
-            - back-db
-            - fav-db
+            - ds-mongo
         ports:
             - "5001"
         networks:
             - default-1
-        # restart: always
-    back-db:
-        image: postgres:latest
-        env_file: ./back/databases.env
+        restart: always
+    ds-mongo:
+        image: mongo
+        restart: always
         networks:
             - default-1
-        # restart: always
-    fav-db:
-        image: redis:latest
-        env_file: ./back/databases.env
-        networks:
-            - default-1
-        # restart: always
+    # fav-db:
+    #     image: redis:latest
+    #     env_file: ./back/databases.env
+    #     networks:
+    #         - default-1
+    #     # restart: always
     nginx:
+        restart: always
         build: ./nginx
         image: nginx:latest
         ports:
             - 80:80
         depends_on:
-            - auth
+            - keyrock
             - front
+            - data-storage
         networks:
             - default-1
 networks:

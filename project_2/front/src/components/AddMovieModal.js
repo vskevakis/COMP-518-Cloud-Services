@@ -4,7 +4,7 @@ import styles from "../styles/movies.module.css";
 import axios from "axios";
 import { checkCookie, checkUser } from './Cookies';
 
-const url = process.env.REACT_APP_SERVICE_URL;
+const url_prefix = process.env.REACT_APP_SERVICE_URL;
 
 
 export default function AddMovieModal(props) {
@@ -24,9 +24,13 @@ export default function AddMovieModal(props) {
             end_date: end_date.value
         };
 
-        await axios.post(url + "/back/add_movie", movie_data).then(
+        axios({
+            method: 'post', //you can set what request you want to be
+            url: url_prefix + "/data-storage/movies",
+            data: movie_data
+        }).then(
             (response) => {
-                console.log("Movie Updated")
+                console.log("Movie Updated");
             },
             (error) => {
                 alert("Movie Update Unsuccesful. Please check your movie_data.");

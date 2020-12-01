@@ -16,7 +16,7 @@ import DeleteUserModal from "../components/DeleteUserModal";
 
 
 
-const url = process.env.REACT_APP_SERVICE_URL;
+const url_prefix = process.env.REACT_APP_SERVICE_URL;
 const app_id = "";
 
 class Admin extends Component {
@@ -65,6 +65,7 @@ class Admin extends Component {
                         this.setState({ isAuthenticated: true });
                     },
                     (error) => {
+                        setCookie(0, 0);
                         console.log("You failed AGAIN");
                         console.log(error);
                     }
@@ -72,7 +73,7 @@ class Admin extends Component {
             },
             (error) => {
                 alert("Token expired. Please login again.");
-                setCookie(null, null);
+                setCookie(0, 0);
                 console.log("Token must have expired");
                 console.log(error);
             }

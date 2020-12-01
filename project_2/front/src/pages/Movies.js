@@ -10,7 +10,7 @@ import { Animate } from 'react-animate-mount'
 import { checkCookie, checkUser, setCookie, checkUserID } from "../components/Cookies";
 import { Movie } from "../components/Movie";
 import { SearchMovie } from "../components/SearchMovie";
-const url = process.env.REACT_APP_SERVICE_URL;
+const url_prefix = process.env.REACT_APP_SERVICE_URL;
 
 class Movies extends Component {
     constructor() {
@@ -37,35 +37,38 @@ class Movies extends Component {
         const user_id = {
             user_id: this.state.user_id
         }
-        axios.post(url + `/back/get_favs`, user_id)
-            .then(res => {
-                console.log("Favs Initialized");
-                console.log(user_id)
-                // console.log(res.data.movies_list);
-                const fav_list = res.data;
-                this.setState({ fav_list: fav_list });
-            },
-                err => {
-                    const fav_list = [4, 35, 1]
-                    this.setState({ fav_list: fav_list });
-                    console.log("Fav List", fav_list);
-                })
-
-
-        axios.post(url + `/back/search_movies`, search_query)
-            .then(res => {
+        // axios.post(url + `/back/get_favs`, user_id)
+        //     .then(res => {
+        //         console.log("Favs Initialized");
+        //         console.log(user_id)
+        //         // console.log(res.data.movies_list);
+        //         const fav_list = res.data;
+        //         this.setState({ fav_list: fav_list });
+        //     },
+        //         err => {
+        //             const fav_list = [4, 35, 1]
+        //             this.setState({ fav_list: fav_list });
+        //             console.log("Fav List", fav_list);
+        //         })
+        axios({
+            method: 'get', //you can set what request you want to be
+            url: url_prefix + "/data-storage/movies?search=" + this.state.query + "&date=" + this.state.date
+        }).then(
+            (response) => {
                 console.log("Search Initialized");
                 console.log(search_query)
                 // console.log(res.data.movies_list);
-                const movies_list = res.data;
+                const movies_list = response.data;
                 this.setState({ movies_list: movies_list });
             },
-                err => {
-                    console.log("Movies API Call ERROR");
-                    console.log(search_query)
-                });
+            (error) => {
+                console.log("Movies API Call ERROR");
+                console.log(search_query);
+            }
+        );
 
     }
+
     componentDidMount() {
         this.searchMovies();
         this.setState({ show: true });

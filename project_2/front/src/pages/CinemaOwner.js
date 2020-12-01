@@ -15,7 +15,7 @@ import AddMovieModal from "../components/AddMovieModal";
 
 
 
-const url = process.env.REACT_APP_SERVICE_URL;
+const url_prefix = process.env.REACT_APP_SERVICE_URL;
 
 class CinemaOwner extends Component {
     constructor() {
@@ -48,16 +48,22 @@ class CinemaOwner extends Component {
             search: this.state.query,
             date: this.state.date
         };
-        axios.post(url + `/back/search_cinema_movies`, search_query)
-            .then(res => {
+        axios({
+            method: 'get', //you can set what request you want to be
+            url: url_prefix + "/data-storage/movies?cinema_name=" + this.state.cinema + "&search=" + this.state.query + "&date=" + this.state.date
+        }).then(
+            (response) => {
                 console.log("Search Initialized");
+                console.log(search_query)
                 // console.log(res.data.movies_list);
-                const movies_list = res.data;
+                const movies_list = response.data;
                 this.setState({ movies_list: movies_list });
             },
-                err => {
-                    console.log("Movies API Call ERROR");
-                });
+            (error) => {
+                console.log("Movies API Call ERROR");
+                console.log(search_query);
+            }
+        );
     }
 
     handleInputChange = (event) => {

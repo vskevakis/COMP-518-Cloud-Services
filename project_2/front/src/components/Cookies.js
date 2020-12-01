@@ -2,13 +2,13 @@ import jwt from "jsonwebtoken";
 import axios from "axios";
 
 const url_prefix = process.env.REACT_APP_SERVICE_URL;
-const base64key = "MDJiMjEzZTctZjYyNy00YWI1LTlhZmItODg2ZjhlODllNzU2OjViMTdmODA2LWYzN2ItNDgwNC1hNzJkLWUwYzI1NmUxZjI1Mg=="
+const base64key = "YmEwYjkyY2MtMzc1OC00MjI1LTkxNDctYWI5NjE0MjE1MDM2OjRhNzhkZjc3LTRjMzItNDM5Yy04N2MyLTJhZmE2MzhiMjQ3Yg=="
 
 
 export function setCookie(access_token, refresh_token) {
     document.cookie = 'access_token' + "=" + access_token + ";path=/";
     document.cookie = 'refresh_token' + "=" + refresh_token + ";path=/";
-    if (access_token == null) {
+    if (access_token == 0) {
         document.cookie = 'username' + "=" + null + ";path=/";
         document.cookie = 'user_id' + "=" + null + ";path=/";
         document.cookie = 'user_role' + "=" + null + ";path=/";
@@ -39,8 +39,8 @@ export function setCookie(access_token, refresh_token) {
 }
 
 export function renewToken() {
-    let rtoken = getCookie("refresh_token")
-    const user_data = 'grant_type=refresh_token&refresh_token=' + rtoken;
+    let refresh_token = getCookie("refresh_token")
+    const user_data = 'grant_type=refresh_token&refresh_token=' + refresh_token;
     const headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': 'Basic ' + base64key //+ base64(client_id: client_secret);
@@ -57,7 +57,7 @@ export function renewToken() {
             setCookie(response.data.access_token, response.data.refresh_token)
         },
         (error) => {
-            setCookie(null, null);
+            setCookie(0, 0);
             console.log(error);
         }
     );
