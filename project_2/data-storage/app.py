@@ -274,9 +274,12 @@ def get_movies():
 def add_fav():
     user_id = request.json['user_id']
     movie_id = request.json['movie_id']
+    title = request.json['title']
     favourite = {
         "user_id": user_id,
-        "movie_id": movie_id
+        "title": title,
+        "movie_id": movie_id,
+        "notification": False
     }
     if (db.favourites.find_one({"$and": [{'user_id': user_id}, {'movie_id': movie_id}]}) is not None):
         return Response("Movie is already favourite for that user", status=400)
@@ -364,10 +367,45 @@ def send_notification():
     for favourite in db.favourites.find({'movie_id': movie_id}):
         response = {
             "user_id": favourite['user_id'],
-            "title": movie['title']
+            "title": movie['title'],
+            "id": movie_id
         }
+        # Save notification for notification list
+        db.favourites.update_one({"$and": [{'user_id': favourite['user_id']}, {'movie_id': movie_id}]}, {
+            "$set": {"notification": True}})
+        # Send socket io notification
         socketio.emit('notification', response)
     return Response("Notifications send", status=200)
+
+
+@app.route("/notification", methods=["PATCH"])
+def delete_notification():
+    user_id = request.json["user_id"]
+    movie_id = request.json["movie_id"]
+    try:
+        db.favourites.update_one({"$and": [{'user_id': user_id}, {'movie_id': movie_id}]}, {
+                                 "$set": {"notification": False}})
+        notifications = []
+        for favourite in db.favourites.find({"$and": [{'user_id': user_id}, {'notification': True}]}):
+            notifications.append({"title": favourite["title"],
+                                  "movie_id": favourite["movie_id"]})
+        return jsonify(notifications)
+    except:
+        notifications = []
+        for favourite in db.favourites.find({"$and": [{'user_id': user_id}, {'notification': True}]}):
+            notifications.append({"title": favourite["title"],
+                                  "movie_id": favourite["movie_id"]})
+        return jsonify(notifications)
+
+
+@app.route("/notification", methods=["GET"])
+def get_notifications():
+    user_id = request.args["user_id"]
+    notifications = []
+    for favourite in db.favourites.find({"$and": [{'user_id': user_id}, {'notification': True}]}):
+        notifications.append({"title": favourite["title"],
+                              "movie_id": favourite["movie_id"]})
+    return jsonify(notifications)
 
 
 if __name__ == "__main__":

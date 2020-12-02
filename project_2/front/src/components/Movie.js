@@ -18,10 +18,11 @@ export function Movie(props) {
     // console.log('Fav: ', props.favs.indexOf(props.movie.movie_id))
 
 
-    const addFavourite = async (movie_id) => {
+    const addFavourite = async (props) => {
         const favourite_data = {
-            movie_id: movie_id,
-            user_id: checkUserID()
+            movie_id: props.movie_id,
+            user_id: checkUserID(),
+            title: props.title
         };
         await axios({
             method: 'post', //you can set what request you want to be
@@ -55,7 +56,7 @@ export function Movie(props) {
                 );
             }
         );
-        props.onFavUpdate();
+        // props.onFavUpdate();
     };
 
     if (props.favsOnly && (favList.length) < 0) {
@@ -70,8 +71,8 @@ export function Movie(props) {
                         <div class={styles.movieEffect}>
                             <ul className={styles.litext}>
                                 <li class={styles.category}>{props.movies.category}</li>
-                                <li class={styles.favourite}> {!favList.includes(props.movies.movie_id) && <button onClick={() => addFavourite(props.movies.movie_id)} style={{ 'font-size': '30px', 'color': 'white' }} class='btn'><i class="fa fa-heart"></i></button>}
-                                    {favList.includes(props.movies.movie_id) && <button onClick={() => addFavourite(props.movies.movie_id)} style={{ 'font-size': '30px', 'color': 'tomato' }} class='btn'><i class="fa fa-heart"></i></button>}
+                                <li class={styles.favourite}> {!favList.includes(props.movies.movie_id) && <button onClick={() => addFavourite(props.movies)} style={{ 'font-size': '30px', 'color': 'white' }} class='btn'><i class="fa fa-heart"></i></button>}
+                                    {favList.includes(props.movies.movie_id) && <button onClick={() => addFavourite(props.movies)} style={{ 'font-size': '30px', 'color': 'tomato' }} class='btn'><i class="fa fa-heart"></i></button>}
                                 </li>
                                 <li class={styles.movie_title}>{props.movies.title}</li>
                                 <li class={styles.cinema}>Cinema: {props.movies.cinema_name}</li>

@@ -119,6 +119,7 @@ input[type="date"] {
   padding: 0;
   -webkit-padding-start: 1px; */
 }
+
 /*
 input::-webkit-datetime-edit {
  -webkit-flex: 1;
