@@ -305,7 +305,7 @@ def add_fav():
                 "category",
                 "end_date",
                 "start_date",
-                "title",
+                "title"
             ]
         },
         "expires": "2030-01-01T14:00:00.00Z",
@@ -319,7 +319,11 @@ def add_fav():
         "POST", url, headers=headers, data=json.dumps(sub_data))
     time.sleep(1)  # Fixing notification at insertion of favourite
     db.favourites.insert_one(favourite).inserted_id
-    return Response("Favourite Added ", status=200)
+    # Return all favourites
+    favourite_movies = []
+    for favourite in db.favourites.find({'user_id': user_id}):
+        favourite_movies.append(str(favourite['movie_id']))
+    return jsonify(favourite_movies)
 
 
 @app.route("/favourites", methods=["DELETE"])
@@ -354,7 +358,7 @@ def get_favs():
 
 @app.route("/notification", methods=["POST"])
 def send_notification():
-    response = request.json['data']
+    response = request.json["data"]
     movie = response[0]
     movie_id = movie['id']
     for favourite in db.favourites.find({'movie_id': movie_id}):

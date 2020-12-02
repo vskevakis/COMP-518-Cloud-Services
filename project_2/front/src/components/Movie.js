@@ -9,7 +9,7 @@ const url_prefix = process.env.REACT_APP_SERVICE_URL;
 export function Movie(props) {
     const [fav, setFav] = useState(true);
     const [favList, setFavList] = useState(props.favs);
-    const [latestFav, setlatestFav] = useState('');
+    const [latestFav, setlatestFav] = useState(0);
     const formatter = new Intl.DateTimeFormat("en-GB", {
         weekday: "short",
         month: "short",
@@ -23,7 +23,6 @@ export function Movie(props) {
             movie_id: movie_id,
             user_id: checkUserID()
         };
-        console.log(favList);
         await axios({
             method: 'post', //you can set what request you want to be
             url: url_prefix + "/data-storage/favourites",
@@ -31,8 +30,10 @@ export function Movie(props) {
         }).then(
             (response) => {
                 console.log("Favourites Updated")
-                favList.push(movie_id);
-                setlatestFav(movie_id);
+                // favList.push(movie_id);
+                console.log(response);
+                setFavList(response.data)
+                // setlatestFav(movie_id);
             },
             (error) => {
                 axios({
@@ -42,8 +43,11 @@ export function Movie(props) {
                 }).then(
                     (response) => {
                         console.log("Favourites Updated")
-                        favList.pop(movie_id);
-                        setlatestFav(movie_id);
+                        // favList.pop(movie_id);
+                        console.log(response.data);
+                        setFavList(response.data)
+
+                        // setlatestFav(movie_id);
                     },
                     (error) => {
                         console.log("Favourites Update Unsuccesful. Please check your movie_data.");
