@@ -5,12 +5,14 @@ import axios from "axios";
 import styles from "../styles/movies.module.css";
 import moment from "moment";
 import { Animate } from 'react-animate-mount'
+import io from "socket.io-client";
 
 
 import { checkCookie, checkUser, setCookie, checkUserID } from "../components/Cookies";
 import { Movie } from "../components/Movie";
 import { SearchMovie } from "../components/SearchMovie";
 const url_prefix = process.env.REACT_APP_SERVICE_URL;
+const socket = io.connect();
 
 class Movies extends Component {
     constructor() {
@@ -24,6 +26,7 @@ class Movies extends Component {
             fav_list: [],
             favs_only: false,
             show: false,
+            notification: false,
             // items: 10,
         };
     }
@@ -34,22 +37,17 @@ class Movies extends Component {
             search: this.state.query,
             date: this.state.date,
         };
-        const user_id = {
-            user_id: this.state.user_id
-        }
-        // axios.post(url + `/back/get_favs`, user_id)
-        //     .then(res => {
-        //         console.log("Favs Initialized");
-        //         console.log(user_id)
-        //         // console.log(res.data.movies_list);
-        //         const fav_list = res.data;
-        //         this.setState({ fav_list: fav_list });
-        //     },
-        //         err => {
-        //             const fav_list = [4, 35, 1]
-        //             this.setState({ fav_list: fav_list });
-        //             console.log("Fav List", fav_list);
-        //         })
+        axios.get(url_prefix + `/data-storage/favourites?user_id=` + this.state.user_id)
+            .then(res => {
+                console.log("Favs Initialized");
+                const fav_list = res.data;
+                this.setState({ fav_list: fav_list });
+            },
+                err => {
+                    const fav_list = []
+                    this.setState({ fav_list: fav_list });
+                    console.log("Fav List", fav_list);
+                })
         axios({
             method: 'get', //you can set what request you want to be
             url: url_prefix + "/data-storage/movies?search=" + this.state.query + "&date=" + this.state.date
@@ -72,7 +70,6 @@ class Movies extends Component {
     componentDidMount() {
         this.searchMovies();
         this.setState({ show: true });
-
     }
 
     // loadMore() {

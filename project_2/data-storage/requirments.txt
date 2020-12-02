@@ -16,6 +16,6 @@ pymongo==3.11.1
 redis==3.5.3 
 
 # Websockets
-flask-socketio==4.3.0
-gevent==20.5.0
-gevent-websocket==0.10.1
+flask-socketio
+gevent
+gevent-websocket

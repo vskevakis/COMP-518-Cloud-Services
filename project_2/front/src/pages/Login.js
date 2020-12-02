@@ -106,16 +106,7 @@ class Login extends Component {
     };
 
     render() {
-        if (checkUser() === "Admin") {
-            return <Redirect to="/admin" />;
-        }
-        else if (checkUser() === "Cinema Owner") {
-            return <Redirect to="/cinemaowner" />;
-        }
-        else if (checkUser() === "User") {
-            return <Redirect to="/movies" />;
-        }
-        else if (checkUser() === "unconfirmed") {
+        if (checkUser()) {
             return <Redirect to="/home" />;
         }
         return (

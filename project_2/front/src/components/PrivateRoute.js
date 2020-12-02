@@ -12,12 +12,12 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
             render={(props) =>
                 (checkCookie() !== null) ? (
                     <div>
-                        <HeaderNav />
+                        <HeaderNav {...props} />
                         <Component {...props} />
                     </div>
                 ) : (
                         <div>
-                            <HeaderNav />
+                            <HeaderNav {...props} />
                             <Component {...props} />
                             <Redirect to="/login" />
                         </div>

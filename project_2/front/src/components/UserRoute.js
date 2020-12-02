@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import { checkCookie } from "./Cookies.js";
+import { checkUser } from "./Cookies.js";
 import HeaderNav from './HeaderNav';
 
 const UserRoute = ({ component: Component, ...rest }) => {
@@ -10,14 +10,14 @@ const UserRoute = ({ component: Component, ...rest }) => {
         <Route
             {...rest}
             render={(props) =>
-                (checkCookie() === "User" || checkCookie() === "Cinema Owner" || checkCookie() === "Admin") ? (
+                (checkUser() === "User" || checkUser() === "Cinema Owner" || checkUser() === "Admin") ? (
                     <div>
-                        <HeaderNav />
+                        <HeaderNav {...props} />
                         <Component {...props} />
                     </div>
                 ) : (
                         <div>
-                            <HeaderNav />
+                            <HeaderNav {...props} />
                             <Component {...props} />
                             <Redirect to="/home" />
                         </div>

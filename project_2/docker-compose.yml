@@ -2,6 +2,7 @@ version: "3.4"
 
 services: 
     keyrock:
+        container_name: keyrock
         build: ./keyrock     
         image: keyrock:latest
         hostname: keyrock
@@ -42,21 +43,23 @@ services:
     #         - default-1
     #     restart: always
     orion-mongo:
+        container_name: db-orion
         image: mongo:3.4
         command: --nojournal
         networks:
             - default-1
+        volumes:
+            - orion-mongo:/var/lib/mongo
     orion:
+        container_name: orion
         image: fiware/orion
         ports:
             - "1026:1026"
-        command: -dbhost orion-mongo -logLevel DEBUG
-        # dns:
-        #     - 208.67.222.222
-        #     - 208.67.220.220
+        command: -dbhost orion-mongo
         networks:
             - default-1
     front:
+        container_name: reactjs
         build: ./front
         image: front:latest
         ports:
@@ -73,6 +76,7 @@ services:
             - default-1
         # restart: always
     data-storage:
+        container_name: flask
         build: ./data-storage
         image: data-storage:latest
         env_file: ./data-storage/databases.env
@@ -84,10 +88,13 @@ services:
             - default-1
         restart: always
     ds-mongo:
+        container_name: flask-db
         image: mongo
         restart: always
         networks:
             - default-1
+        volumes:
+            - ds-mongo:/var/lib/mongo
     # fav-db:
     #     image: redis:latest
     #     env_file: ./back/databases.env
@@ -95,6 +102,7 @@ services:
     #         - default-1
     #     # restart: always
     nginx:
+        container_name: nginx
         restart: always
         build: ./nginx
         image: nginx:latest
@@ -113,3 +121,5 @@ networks:
                 - subnet: 172.18.1.0/24
 volumes:
     mysql-db: ~
+    ds-mongo: ~
+    orion-mongo: ~

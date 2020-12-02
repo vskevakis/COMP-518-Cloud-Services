@@ -163,16 +163,7 @@ class Register extends Component {
     };
 
     render() {
-        if (checkUser() === "admin") {
-            return <Redirect to="/admin" />;
-        }
-        else if (checkUser() === "cinemaowner") {
-            return <Redirect to="/cinemaowner" />;
-        }
-        else if (checkUser() === "user") {
-            return <Redirect to="/movies" />;
-        }
-        else if (checkUser() === "unconfirmed") {
+        if (checkUser()) {
             return <Redirect to="/home" />;
         }
         return (

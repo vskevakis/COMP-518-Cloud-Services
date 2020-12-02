@@ -1,9 +1,8 @@
 import os
 import datetime
+import time
 import json
 import enum
-import redis
-import re
 import pymongo
 import requests
 from urllib.parse import urljoin
@@ -14,6 +13,7 @@ from gevent import monkey
 from flask_socketio import SocketIO, emit
 
 # Initialize Application
+monkey.patch_all()
 app = Flask(__name__)
 socketio = SocketIO(app)  # async_mode=async_mode,
 
@@ -25,6 +25,7 @@ db = client['MONGO_DB_NAME']
 
 # Database Movie Model
 collection = db['movies-collection']
+favs_collection = db['favourites-collection']
 db.movies.create_index(
     [("start_date", 1)])
 db.movies.create_index(
@@ -266,51 +267,105 @@ def get_movies():
     if (movies_list):
         return jsonify(movies_list)
     else:
-        Response("No movies found", status=300)
+        return Response("No movies found", status=300)
+
+
+@app.route("/favourites", methods=["POST"])
+def add_fav():
+    user_id = request.json['user_id']
+    movie_id = request.json['movie_id']
+    favourite = {
+        "user_id": user_id,
+        "movie_id": movie_id
+    }
+    if (db.favourites.find_one({"$and": [{'user_id': user_id}, {'movie_id': movie_id}]}) is not None):
+        return Response("Movie is already favourite for that user", status=400)
+    sub_data = {
+        "subject": {
+            "entities": [
+                {
+                    "id": movie_id,
+                    "type": "movie"
+                }
+            ],
+            "condition": {
+                "attrs": [
+                    "category",
+                    "end_date",
+                    "start_date",
+                    "title"
+                ]
+            }
+        },
+        "notification": {
+            "http": {
+                "url": "http://data-storage:5001/notification"
+            },
+            "attrs": [
+                "category",
+                "end_date",
+                "start_date",
+                "title",
+            ]
+        },
+        "expires": "2030-01-01T14:00:00.00Z",
+        "throttling": 5
+    }
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    url = "http://orion:1026/v2/subscriptions"
+    requests.request(
+        "POST", url, headers=headers, data=json.dumps(sub_data))
+    time.sleep(1)  # Fixing notification at insertion of favourite
+    db.favourites.insert_one(favourite).inserted_id
+    return Response("Favourite Added ", status=200)
+
+
+@app.route("/favourites", methods=["DELETE"])
+def delete_fav():
+    try:
+        user_id = request.args["user_id"]
+        db.favourites.delete_many({'user_id': user_id})
+        return Response('Deleted all user favourites', status=201)
+    except:
+        user_id = request.json['user_id']
+        movie_id = request.json['movie_id']
+        db.favourites.delete_one({"$and": [
+            {"user_id": user_id},
+            {"movie_id": movie_id}
+        ]})
+        return Response('Deleted Favourite', status=200)
+
+
+@app.route("/favourites", methods=["GET"])
+def get_favs():
+    favourite_movies = []
+    try:
+        user_id = request.args['user_id']
+        for favourite in db.favourites.find({'user_id': user_id}):
+            favourite_movies.append(str(favourite['movie_id']))
+    except:
+        for favourite in db.favourites:
+            favourite_movies.append({'user_id': favourite['user_id'],
+                                     'movie_id': favourite['movie_id']})
+    return jsonify(favourite_movies)
 
 
 @app.route("/notification", methods=["POST"])
-@socketio.on("start")
 def send_notification():
-    movie_id = request.json['movie_id']
-    movies = db.movies
-    if(movies.delete_one({"_id": ObjectId(movie_id)})):
-        # Delete entity in ORION
-        url = "http://orion:1026/v2/entities/"+movie_id
-        response = requests.request(
-            "DELETE", url, headers={}, data={})
-        return Response('Deleted Movie ' + str(movie_id) + 'and Orion response' + str(response), status=200)
-    else:
-        return Response('Movie not found', status=404)
+    response = request.json['data']
+    movie = response[0]
+    movie_id = movie['id']
+    for favourite in db.favourites.find({'movie_id': movie_id}):
+        response = {
+            "user_id": favourite['user_id'],
+            "title": movie['title']
+        }
+        socketio.emit('notification', response)
+    return Response("Notifications send", status=200)
 
-# @app.route("/back/modify_fav", methods=["POST"])
-# def modify_fav():
-#     user_id = request.json['user_id']
-#     movie_id = request.json['movie_id']
-#     if (redisDB.srem(user_id, movie_id)):
-#         response = True
-#     else:
-#         redisDB.sadd(user_id, movie_id)
-#         response = False
-#     return json.dumps(response)
-
-
-# @app.route("/back/get_favs", methods=["POST"])
-# def get_favs():
-#     user_id = request.json['user_id']
-#     movies = redisDB.smembers(user_id)
-#     try:
-#         results = re.split("[{' 'b,}]", str(movies))
-#         response = []
-#         for result in results:
-#             if (result != ""):
-#                 response.append(int(result))
-#         return json.dumps(response)
-#     # movies = movies[1]
-#     except:
-#         response = []
-#     return json.dumps(response)
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    # app.run(debug=False)
     socketio.run(app, host="0.0.0.0", port=5001)
