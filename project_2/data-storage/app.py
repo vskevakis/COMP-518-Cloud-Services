@@ -57,7 +57,7 @@ def add_movie():
     end_date = request.json['end_date']
     category = request.json['category']
     cinema_name = request.json['cinema_name']
-
+    poster_path = get_poster(title)
     # if user_role is not ("cinemaowner" or "admin"):  # Need to remove Admin From Here
     #     error = 'You do not have authorization to add movie'
     #     return Response(error, status=400)
@@ -70,7 +70,7 @@ def add_movie():
         "category": category,
         "start_date": datetime.datetime.strptime(start_date, '%Y-%m-%d'),
         "end_date": datetime.datetime.strptime(end_date, '%Y-%m-%d'),
-        "poster_path": get_poster(title)
+        "poster_path": poster_path
     }
     movie_id = movies.insert_one(movie).inserted_id
 
@@ -93,6 +93,10 @@ def add_movie():
         },
         "category": {
             "value": category,
+            "type": "String"
+        },
+        "poster_path": {
+            "value": poster_path,
             "type": "String"
         }
     }
@@ -161,6 +165,10 @@ def edit_movie():
                 "end_date": {
                     "value": end_date,
                     "type": "String"
+                },
+                "poster_path": {
+                    "value": poster_path,
+                    "type": "String"
                 }
             }
             requests.request("PATCH", url, headers=headers,
@@ -176,11 +184,15 @@ def get_movies():
     try:
         search_query = request.args['search']
     except:
-        search_query = ""
+        search_query = None
     try:
         date_query = request.args['date']
     except:
-        date_query = ""
+        date_query = None
+    try:
+        cinema_name = request.args['cinema_name']
+    except:
+        cinema_name = None
     movies_list = []
     if (search_query and date_query):
         for movie in movies.find({"$or": [
@@ -188,60 +200,104 @@ def get_movies():
             {"category": {"$regex": search_query}},
             {"cinema_name": {"$regex": search_query}},
             {"$and": [
-                {"start_date": {"$lte": datetime.datetime.strptime(
-                    date_query, '%Y-%m-%d')}},
-                {"end_date": {"$gte": datetime.datetime.strptime(
-                    date_query, '%Y-%m-%d')}}
+                {"start_date": {"$lte": date_query}},
+                {"end_date": {"$gte": date_query}}
             ]}
         ]}):
-            movies_list.append({'movie_id': str(movie['_id']),
-                                'title': movie['title'],
-                                'category': movie['category'],
-                                'start_date': movie['start_date'],
-                                'end_date': movie['end_date'],
-                                'cinema_name': movie['cinema_name'],
-                                'poster_path': movie['poster_path'],
-                                })
+            # If we give cinema_name as argument we want only the movies on this cinema
+            if (cinema_name):
+                if movie['cinema_name'] == cinema_name:
+                    movies_list.append({'movie_id': str(movie['_id']),
+                                        'title': movie['title'],
+                                        'category': movie['category'],
+                                        'start_date': movie['start_date'],
+                                        'end_date': movie['end_date'],
+                                        'cinema_name': cinema_name,
+                                        'poster_path': movie['poster_path'],
+                                        })
+            else:
+                movies_list.append({'movie_id': str(movie['_id']),
+                                    'title': movie['title'],
+                                    'category': movie['category'],
+                                    'start_date': movie['start_date'],
+                                    'end_date': movie['end_date'],
+                                    'cinema_name': movie['cinema_name'],
+                                    'poster_path': movie['poster_path'],
+                                    })
     elif (search_query):
         for movie in movies.find({"$or": [
             {"title": {"$regex": search_query}},
             {"category": {"$regex": search_query}},
             {"cinema_name": {"$regex": search_query}},
         ]}):
-            movies_list.append({'movie_id': str(movie['_id']),
-                                'title': movie['title'],
-                                'category': movie['category'],
-                                'start_date': movie['start_date'],
-                                'end_date': movie['end_date'],
-                                'cinema_name': movie['cinema_name'],
-                                'poster_path': movie['poster_path'],
-                                })
+            # If we give cinema_name as argument we want only the movies on this cinema
+            if (cinema_name):
+                if movie['cinema_name'] == cinema_name:
+                    movies_list.append({'movie_id': str(movie['_id']),
+                                        'title': movie['title'],
+                                        'category': movie['category'],
+                                        'start_date': movie['start_date'],
+                                        'end_date': movie['end_date'],
+                                        'cinema_name': cinema_name,
+                                        'poster_path': movie['poster_path'],
+                                        })
+            else:
+                movies_list.append({'movie_id': str(movie['_id']),
+                                    'title': movie['title'],
+                                    'category': movie['category'],
+                                    'start_date': movie['start_date'],
+                                    'end_date': movie['end_date'],
+                                    'cinema_name': movie['cinema_name'],
+                                    'poster_path': movie['poster_path'],
+                                    })
     elif (date_query):
         for movie in movies.find({"$and": [
-            {"start_date": {"$lte": datetime.datetime.strptime(
-                date_query, '%Y-%m-%d')}},
-            {"end_date": {"$gte": datetime.datetime.strptime(
-                date_query, '%Y-%m-%d')}}
+            {"start_date": {"$lte": date_query}},
+            {"end_date": {"$gte": date_query}}
         ]}):
-            movies_list.append({'movie_id': str(movie['_id']),
-                                'title': movie['title'],
-                                'category': movie['category'],
-                                'start_date': movie['start_date'],
-                                'end_date': movie['end_date'],
-                                'cinema_name': movie['cinema_name'],
-                                'poster_path': movie['poster_path'],
-                                })
+            # If we give cinema_name as argument we want only the movies on this cinema
+            if (cinema_name):
+                if movie['cinema_name'] == cinema_name:
+                    movies_list.append({'movie_id': str(movie['_id']),
+                                        'title': movie['title'],
+                                        'category': movie['category'],
+                                        'start_date': movie['start_date'],
+                                        'end_date': movie['end_date'],
+                                        'cinema_name': cinema_name,
+                                        'poster_path': movie['poster_path'],
+                                        })
+            else:
+                movies_list.append({'movie_id': str(movie['_id']),
+                                    'title': movie['title'],
+                                    'category': movie['category'],
+                                    'start_date': movie['start_date'],
+                                    'end_date': movie['end_date'],
+                                    'cinema_name': movie['cinema_name'],
+                                    'poster_path': movie['poster_path'],
+                                    })
     else:
         movies_list = []
         for movie in movies.find():
-            movies_list.append({'movie_id': str(movie['_id']),
-                                'title': movie['title'],
-                                'category': movie['category'],
-                                'start_date': movie['start_date'],
-                                'end_date': movie['end_date'],
-                                'cinema_name': movie['cinema_name'],
-                                'poster_path': movie['poster_path'],
-                                })
+            # If we give cinema_name as argument we want only the movies on this cinema
+            if (cinema_name):
+                if movie['cinema_name'] == cinema_name:
+                    movies_list.append({'movie_id': str(movie['_id']),
+                                        'title': movie['title'],
+                                        'category': movie['category'],
+                                        'start_date': movie['start_date'],
+                                        'end_date': movie['end_date'],
+                                        'cinema_name': cinema_name,
+                                        'poster_path': movie['poster_path'],
+                                        })
+            else:
+                movies_list.append({'movie_id': str(movie['_id']),
+                                    'title': movie['title'],
+                                    'category': movie['category'],
+                                    'start_date': movie['start_date'],
+                                    'end_date': movie['end_date'],
+                                    'cinema_name': movie['cinema_name'],
+                                    'poster_path': movie['poster_path'],
+                                    })
     if (movies_list):
         return jsonify(movies_list)
     else:
@@ -257,7 +313,8 @@ def add_fav():
         "user_id": user_id,
         "title": title,
         "movie_id": movie_id,
-        "notification": False
+        "notification": False,
+        "poster_path": get_poster(title)
     }
     if (db.favourites.find_one({"$and": [{'user_id': user_id}, {'movie_id': movie_id}]}) is not None):
         delete_fav()
@@ -278,7 +335,8 @@ def add_fav():
                     "category",
                     "end_date",
                     "start_date",
-                    "title"
+                    "title",
+                    "poster_path"
                 ]
             }
         },
@@ -290,7 +348,8 @@ def add_fav():
                 "category",
                 "end_date",
                 "start_date",
-                "title"
+                "title",
+                "poster_path"
             ]
         },
         "expires": "2030-01-01T14:00:00.00Z",
@@ -352,7 +411,8 @@ def send_notification():
         response = {
             "user_id": favourite['user_id'],
             "title": movie['title'],
-            "id": movie_id
+            "id": movie_id,
+            "poster_path": favourite["poster_path"]
         }
         # Save notification for notification list
         db.favourites.update_one({"$and": [{'user_id': favourite['user_id']}, {'movie_id': movie_id}]}, {
@@ -372,13 +432,17 @@ def delete_notification():
         notifications = []
         for favourite in db.favourites.find({"$and": [{'user_id': user_id}, {'notification': True}]}):
             notifications.append({"title": favourite["title"],
-                                  "movie_id": favourite["movie_id"]})
+                                  "movie_id": favourite["movie_id"],
+                                  "poster_path": favourite["poster_path"]
+                                  })
         return jsonify(notifications)
     except:
         notifications = []
         for favourite in db.favourites.find({"$and": [{'user_id': user_id}, {'notification': True}]}):
             notifications.append({"title": favourite["title"],
-                                  "movie_id": favourite["movie_id"]})
+                                  "movie_id": favourite["movie_id"],
+                                  "poster_path": favourite["poster_path"]
+                                  })
         return jsonify(notifications)
 
 
@@ -388,7 +452,9 @@ def get_notifications():
     notifications = []
     for favourite in db.favourites.find({"$and": [{'user_id': user_id}, {'notification': True}]}):
         notifications.append({"title": favourite["title"],
-                              "movie_id": favourite["movie_id"]})
+                              "movie_id": favourite["movie_id"],
+                              "poster_path": favourite["poster_path"]
+                              })
     return jsonify(notifications)
 
 

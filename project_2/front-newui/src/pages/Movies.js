@@ -113,7 +113,7 @@ class Movies extends Component {
                 <main class="bg-light dark:bg-dark-dark min-h-full ">
                     <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                         <div class="px-4 py-6 sm:px-0">
-                            <ul class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                            <ul class=" align-middle grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                                 {this.state.movies_list.map((movie) => (
                                     <Movie
                                         movies={movie}

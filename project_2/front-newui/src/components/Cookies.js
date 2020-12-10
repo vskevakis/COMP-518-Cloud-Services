@@ -9,34 +9,41 @@ const base64key = "YmEwYjkyY2MtMzc1OC00MjI1LTkxNDctYWI5NjE0MjE1MDM2OjRhNzhkZjc3L
 export function setCookie(access_token, refresh_token) {
     document.cookie = 'access_token' + "=" + access_token + ";path=/";
     document.cookie = 'refresh_token' + "=" + refresh_token + ";path=/";
-    if (access_token == 0) {
-        document.cookie = 'username' + "=" + null + ";path=/";
-        document.cookie = 'user_id' + "=" + null + ";path=/";
-        document.cookie = 'user_role' + "=" + null + ";path=/";
+    if (!access_token) {
+        document.cookie.split(";").forEach((c) => {
+            document.cookie = c
+                .replace(/^ +/, "")
+                .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+        // document.cookie = 'username' + "=" + null + ";path=/";
+        // document.cookie = 'user_id' + "=" + null + ";path=/";
+        // document.cookie = 'user_role' + "=" + null + ";path=/";
     }
-    const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    }
-    axios({
-        method: 'get', //you can set what request you want to be
-        url: url_prefix + "/idm/user?access_token=" + access_token,
-        data: null,
-        headers: headers
-    }).then(
-        (response) => {
-            document.cookie = 'username' + "=" + response.data.username + ";path=/";
-            document.cookie = 'user_id' + "=" + response.data.id + ";path=/";
-            if (response.data.organizations.name)
-                document.cookie = 'user_role' + "=" + response.data.roles[0].name + ";path=/";
-            else {
-                document.cookie = 'user_role' + "=" + 'unconfirmed' + ";path=/"; // If user exists but he doesn't have a role yet (he is unconfirmed)
-            }
-        },
-        (error) => {
-            console.log("You failed AGAIN");
-            console.log(error);
+    else {
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
         }
-    );
+        axios({
+            method: 'get', //you can set what request you want to be
+            url: url_prefix + "/idm/user?access_token=" + access_token,
+            data: null,
+            headers: headers
+        }).then(
+            (response) => {
+                document.cookie = 'username' + "=" + response.data.username + ";path=/";
+                document.cookie = 'user_id' + "=" + response.data.id + ";path=/";
+                if (response.data.roles[0].name)
+                    document.cookie = 'user_role' + "=" + response.data.roles[0].name + ";path=/";
+                else {
+                    document.cookie = 'user_role' + "=" + 'unconfirmed' + ";path=/"; // If user exists but he doesn't have a role yet (he is unconfirmed)
+                }
+            },
+            (error) => {
+                console.log("You failed AGAIN");
+                console.log(error);
+            }
+        );
+    }
 }
 
 

@@ -163,13 +163,13 @@ class CinemaOwner extends Component {
                                                             <div class="text-sm text-gray-900">{movie.category}</div>
                                                         </td>
                                                         <td class="px-6 py-4 whitespace-nowrap">
-                                                            {movie.start_date >= Date() && movie.end_date >= Date() && <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                            {movie.start_date <= moment().format('YYYY-MM-DD') && movie.end_date >= moment().format('YYYY-MM-DD') && <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                                                 Active
                                                             </span>}
-                                                            {movie.end_date < Date() && <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                            {movie.end_date < moment().format('YYYY-MM-DD') && <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
                                                                 Archived
                                                             </span>}
-                                                            {movie.start_date > Date() && <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                            {movie.start_date > moment().format('YYYY-MM-DD') && <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                                                                 Scheduled
                                                             </span>}
                                                         </td>

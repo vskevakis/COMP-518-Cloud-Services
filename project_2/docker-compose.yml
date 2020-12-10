@@ -136,8 +136,9 @@ services:
         environment:
             - NODE_ENV=development
             - REACT_APP_SERVICE_URL=http://localhost:80
-            - IDM_APP_CLIENT_ID='02b213e7-f627-4ab5-9afb-886f8e89e756'
-            - IDM_APP_CLIENT_SEC='5b17f806-f37b-4804-a72d-e0c256e1f252'
+            - IDM_APP_CLIENT_ID=ba0b92cc-3758-4225-9147-ab9614215036
+            - IDM_APP_CLIENT_SEC=4a78df77-4c32-439c-87c2-2afa638b247b
+            - BASE64_AUTH=YmEwYjkyY2MtMzc1OC00MjI1LTkxNDctYWI5NjE0MjE1MDM2OjRhNzhkZjc3LTRjMzItNDM5Yy04N2MyLTJhZmE2MzhiMjQ3Yg==
             - CHOKIDAR_USEPOLLING=true
         depends_on:
             - keyrock
@@ -190,6 +191,9 @@ networks:
             config:
                 - subnet: 172.18.1.0/24
 volumes:
-    mysql-db: ~
-    ds-mongo: ~
-    orion-mongo: ~
+    mysql-db: 
+        external: true
+    ds-mongo: 
+        external: true
+    orion-mongo:
+        external: true

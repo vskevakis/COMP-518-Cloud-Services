@@ -3,21 +3,6 @@ import { Redirect } from "react-router-dom";
 import { Animate } from 'react-animate-mount'
 import DarkMode from "../components/DarkMode";
 
-import background1 from '../assets/backgrounds/background-image-01.png';
-import background2 from '../assets/backgrounds/background-image-02.png';
-import background3 from '../assets/backgrounds/background-image-03.png';
-import background4 from '../assets/backgrounds/background-image-04.png';
-import background5 from '../assets/backgrounds/background-image-05.png';
-import background6 from '../assets/backgrounds/background-image-06.png';
-import background7 from '../assets/backgrounds/background-image-07.png';
-import background8 from '../assets/backgrounds/background-image-08.png';
-import background9 from '../assets/backgrounds/background-image-09.png';
-import background10 from '../assets/backgrounds/background-image-10.png';
-import background11 from '../assets/backgrounds/background-image-11.png';
-import background12 from '../assets/backgrounds/background-image-12.png';
-
-
-
 import logo from '../logo.png';
 import logo_rev from '../logo-rev.png';
 
@@ -26,21 +11,21 @@ import axios from "axios";
 import { checkUser, checkCookie, setCookie } from "../components/Cookies";
 
 // const client_id = "fd06208b-3a85-4296-b8f6-9d52c1127576";
-const base64key = "YmEwYjkyY2MtMzc1OC00MjI1LTkxNDctYWI5NjE0MjE1MDM2OjRhNzhkZjc3LTRjMzItNDM5Yy04N2MyLTJhZmE2MzhiMjQ3Yg=="
+const base64key = "YmEwYjkyY2MtMzc1OC00MjI1LTkxNDctYWI5NjE0MjE1MDM2OjRhNzhkZjc3LTRjMzItNDM5Yy04N2MyLTJhZmE2MzhiMjQ3Yg==";
 const url_prefix = process.env.REACT_APP_SERVICE_URL;
 class Login extends Component {
     constructor() {
         super();
         this.state = {
-            bgStyle: {
-                height: "100%",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-            },
+            // bgStyle: {
+            //     height: "100%",
+            //     backgroundPosition: "center",
+            //     backgroundRepeat: "no-repeat",
+            //     backgroundSize: "cover",
+            // },
             email: "",
             password: "",
-            isAuthenticated: "",
+            isAuthenticated: checkUser(),
             mode: localStorage.getItem("theme"),
             show: false
 
@@ -53,31 +38,31 @@ class Login extends Component {
         // and use it to target the key on our `state` object with the same name, using bracket syntax
         this.setState({ [event.target.name]: event.target.value });
     }
-    componentWillMount() {
-        this.setbgPic()
-    }
+    // componentWillMount() {
+    //     this.setbgPic()
+    // }
 
-    setbgPic() {
-        const pictureArray = [background1, background2, background3, background4, background5, background6, background7, background8, background9, background10, background11, background12];
-        const randomIndex = Math.floor(Math.random() * pictureArray.length);
-        const selectedPicture = pictureArray[randomIndex];
+    // setbgPic() {
+    //     const pictureArray = [background1, background2, background3, background4, background5, background6, background7, background8, background9, background10, background11, background12];
+    //     const randomIndex = Math.floor(Math.random() * pictureArray.length);
+    //     const selectedPicture = pictureArray[randomIndex];
 
-        this.setState({
-            bgStyle: {
-                backgroundImage: `url(${selectedPicture})`,
-                height: "100vh",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-            }
-        })
-    }
+    //     this.setState({
+    //         bgStyle: {
+    //             backgroundImage: `url(${selectedPicture})`,
+    //             height: "100vh",
+    //             backgroundPosition: "center",
+    //             backgroundRepeat: "no-repeat",
+    //             backgroundSize: "cover",
+    //         }
+    //     })
+    // }
 
     componentDidMount() {
         this.setState({ show: true })
-        setInterval(() => {
-            this.setbgPic()
-        }, 5000)
+        // setInterval(() => {
+        //     this.setbgPic()
+        // }, 5000)
     }
 
     handleSubmit = async (event) => {
@@ -97,10 +82,10 @@ class Login extends Component {
             (response) => {
                 console.log(response);
                 setCookie(response.data.access_token, response.data.refresh_token);
-                return <Redirect to="/home" />;
+                this.setState({ isAuthenticated: true });
             },
             (error) => {
-                setCookie(0, 0);
+                setCookie(null, null);
                 console.log("You failed AGAIN");
                 console.log(error);
             }
@@ -108,7 +93,7 @@ class Login extends Component {
     };
 
     render() {
-        if (checkUser()) {
+        if (this.state.isAuthenticated) {
             return <Redirect to="/home" />;
         }
         return (
@@ -125,8 +110,8 @@ class Login extends Component {
                             </h2>
                             <p class="mt-2 text-center text-sm text-gray-600">
                                 or <br />
-                                <a href="/register" class="font-medium text-indigo-600 hover:text-indigo-500">
-                                    register for free
+                                <a href="/idm" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                    register via Keyrock IDM
                                 </a>
                             </p>
 
@@ -155,7 +140,7 @@ class Login extends Component {
                                 <div class="text-sm">
                                     <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
                                         Forgot your password?
-          </a>
+                                    </a>
                                 </div>
                             </div>
 
@@ -166,10 +151,10 @@ class Login extends Component {
                                             <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
                                         </svg>
                                     </span>
-          Sign in
-        </button>
+                                    Sign in
+                                </button>
                             </div>
-                            <div class="flex justify-center" > <DarkMode onClick={() => this.setState({ mode: localStorage.getItem("theme") })} /> </div>
+                            <div class="flex justify-center" > <DarkMode /> </div>
                         </form>
                     </div>
                 </div>
