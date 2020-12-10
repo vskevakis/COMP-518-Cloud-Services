@@ -149,7 +149,7 @@ class HeaderNav extends Component {
                         <Nav.Link href="/home">Home</Nav.Link>
                         <Nav.Link href="/movies">Movies</Nav.Link>
                         {checkUser() === "Cinema Owner" && <Nav.Link href="/owner">Cinema Owner</Nav.Link>}
-                        {checkUser() === "Admin" && <Nav.Link href="/admin">Admin</Nav.Link>}
+                        {checkUser() === "Admin Panel" && <Nav.Link href="/admin">Admin</Nav.Link>}
                     </Nav>
                     <Navbar.Collapse className="justify-content-end">
                         {/* <Toast show={this.state.show_not} onClose={() => this.setState({ show_not: false })}>

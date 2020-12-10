@@ -1,3 +1,4 @@
+import http.client
 import os
 import datetime
 import time
@@ -44,8 +45,8 @@ def get_poster(title):
             "https://image.tmdb.org/t/p/w300_and_h450_bestv2") + str(tmdb_path.replace("\"", ""))
         return tmdb_poster
     except:
-        # Easter Egg in case request fail or doesn't return items
-        tmdb_poster = "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg"
+        # In case request fail or doesn't return items
+        tmdb_poster = "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-38-picture-grey-c2ebdbb057f2a7614185931650f8cee23fa137b93812ccb132b9df511df1cfac.svg"
         return tmdb_poster
 
 # CreateMovie API
@@ -74,7 +75,7 @@ def add_movie():
     movie_id = movies.insert_one(movie).inserted_id
 
     # Add movie to Orion
-    url = "http://orion:1026/v2/entities"
+    url = "http://orion-proxy:1027/v2/entities"
     payload = {
         "id": str(movie_id),
         "type": "movie",
@@ -96,7 +97,8 @@ def add_movie():
         }
     }
     headers = {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Auth-Token': os.environ['PEP_PROXY_MAGIC_KEY']
     }
     response = requests.request(
         "POST", url, headers=headers, data=json.dumps(payload))
@@ -109,9 +111,9 @@ def delete_movie():
     movies = db.movies
     if(movies.delete_one({"_id": ObjectId(movie_id)})):
         # Delete entity in ORION
-        url = "http://orion:1026/v2/entities/"+movie_id
+        url = "http://orion-proxy:1027/v2/entities/"+movie_id
         response = requests.request(
-            "DELETE", url, headers={}, data={})
+            "DELETE", url, headers={'X-Auth-Token': os.environ['PEP_PROXY_MAGIC_KEY']}, data={})
         return Response('Deleted Movie ' + str(movie_id) + 'and Orion response' + str(response), status=200)
     else:
         return Response('Movie not found', status=404)
@@ -121,88 +123,64 @@ def delete_movie():
 def edit_movie():
     movie_id = request.json['movie_id']
     movies = db.movies
-    url = "http://orion:1026/v2/entities/"+movie_id+"/attrs"
-    headers = {'Content-Type': 'application/json'}
+    url = "http://orion-proxy:1027/v2/entities/"+movie_id+"/attrs"
+    headers = {
+        'Content-Type': 'application/json',
+        'X-Auth-Token': os.environ['PEP_PROXY_MAGIC_KEY']
+    }
     if (movies.find_one({"_id": ObjectId(movie_id)})) is None:
         error = 'A movie with that id does not exist'
         return Response(error, status=404)
     else:
         try:
             title = request.json['title']
-            if title:
-                movies.update_one(
-                    {"_id": ObjectId(movie_id)},
-                    {"$set": {"title": title, "poster_path": poster_path}}
-                )
-                payload = {
-                    "title": {
-                        "value": title,
-                        "type": "String"
-                    }
-                }
-                requests.request("PATCH", url, headers=headers,
-                                 data=json.dumps(payload))
-        except:
-            title = None
-        try:
             start_date = request.json['start_date']
-            if start_date:
-                movies.update_one(
-                    {"_id": ObjectId(movie_id)},
-                    {"$set": {"start_date": start_date}}
-                )
-                payload = {
-                    "start_date": {
-                        "value": start_date,
-                        "type": "String"
-                    }
-                }
-                requests.request("PATCH", url, headers=headers,
-                                 data=json.dumps(payload))
-        except:
-            start_date = None
-        try:
             end_date = request.json['end_date']
-            if end_date:
-                movies.update_one(
-                    {"_id": ObjectId(movie_id)},
-                    {"$set": {"end_date": end_date}}
-                )
-                payload = {
-                    "end_date": {
-                        "value": end_date,
-                        "type": "String"
-                    }
-                }
-                requests.request("PATCH", url, headers=headers,
-                                 data=json.dumps(payload))
-        except:
-            end_date = None
-        try:
             category = request.json['category']
-            if category:
-                movies.update_one(
-                    {"_id": ObjectId(movie_id)},
-                    {"$set": {"category": category}}
-                )
-                payload = {
-                    "category": {
-                        "value": category,
-                        "type": "String"
-                    }
+
+            poster_path = get_poster(title)
+            movies.update_one(
+                {"_id": ObjectId(movie_id)},
+                {"$set": {"title": title, "poster_path": poster_path,
+                          "category": category, "start_date": start_date, "end_date": end_date}}
+            )
+
+            payload = {
+                "title": {
+                    "value": title,
+                    "type": "String"
+                },
+                "category": {
+                    "value": category,
+                    "type": "String"
+                },
+                "start_date": {
+                    "value": start_date,
+                    "type": "String"
+                },
+                "end_date": {
+                    "value": end_date,
+                    "type": "String"
                 }
-                requests.request("PATCH", url, headers=headers,
-                                 data=json.dumps(payload))
+            }
+            requests.request("PATCH", url, headers=headers,
+                             data=json.dumps(payload))
         except:
-            category = None
-        return Response('Movie ' + str(movie_id) + ' edited with success', status=200)
+            return Response("Error on patching", status=400)
+        return Response('Movie edited with success', status=200)
 
 
 @app.route("/movies", methods=["GET"])
 def get_movies():
     movies = db.movies
-    search_query = request.args['search']
-    date_query = request.args['date']
+    try:
+        search_query = request.args['search']
+    except:
+        search_query = ""
+    try:
+        date_query = request.args['date']
+    except:
+        date_query = ""
     movies_list = []
     if (search_query and date_query):
         for movie in movies.find({"$or": [
@@ -267,7 +245,7 @@ def get_movies():
     if (movies_list):
         return jsonify(movies_list)
     else:
-        return Response("No movies found", status=300)
+        return Response("No movies found", status=404)
 
 
 @app.route("/favourites", methods=["POST"])
@@ -282,7 +260,11 @@ def add_fav():
         "notification": False
     }
     if (db.favourites.find_one({"$and": [{'user_id': user_id}, {'movie_id': movie_id}]}) is not None):
-        return Response("Movie is already favourite for that user", status=400)
+        delete_fav()
+        favourite_movies = []
+        for favourite in db.favourites.find({'user_id': user_id}):
+            favourite_movies.append(str(favourite['movie_id']))
+        return jsonify(favourite_movies)
     sub_data = {
         "subject": {
             "entities": [
@@ -315,12 +297,13 @@ def add_fav():
         "throttling": 5
     }
     headers = {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Auth-Token': os.environ['PEP_PROXY_MAGIC_KEY']
     }
-    url = "http://orion:1026/v2/subscriptions"
+    url = "http://orion-proxy:1027/v2/subscriptions?options=skipInitialNotification"
     requests.request(
         "POST", url, headers=headers, data=json.dumps(sub_data))
-    time.sleep(1)  # Fixing notification at insertion of favourite
+    # time.sleep(1)  # Fixing notification at insertion of favourite
     db.favourites.insert_one(favourite).inserted_id
     # Return all favourites
     favourite_movies = []
@@ -352,11 +335,12 @@ def get_favs():
         user_id = request.args['user_id']
         for favourite in db.favourites.find({'user_id': user_id}):
             favourite_movies.append(str(favourite['movie_id']))
+        return jsonify(favourite_movies)
     except:
-        for favourite in db.favourites:
-            favourite_movies.append({'user_id': favourite['user_id'],
-                                     'movie_id': favourite['movie_id']})
-    return jsonify(favourite_movies)
+        return Response("Please provide user_id", status=400)
+        # for favourite in db.favourites:
+        #     favourite_movies.append({'user_id': favourite['user_id'],
+        #                              'movie_id': favourite['movie_id']})
 
 
 @app.route("/notification", methods=["POST"])

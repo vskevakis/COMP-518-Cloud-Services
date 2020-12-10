@@ -1,0 +1,184 @@
+import React, { Component, useState } from "react";
+import { Redirect } from "react-router-dom";
+import { Animate } from 'react-animate-mount'
+import DarkMode from "../components/DarkMode";
+
+import background1 from '../assets/backgrounds/background-image-01.png';
+import background2 from '../assets/backgrounds/background-image-02.png';
+import background3 from '../assets/backgrounds/background-image-03.png';
+import background4 from '../assets/backgrounds/background-image-04.png';
+import background5 from '../assets/backgrounds/background-image-05.png';
+import background6 from '../assets/backgrounds/background-image-06.png';
+import background7 from '../assets/backgrounds/background-image-07.png';
+import background8 from '../assets/backgrounds/background-image-08.png';
+import background9 from '../assets/backgrounds/background-image-09.png';
+import background10 from '../assets/backgrounds/background-image-10.png';
+import background11 from '../assets/backgrounds/background-image-11.png';
+import background12 from '../assets/backgrounds/background-image-12.png';
+
+
+
+import logo from '../logo.png';
+import logo_rev from '../logo-rev.png';
+
+import axios from "axios";
+
+import { checkUser, checkCookie, setCookie } from "../components/Cookies";
+
+// const client_id = "fd06208b-3a85-4296-b8f6-9d52c1127576";
+const base64key = "YmEwYjkyY2MtMzc1OC00MjI1LTkxNDctYWI5NjE0MjE1MDM2OjRhNzhkZjc3LTRjMzItNDM5Yy04N2MyLTJhZmE2MzhiMjQ3Yg=="
+const url_prefix = process.env.REACT_APP_SERVICE_URL;
+class Login extends Component {
+    constructor() {
+        super();
+        this.state = {
+            bgStyle: {
+                height: "100%",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+            },
+            email: "",
+            password: "",
+            isAuthenticated: "",
+            mode: localStorage.getItem("theme"),
+            show: false
+
+        };
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event) {
+        // check it out: we get the event.target.name (which will be either "username" or "password")
+        // and use it to target the key on our `state` object with the same name, using bracket syntax
+        this.setState({ [event.target.name]: event.target.value });
+    }
+    componentWillMount() {
+        this.setbgPic()
+    }
+
+    setbgPic() {
+        const pictureArray = [background1, background2, background3, background4, background5, background6, background7, background8, background9, background10, background11, background12];
+        const randomIndex = Math.floor(Math.random() * pictureArray.length);
+        const selectedPicture = pictureArray[randomIndex];
+
+        this.setState({
+            bgStyle: {
+                backgroundImage: `url(${selectedPicture})`,
+                height: "100vh",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+            }
+        })
+    }
+
+    componentDidMount() {
+        this.setState({ show: true })
+        setInterval(() => {
+            this.setbgPic()
+        }, 5000)
+    }
+
+    handleSubmit = async (event) => {
+        event.preventDefault();
+
+        const user_data = 'grant_type=password&username=' + this.state.email + '&password=' + this.state.password
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + base64key //+ base64(client_id: client_secret);
+        }
+        await axios({
+            method: 'post', //you can set what request you want to be
+            url: url_prefix + "/idm/oauth2/token",
+            data: user_data,
+            headers: headers
+        }).then(
+            (response) => {
+                console.log(response);
+                setCookie(response.data.access_token, response.data.refresh_token);
+                return <Redirect to="/home" />;
+            },
+            (error) => {
+                setCookie(0, 0);
+                console.log("You failed AGAIN");
+                console.log(error);
+            }
+        );
+    };
+
+    render() {
+        if (checkUser()) {
+            return <Redirect to="/home" />;
+        }
+        return (
+            <Animate type='fade' duration="500" show={this.state.show}>
+
+                <div class="min-h-screen dark:bg-gray-900 flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+                    <div class=" max-w-md w-full space-y-8">
+                        <div>
+                            {localStorage.getItem("theme") === "dark" && <img class="mx-auto h-40 w-auto" src={logo_rev} alt="Workflow" />}
+                            {localStorage.getItem("theme") === "light" && <img class="mx-auto h-40 w-auto" src={logo} alt="Workflow" />}
+                            {/* <img class="visible dark:invisible mx-auto h-40 w-auto dark:shadow-2xl" src={logo} alt="Workflow" /> */}
+                            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-400">
+                                Sign in to your account
+                            </h2>
+                            <p class="mt-2 text-center text-sm text-gray-600">
+                                or <br />
+                                <a href="/register" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                    register for free
+                                </a>
+                            </p>
+
+                        </div>
+                        <form onSubmit={this.handleSubmit} class="mt-8 space-y-6" action="" method="POST">
+                            <input type="hidden" name="remember" value="true" />
+                            <div class="rounded-md shadow-sm -space-y-px">
+                                <div>
+                                    <label for="email-address" class="sr-only">Email address</label>
+                                    <input id="email-address" name="email" type="email" onChange={this.handleChange} autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 dark:border-gray-900 dark:bg-gray-800 dark:placeholder-gray-400 dark:text-gray-400 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address" />
+                                </div>
+                                <div>
+                                    <label for="password" class="sr-only">Password</label>
+                                    <input id="password" name="password" type="password" onChange={this.handleChange} autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 dark:border-gray-900 dark:bg-gray-800 dark:placeholder-gray-400 dark:text-gray-400 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password" />
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <input id="remember_me" name="remember_me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded dark:border-gray-900 dark:bg-gray-800" />
+                                    <label for="remember_me" class="ml-2 block text-sm text-gray-900 dark:text-gray-200">
+                                        Remember me
+                                    </label>
+                                </div>
+
+                                <div class="text-sm">
+                                    <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                        Forgot your password?
+          </a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <button onClick={this.handleSubmit} type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                                        <svg class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </span>
+          Sign in
+        </button>
+                            </div>
+                            <div class="flex justify-center" > <DarkMode onClick={() => this.setState({ mode: localStorage.getItem("theme") })} /> </div>
+                        </form>
+                    </div>
+                </div>
+
+
+            </Animate>
+
+        );
+    }
+}
+
+export default Login;

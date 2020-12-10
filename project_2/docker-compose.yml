@@ -35,6 +35,8 @@ services:
         volumes:
             - mysql-db:/var/lib/mysql
     # pep-proxy:
+    #     container_name: wilma
+    #     hostname: wilma
     #     build: ./pep-proxy
     #     image: pep-proxy:latest
     #     ports:
@@ -52,15 +54,82 @@ services:
             - orion-mongo:/var/lib/mongo
     orion:
         container_name: orion
+        hostname: orion
         image: fiware/orion
         ports:
             - "1026:1026"
         command: -dbhost orion-mongo
         networks:
             - default-1
+        restart: always
+    # ngsi-proxy:
+    #     image: fiware/ngsi-proxy
+    #     hostname: ngsi-proxy
+    #     container_name: ngsi-proxy
+    #     expose:
+    #         - "2000"
+    #     ports:
+    #         - "2000:2000"
+    #     environment:
+    #         - PORT=2000
+    #         - TRUST_PROXY_HEADERS=1
+    orion-proxy:
+        image: fiware/pep-proxy
+        container_name: fiware-orion-proxy
+        hostname: orion-proxy
+        networks:
+            - default-1
+        depends_on:
+            - keyrock
+        ports:
+            - "1027:1027"
+        expose:
+            - "1027"
+        environment:
+            - PEP_PROXY_APP_HOST=orion
+            - PEP_PROXY_APP_PORT=1026
+            - PEP_PROXY_PORT=1027
+            - PEP_PROXY_IDM_HOST=keyrock
+            - PEP_PROXY_HTTPS_ENABLED=false
+            - PEP_PROXY_AUTH_ENABLED=false
+            - PEP_PROXY_IDM_SSL_ENABLED=false
+            - PEP_PROXY_IDM_PORT=3001
+            - PEP_PROXY_APP_ID=ba0b92cc-3758-4225-9147-ab9614215036
+            - PEP_PROXY_USERNAME=pep_proxy_5a5e8f81-ff33-4aec-8c5f-b2d61d292179
+            - PEP_PASSWORD=pep_proxy_e1603f1d-8fd2-470c-9d04-771473c3142e
+            - PEP_PROXY_PDP=idm
+            - PEP_PROXY_AUTH_FOR_NGINX=true
+            - PEP_PROXY_MAGIC_KEY=723fe949e2754caf8c74aa37c6a7678f
+    data-proxy:
+        image: fiware/pep-proxy
+        container_name: data-proxy
+        hostname: data-proxy
+        networks:
+            - default-1
+        depends_on:
+            - keyrock
+        ports:
+            - "1028:1028"
+        expose:
+            - "1028"
+        environment:
+            - PEP_PROXY_APP_HOST=data-storage
+            - PEP_PROXY_APP_PORT=5001
+            - PEP_PROXY_PORT=1028
+            - PEP_PROXY_IDM_HOST=keyrock
+            - PEP_PROXY_HTTPS_ENABLED=false
+            - PEP_PROXY_AUTH_ENABLED=false
+            - PEP_PROXY_IDM_SSL_ENABLED=false
+            - PEP_PROXY_IDM_PORT=3001
+            - PEP_PROXY_APP_ID=ba0b92cc-3758-4225-9147-ab9614215036
+            - PEP_PROXY_USERNAME=pep_proxy_5a5e8f81-ff33-4aec-8c5f-b2d61d292179
+            - PEP_PASSWORD=pep_proxy_e1603f1d-8fd2-470c-9d04-771473c3142e
+            - PEP_PROXY_PDP=idm
+            - PEP_PROXY_AUTH_FOR_NGINX=true
+            - PEP_PROXY_MAGIC_KEY=723fe949e2754caf8c74aa37c6a7678f
     front:
         container_name: reactjs
-        build: ./front
+        build: ./front-newui
         image: front:latest
         ports:
             - "3000"
@@ -76,7 +145,8 @@ services:
             - default-1
         # restart: always
     data-storage:
-        container_name: flask
+        container_name: data-storage
+        hostname: data-storage
         build: ./data-storage
         image: data-storage:latest
         env_file: ./data-storage/databases.env

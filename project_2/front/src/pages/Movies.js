@@ -54,14 +54,14 @@ class Movies extends Component {
         }).then(
             (response) => {
                 console.log("Search Initialized");
-                console.log(search_query)
+                console.log(response)
                 // console.log(res.data.movies_list);
                 const movies_list = response.data;
                 this.setState({ movies_list: movies_list });
             },
             (error) => {
                 console.log("Movies API Call ERROR");
-                console.log(search_query);
+                console.log(error);
             }
         );
 
