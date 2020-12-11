@@ -3,7 +3,7 @@ import axios from "axios";
 import { Redirect } from "react-router-dom";
 
 const url_prefix = process.env.REACT_APP_SERVICE_URL;
-const base64key = "YmEwYjkyY2MtMzc1OC00MjI1LTkxNDctYWI5NjE0MjE1MDM2OjRhNzhkZjc3LTRjMzItNDM5Yy04N2MyLTJhZmE2MzhiMjQ3Yg=="
+const base64key = "NzIyYWQzNWQtMzlhOS00MDBlLWE5ZjctOTllYzgxYTMwZGZlOjVlOWViMzE4LTg3NjItNDMxNi04MDdjLTNlYTQyZjNiYjNhOQ=="
 
 
 export function setCookie(access_token, refresh_token) {
