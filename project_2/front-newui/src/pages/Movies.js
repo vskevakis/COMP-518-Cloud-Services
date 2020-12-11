@@ -66,7 +66,27 @@ class Movies extends Component {
             },
             (error) => {
                 console.log("GET /movies - ERROR");
-                this.setState({ movies_list: [] });
+                this.setState({
+                    movies_list: [
+                        {
+                            "title": "This is the End",
+                            "movie_id": "1234",
+                            "category": "Comedy",
+                            "start_date": "2020-10-10",
+                            "end_date": "2020-11-11",
+                            "cinema_name": "Attikon",
+                            "poster_path": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/kwh9dYvZLn7yJ9nfU5sPj2h9O7l.jpg"
+                        },
+                        {
+                            "title": "This was the End",
+                            "category": "Comedy",
+                            "start_date": "2020-10-10",
+                            "end_date": "2020-11-11",
+                            "cinema_name": "Ellinis",
+                            "poster_path": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/kwh9dYvZLn7yJ9nfU5sPj2h9O7l.jpg"
+                        }
+                    ]
+                });
             }
         );
 
@@ -75,6 +95,7 @@ class Movies extends Component {
     componentDidMount() {
         this.searchMovies();
         this.setState({ show: true });
+        console.log("Favs Only", this.state.favs_only)
     }
 
     handleInputChange = (event) => {
@@ -105,8 +126,8 @@ class Movies extends Component {
                             <input class="bg-transparent dark:text-gray-400 border-t-0 border-r-0 border-l-0" type="date" value={this.state.date} onChange={this.handleDateChange}></input>
                         </div>
                         <div class="pt-2 pb-2 dark:text-gray-400" >
-                            {this.state.favs_only && <button onClick={() => this.setState({ favs_only: !this.state.favs_only })} ><i class="far fa-check-square"></i> Only Favourites</button>}
-                            {!this.state.favs_only && <button onClick={() => this.setState({ favs_only: !this.state.favs_only })} ><i class="far fa-square"></i> Only Favourites</button>}
+                            {this.state.favs_only && <button onClick={() => this.setState({ favs_only: false })} ><i class="far fa-check-square"></i> Only Favourites</button>}
+                            {!this.state.favs_only && <button onClick={() => this.setState({ favs_only: true })} ><i class="far fa-square"></i> Only Favourites</button>}
                         </div>
                     </div>
                 </div>
@@ -120,7 +141,6 @@ class Movies extends Component {
                                         favs={this.state.fav_list}
                                         onFavUpdate={() => this.setState({ update: !this.state.update })}
                                         favsOnly={this.state.favs_only}>
-
                                     </Movie>
                                 ))}
                             </ul>
@@ -129,7 +149,7 @@ class Movies extends Component {
                                 <div class="flex flex-auto justify-center bg-light dark:bg-dark-dark">
                                     <div class="my-5 align-middle inline-block max-w-1 sm:px-6 lg:px-10">
                                         <div class="pt-2 pb-2 border-b border-gray-900  dark:border-gray-400 center" inline>
-                                            <h2 class="bg-transparent border-t-0 border-r-0 border-l-0">No Movies Found</h2>
+                                            <h2 class="bg-transparent dark:text-gray-300 border-t-0 border-r-0 border-l-0">No Movies Found</h2>
                                         </div>
                                     </div>
                                 </div>

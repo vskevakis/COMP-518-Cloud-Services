@@ -189,17 +189,18 @@ class CinemaOwner extends Component {
                                                 ))
                                             }
                                         </tbody>
-                                        {
-                                            this.state.movies_list.length == 0 &&
-                                            <div class="flex flex-auto justify-center bg-light dark:bg-dark-dark">
-                                                <div class="my-5 align-middle inline-block max-w-1 sm:px-6 lg:px-10">
-                                                    <div class="pt-2 pb-2 border-b border-gray-900  dark:border-gray-400 center" inline>
-                                                        <h2 class="bg-transparent border-t-0 border-r-0 border-l-0">No Movies Found</h2>
-                                                    </div>
+
+                                    </table>
+                                    {
+                                        this.state.movies_list.length == 0 &&
+                                        <div class="flex flex-auto justify-center bg-light dark:bg-dark-dark">
+                                            <div class="my-5 align-middle inline-block max-w-1 sm:px-6 lg:px-10">
+                                                <div class="pt-2 pb-2 center" inline>
+                                                    <h2 class="bg-transparent dark:text-gray-300">No Movies Found</h2>
                                                 </div>
                                             </div>
-                                        }
-                                    </table>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>

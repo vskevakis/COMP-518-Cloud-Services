@@ -24,7 +24,7 @@ client = MongoClient(os.environ['MONGO_HOST'], int(os.environ['MONGO_PORT']))
 # Create Database
 db = client['MONGO_DB_NAME']
 
-# Database Movie Model
+# Database Movie Model - Not Needed ..?
 collection = db['movies-collection']
 favs_collection = db['favourites-collection']
 db.movies.create_index(
