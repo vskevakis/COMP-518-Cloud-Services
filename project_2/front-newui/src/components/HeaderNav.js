@@ -116,23 +116,23 @@ class HeaderNav extends Component {
             },
             (error) => {
                 console.log("GET /notification - ERROR");
-                // setTimeout(() => this.setState({
-                //     notification_list: [
-                //         {
-                //             "title": "Rubber",
-                //             "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg"
-                //         },
-                //         {
-                //             "title": "Rubber",
-                //             "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg"
-                //         }
-                //     ],
-                //     show_not: true
-                // }), 4000);
-                // setTimeout(
-                //     () => this.setState({ show_not: false }),
-                //     8000
-                // );
+                setTimeout(() => this.setState({
+                    notification_list: [
+                        {
+                            "title": "Rubber",
+                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg"
+                        },
+                        {
+                            "title": "Rubber",
+                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg"
+                        }
+                    ],
+                    show_not: true
+                }), 4000);
+                setTimeout(
+                    () => this.setState({ show_not: false }),
+                    8000
+                );
             }
         );
 
@@ -188,16 +188,16 @@ class HeaderNav extends Component {
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                                 </svg>}
                                             </button>
-                                            {this.state.show_not && <div class="dark:bg-gray-700 origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                            {this.state.show_not && <div class="dark:bg-gray-700 z-10 origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                                                 <div role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                                                     {
                                                         this.state.notification_list.map((notification) => (
-                                                            <div class="flex items-center block dark-h:bg-gray-700 dark:borger-black px-4 py-2 text-sm text-gray-700 rounded-t-md hover:bg-gray-100 hover:text-gray-900 border-b-2 border-gray-200">
+                                                            <div class="flex items-center block dark:hover:bg-gray-800 dark:border-black px-4 py-2 text-sm text-gray-700 rounded-t-md hover:bg-gray-100 hover:text-gray-900 border-b-2 border-gray-200">
                                                                 <div class="flex-shrink-0 h-10 w-10">
                                                                     <img class="h-10 w-10 rounded-full" src={notification.poster_path} alt="" />
                                                                 </div>
-                                                                <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-100" role="menuitem">Movie "{notification.title}" has been updated</a>
-                                                                <button onClick={() => this.handleNotification(notification)}>Mark as read</button>
+                                                                <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:text-gray-100" role="menuitem">"{notification.title}" has been updated</a>
+                                                                <button class="h-10 w-10 hover:bg-gray-300 dark:hover:bg-gray-900 rounded-full" onClick={() => this.handleNotification(notification)}><i class="fas fa-check-double dark:text-gray-400"></i></button>
                                                             </div>
                                                         ))
                                                     }
@@ -228,53 +228,55 @@ class HeaderNav extends Component {
                             </div >
                         </div >
 
-                        {this.state.mobile_menu && <div class="lg:hidden">
-                            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                                {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-                                {(window.location.pathname === "/home") && <a href="\home" class="bg-gray-900 text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Home</a>}
-                                {(window.location.pathname !== "/home") && <a href="\home" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>}
+                        {
+                            this.state.mobile_menu && <div class="lg:hidden">
+                                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                                    {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
+                                    {(window.location.pathname === "/home") && <a href="\home" class="bg-gray-900 text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Home</a>}
+                                    {(window.location.pathname !== "/home") && <a href="\home" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>}
 
-                                {(window.location.pathname === "/movies") && <a href="\movies" class="bg-gray-900 text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Movies</a>}
-                                {(window.location.pathname !== "/movies") && <a href="\movies" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Movies</a>}
+                                    {(window.location.pathname === "/movies") && <a href="\movies" class="bg-gray-900 text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Movies</a>}
+                                    {(window.location.pathname !== "/movies") && <a href="\movies" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Movies</a>}
 
-                                {(window.location.pathname === "/owner") && checkUser() === "Cinema Owner" && <a href="\owner" class="bg-gray-900 text-gray-200 px-3 py-2 rounded-md text-sm font-medium">My Cinema</a>}
-                                {(window.location.pathname !== "/owner") && checkUser() === "Cinema Owner" && <a href="\owner" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">My Cinema</a>}
+                                    {(window.location.pathname === "/owner") && checkUser() === "Cinema Owner" && <a href="\owner" class="bg-gray-900 text-gray-200 px-3 py-2 rounded-md text-sm font-medium">My Cinema</a>}
+                                    {(window.location.pathname !== "/owner") && checkUser() === "Cinema Owner" && <a href="\owner" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">My Cinema</a>}
 
-                                {(window.location.pathname === "/admin") && checkUser() === "Admin" && <a href="\admin" class="bg-gray-900 text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Admin Panel</a>}
-                                {(window.location.pathname !== "/admin") && checkUser() === "Admin" && <a href="\admin" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin Panel</a>}
+                                    {(window.location.pathname === "/admin") && checkUser() === "Admin" && <a href="\admin" class="bg-gray-900 text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Admin Panel</a>}
+                                    {(window.location.pathname !== "/admin") && checkUser() === "Admin" && <a href="\admin" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin Panel</a>}
 
-                            </div>
-                            <div class="pt-4 pb-3 border-t border-gray-700">
-                                <div class="flex items-center px-5">
-                                    <div class="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                                        <button onClick={() => this.handleLogout()}>Sign out</button>
-                                    </div>
-                                    <button onClick={() => this.setState({ show_not: !this.state.show_not })} class="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                                        <span class="sr-only">View notifications</span>
-                                        {/* <!-- Heroicon name: bell --> */}
-                                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                        </svg>
-                                    </button>
-                                    {this.state.show_not && <div class="origin-mid-center absolute center-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                                        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                                            {
-                                                this.state.notification_list.map((notification) => (
-                                                    <div href="#" class="flex items-center block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
-                                                        <div class="flex-shrink-0 h-10 w-10">
-                                                            <img class="h-10 w-10 rounded-full" src={notification.poster_path} alt="" />
-                                                        </div>
-                                                        <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Movie "{notification.title}" has been updated</a>
-                                                        <button onClick={() => this.handleNotification(notification)}>Mark as read</button>
-                                                    </div>
-                                                ))
-                                            }
+                                </div>
+                                <div class="pt-4 pb-3 border-t border-gray-700">
+                                    <div class="flex items-center px-5">
+                                        <div class="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                                            <button onClick={() => this.handleLogout()}>Sign out</button>
                                         </div>
+                                        <button onClick={() => this.setState({ show_not: !this.state.show_not })} class="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                                            <span class="sr-only">View notifications</span>
+                                            {/* <!-- Heroicon name: bell --> */}
+                                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                            </svg>
+                                        </button>
+                                        {this.state.show_not && <div class="origin-mid-center  z-10  absolute center-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                                {
+                                                    this.state.notification_list.map((notification) => (
+                                                        <div href="#" class="flex items-center block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                                                            <div class="flex-shrink-0 h-10 w-10">
+                                                                <img class="h-10 w-10 rounded-full" src={notification.poster_path} alt="" />
+                                                            </div>
+                                                            <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Movie "{notification.title}" has been updated</a>
+                                                            <button onClick={() => this.handleNotification(notification)}>Mark as read</button>
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
+                                        </div>
+                                        }
                                     </div>
-                                    }
                                 </div>
                             </div>
-                        </div>}
+                        }
                     </nav >
                 </div >
             );

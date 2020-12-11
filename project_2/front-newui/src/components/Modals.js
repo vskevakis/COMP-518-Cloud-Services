@@ -96,8 +96,8 @@ export function AddMovieModal(props) {
             cinema_name: checkCookie(),
             title: inputTitle.current.value,
             category: inputCat.current.value,
-            start_date: inputStart.current.value ? inputEnd.current.value : moment().format('YYYY-MM-DD'),
-            end_date: inputEnd.current.value ? inputEnd.current.value : moment().add(1, 'week').format('YYYY-MM-DD')
+            start_date: inputStart.current.value ? moment(inputStart.current.value).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
+            end_date: inputEnd.current.value ? moment(inputEnd.current.value).format('YYYY-MM-DD') : moment().add(1, 'week').format('YYYY-MM-DD')
         };
         axios({
             method: 'post', //you can set what request you want to be
