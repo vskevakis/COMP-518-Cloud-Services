@@ -24,7 +24,8 @@ class Movies extends Component {
             fav_list: [],
             favs_only: false,
             show: false,
-            notification: false
+            notification: false,
+            update: false
             // items: 10,
         };
     }
@@ -96,6 +97,9 @@ class Movies extends Component {
         this.searchMovies();
         this.setState({ show: true });
         console.log("Favs Only", this.state.favs_only)
+        socket.on('notification', () => {
+            this.searchMovies();
+        })
     }
 
     handleInputChange = (event) => {

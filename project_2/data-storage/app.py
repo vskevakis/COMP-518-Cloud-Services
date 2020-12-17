@@ -49,6 +49,7 @@ def get_poster(title):
         tmdb_poster = "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-38-picture-grey-c2ebdbb057f2a7614185931650f8cee23fa137b93812ccb132b9df511df1cfac.svg"
         return tmdb_poster
 
+##### MOVIES API AND ENDPOINTS #####
 # CreateMovie API
 @app.route("/movies", methods=["POST"])
 def add_movie():
@@ -303,6 +304,8 @@ def get_movies():
     else:
         return Response("No movies found", status=404)
 
+##### FAVOURITES API AND ENDPOINTS #####
+
 
 @app.route("/favourites", methods=["POST"])
 def add_fav():
@@ -402,6 +405,8 @@ def get_favs():
         #                              'movie_id': favourite['movie_id']})
 
 
+##### NOTIFICATION API AND ENDPOINTS #####
+
 @app.route("/notification", methods=["POST"])
 def send_notification():
     response = request.json["data"]
@@ -456,6 +461,48 @@ def get_notifications():
                               "poster_path": favourite["poster_path"]
                               })
     return jsonify(notifications)
+
+
+##### CINEMAS API AND ENDPOINTS #####
+@app.route("/cinemas", methods=["POST"])
+def add_cinema():
+    user_id = request.json['user_id']
+    cinema_name = request.json['cinema_name']
+    cinema = {
+        "user_id": user_id,
+        "cinema_name": cinema_name
+    }
+    if (db.cinemas.find_one({'cinema_name': cinema_name}) is not None):
+        return Response('Cinema name already exits', status=400)
+    else:
+        db.cinemas.insert_one(cinema).inserted_id
+        return Response('Cinema added', status=200)
+
+
+@app.route("/cinemas", methods=["GET"])
+def get_cinema():
+    user_id = request.args['user_id']
+    cinema_list = []
+    for cinema in db.cinemas.find({"user_id": user_id}):
+        cinema_list.append({
+            "cinema_name": cinema["cinema_name"]
+        })
+    return jsonify(cinema_list)
+
+
+@app.route("/cinemas", methods=["DELETE"])
+def delete_cinema():
+    user_id = request.args['user_id']
+    try:
+        cinema_name = requests.args['cinema_name']
+        db.cinemas.delete_one({'cinema_name': cinema_name})
+        db.movies.delete_many({'cinema_name': cinema_name})
+        return Response('Cinema deleted', status=200)
+    except:
+        for cinema in db.cinemas.find({'user_id': user_id}):
+            db.cinemas.delete_one({'cinema_name': cinema["cinema_name"]})
+            db.movies.delete_many({'cinema_name': cinema_name})
+        return Response('All user\'s cinema\'s deleted', status=200)
 
 
 if __name__ == "__main__":

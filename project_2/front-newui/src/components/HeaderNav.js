@@ -205,7 +205,7 @@ class HeaderNav extends Component {
                                             </div>
                                             }
                                         </div>
-                                        <a class="text-md px-4 py-2 text-white ">username</a>
+                                        <a class="text-md px-4 py-2 text-white ">{this.state.username}</a>
                                         <div class="dark:bg-gray-300 rounded-md shadow-lg py-1 bg-gray-200 ring-1 ring-black ring-opacity-5">
                                             <a href="/login" onClick={() => this.handleLogout()} class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
                                         </div>
