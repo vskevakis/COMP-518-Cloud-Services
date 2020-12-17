@@ -117,16 +117,7 @@ class HeaderNav extends Component {
             (error) => {
                 console.log("GET /notification - ERROR");
                 setTimeout(() => this.setState({
-                    notification_list: [
-                        {
-                            "title": "Rubber",
-                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg"
-                        },
-                        {
-                            "title": "Rubber",
-                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg"
-                        }
-                    ],
+                    notification_list: [],
                     show_not: true
                 }), 4000);
                 setTimeout(

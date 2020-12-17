@@ -68,25 +68,7 @@ class Movies extends Component {
             (error) => {
                 console.log("GET /movies - ERROR");
                 this.setState({
-                    movies_list: [
-                        {
-                            "title": "This is the End",
-                            "movie_id": "1234",
-                            "category": "Comedy",
-                            "start_date": "2020-10-10",
-                            "end_date": "2020-11-11",
-                            "cinema_name": "Attikon",
-                            "poster_path": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/kwh9dYvZLn7yJ9nfU5sPj2h9O7l.jpg"
-                        },
-                        {
-                            "title": "This was the End",
-                            "category": "Comedy",
-                            "start_date": "2020-10-10",
-                            "end_date": "2020-11-11",
-                            "cinema_name": "Ellinis",
-                            "poster_path": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/kwh9dYvZLn7yJ9nfU5sPj2h9O7l.jpg"
-                        }
-                    ]
+                    movies_list: []
                 });
             }
         );
@@ -97,7 +79,7 @@ class Movies extends Component {
         this.searchMovies();
         this.setState({ show: true });
         console.log("Favs Only", this.state.favs_only)
-        socket.on('notification', () => {
+        socket.on('movie_change', () => {
             this.searchMovies();
         })
     }

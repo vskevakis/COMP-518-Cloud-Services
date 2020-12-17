@@ -110,6 +110,13 @@ class CinemaOwner extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        if (prevState.cinema !== this.state.cinema) {
+            this.searchMovies();
+        }
+        if (prevState.deleteCinemaModalShow !== this.state.deleteCinemaModalShow) {
+            this.fetchCinemas();
+            this.searchMovies();
+        }
         if (prevState.editModalShow !== this.state.editModalShow) {
             this.searchMovies();
         }
@@ -119,11 +126,8 @@ class CinemaOwner extends Component {
         if (prevState.deleteModalShow !== this.state.deleteModalShow) {
             this.searchMovies();
         }
-        if (prevState.cinema_name !== this.state.cinema_name) {
-            this.searchMovies();
-        }
-        if (prevState.deleteCinemaModalShow !== this.state.deleteCinemaModalShow) {
-            this.searchMovies();
+        if (prevState.addCinemaModalShow !== this.state.addCinemaModalShow) {
+            this.fetchCinemas();
         }
     }
 
@@ -136,21 +140,6 @@ class CinemaOwner extends Component {
     }
 
     render() {
-        // if (this.state.cinemas_list == 0) {
-        //     return (
-        //         <div class="flex flex-auto justify-center bg-light dark:bg-dark-dark">
-        //             <div class="my-5 align-middle inline-block max-w-1 sm:px-6 lg:px-10">
-        //                 <div class="pt-2 pb-2 border-b border-gray-900  dark:border-gray-400 center" inline>
-        //                     <div class="bg-transparent dark:text-gray-400 border-t-0 border-r-0 border-l-0"> Please add a cinema </div>
-        //                     <a href="#" onClick={() => this.setState({ addCinemaModalShow: true })} class="text-indigo-600 dark:text-gray-600 hover:text-indigo-900">Add Cinema</a>
-        //                 </div>
-        //             </div>
-        //             {this.state.addCinemaModalShow && <AddCinemaModal
-        //                 onHide={() => this.setState({ addCinemaModalShow: false })}
-        //             />}
-        //         </div>
-        //     )
-        // }
         return (
             <Animate type="fade" duration="1000" show={this.state.show}>
                 {/* <div class="dark:bg-black min-h-screen max-w-7xl mx-auto py-6 sm:px-6 lg:px-8"> */}
@@ -220,7 +209,7 @@ class CinemaOwner extends Component {
                     </div>
 
                 </div>
-                <div class="bg-sm dark:bg-dark-dark min-h-full py-6 sm:px-6 lg:px-8">
+                { this.state.cinemas_list.length > 0 && <div class="bg-sm dark:bg-dark-dark min-h-full py-6 sm:px-6 lg:px-8">
                     <div class="flex flex-col">
                         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -247,10 +236,8 @@ class CinemaOwner extends Component {
                                                     <span class="sr-only">Edit</span>
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-mid-dark ">
-                                                    <a href="#" onClick={() => this.setState({ addModalShow: true })} class="text-indigo-600 hover:text-indigo-900">Add Movie</a>
-                                                </th>
-                                                <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-mid-dark ">
-                                                    <a href="#" onClick={() => this.setState({ deleteCinemaModalShow: true })} class="text-indigo-600 hover:text-indigo-900">Delete Cinema</a>
+                                                    <a href="#" class="mx-2" onClick={() => this.setState({ addModalShow: true })} class="text-indigo-600 hover:text-indigo-900">Add Movie</a>
+                                                    <a href="#" class="mx-2" onClick={() => this.setState({ deleteCinemaModalShow: true })} class="text-indigo-600 hover:text-indigo-900">Delete Cinema</a>
                                                 </th>
                                             </tr>
                                         </thead>
@@ -320,6 +307,7 @@ class CinemaOwner extends Component {
                         </div>
                     </div>
                 </div>
+                }
                 {this.state.deleteModalShow && <DeleteMovieModal
                     onHide={() => this.setState({ deleteModalShow: false })}
                     movie={this.state.edit_movie}

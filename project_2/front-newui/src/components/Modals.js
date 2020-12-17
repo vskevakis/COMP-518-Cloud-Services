@@ -96,8 +96,8 @@ export function AddMovieModal(props) {
             cinema_name: props.cinema,
             title: inputTitle.current.value,
             category: inputCat.current.value,
-            start_date: inputStart.current.value ? inputEnd.current.value : moment().format('YYYY-MM-DD'),
-            end_date: inputEnd.current.value ? inputEnd.current.value : moment().add(1, 'week').format('YYYY-MM-DD')
+            start_date: inputStart.current.value ? moment(inputStart.current.value).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
+            end_date: inputEnd.current.value ? moment(inputEnd.current.value).format('YYYY-MM-DD') : moment().add(1, 'week').format('YYYY-MM-DD')
         };
         axios({
             method: 'post', //you can set what request you want to be
@@ -359,7 +359,7 @@ export function DeleteCinemaModal(props) {
     const deleteCinema = async () => {
         axios({
             method: 'delete', //you can set what request you want to be
-            url: url_prefix + "/data-storage/cinemas?user_id=" + props.user_id + "&cinema_name=" + props.cinema,
+            url: url_prefix + "/data-storage/cinemas?cinema_name=" + props.cinema,
             headers: {
                 'Content-Type': 'application/json',
                 'X-Auth-Token': checkToken()
