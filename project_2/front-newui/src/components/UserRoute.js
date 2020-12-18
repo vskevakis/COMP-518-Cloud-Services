@@ -10,7 +10,7 @@ const UserRoute = ({ component: Component, ...rest }) => {
         <Route
             {...rest}
             render={(props) =>
-                (checkUser() === "User" || checkUser() === "Cinema Owner" || checkUser() === "Admin") ? (
+                (checkUser() == "User" || checkUser() == "Cinema Owner" || checkUser() == "Admin") ? (
                     <div>
                         <HeaderNav {...props} />
                         <Component {...props} />

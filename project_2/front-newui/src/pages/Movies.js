@@ -49,7 +49,6 @@ class Movies extends Component {
             (error) => {
                 const fav_list = []
                 this.setState({ fav_list: fav_list });
-                console.log("Fav List", fav_list);
             }
         );
         /* Fetching Movies with search arguments */
@@ -101,11 +100,7 @@ class Movies extends Component {
     }
 
 
-
     render() {
-        // if (checkUser() !== "Cinema Owner" && checkUser() !== "Admin" && checkUser() !== "User") {
-        //     return <Redirect to="/logout" />;
-        // }
         return (
             <Animate type='fade' duration="1000" show={this.state.show}>
                 <div class="flex flex-auto justify-center bg-light dark:bg-dark-dark">

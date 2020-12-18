@@ -6,7 +6,8 @@ import { setCookie } from "./Cookies";
 const socket = io.connect();
 
 export function Logout(props) {
-    setCookie(null, null);
-    socket.emit('disconnect');
-    return <Redirect to="/login" />;
+    // setCookie(null, null);
+    // socket.emit('disconnect');
+    // return <Redirect to="/login" />;
+    alert('Please re-login!')
 }
