@@ -94,9 +94,9 @@ services:
             - PEP_PROXY_AUTH_ENABLED=false
             - PEP_PROXY_IDM_SSL_ENABLED=false
             - PEP_PROXY_IDM_PORT=3001
-            - PEP_PROXY_APP_ID=722ad35d-39a9-400e-a9f7-99ec81a30dfe
-            - PEP_PROXY_USERNAME=pep_proxy_ae660e9d-2326-480d-8d5a-a2bf7887a5dd
-            - PEP_PASSWORD=pep_proxy_4c907759-bc02-4014-902a-22fa1084640e
+            - PEP_PROXY_APP_ID=538918b8-b621-4a79-b8a7-e59af1b7eef5
+            - PEP_PROXY_USERNAME=pep_proxy_7ac20521-4ff2-4846-b728-ce0fcfdbc49c
+            - PEP_PASSWORD=pep_proxy_6cca4284-cc33-4617-9ec1-0fbd8b961cce
             - PEP_PROXY_PDP=idm
             - PEP_PROXY_AUTH_FOR_NGINX=true
             - PEP_PROXY_MAGIC_KEY=723fe949e2754caf8c74aa37c6a7678f
@@ -121,9 +121,9 @@ services:
             - PEP_PROXY_AUTH_ENABLED=false
             - PEP_PROXY_IDM_SSL_ENABLED=false
             - PEP_PROXY_IDM_PORT=3001
-            - PEP_PROXY_APP_ID=722ad35d-39a9-400e-a9f7-99ec81a30dfe
-            - PEP_PROXY_USERNAME=pep_proxy_ae660e9d-2326-480d-8d5a-a2bf7887a5dd
-            - PEP_PASSWORD=pep_proxy_4c907759-bc02-4014-902a-22fa1084640e
+            - PEP_PROXY_APP_ID=538918b8-b621-4a79-b8a7-e59af1b7eef5
+            - PEP_PROXY_USERNAME=pep_proxy_7ac20521-4ff2-4846-b728-ce0fcfdbc49c
+            - PEP_PASSWORD=pep_proxy_6cca4284-cc33-4617-9ec1-0fbd8b961cce
             - PEP_PROXY_PDP=idm
             - PEP_PROXY_AUTH_FOR_NGINX=true
             - PEP_PROXY_MAGIC_KEY=723fe949e2754caf8c74aa37c6a7678f
@@ -136,7 +136,7 @@ services:
         environment:
             - NODE_ENV=development
             - REACT_APP_SERVICE_URL=http://35.207.102.89:80
-            - REACT_APP_BASE64_AUTH=NzIyYWQzNWQtMzlhOS00MDBlLWE5ZjctOTllYzgxYTMwZGZlOjVlOWViMzE4LTg3NjItNDMxNi04MDdjLTNlYTQyZjNiYjNhOQ==
+            - REACT_APP_BASE64_AUTH=NTM4OTE4YjgtYjYyMS00YTc5LWI4YTctZTU5YWYxYjdlZWY1OmU5NzBmYjY3LWI1OWEtNDAwNS04NGQ3LTRlYmFjZWRhNjYxMg==
             - CHOKIDAR_USEPOLLING=true
         depends_on:
             - keyrock
