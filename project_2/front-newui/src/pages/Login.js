@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Animate } from 'react-animate-mount'
 import DarkMode from "../components/DarkMode";

@@ -7,8 +7,7 @@ import UserRoute from "./UserRoute";
 
 import Register from "../pages/Register";
 import Login from "../pages/Login";
-import { Logout } from "../components/Logout";
-
+import { Logout } from "./Logout";
 import Home from "../pages/Home";
 import Movies from "../pages/Movies"
 import Admin from "../pages/Admin";
