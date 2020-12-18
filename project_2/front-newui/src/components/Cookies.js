@@ -32,15 +32,15 @@ export function setCookie(access_token, refresh_token) {
             (response) => {
                 document.cookie = 'username' + "=" + response.data.username + ";path=/";
                 document.cookie = 'user_id' + "=" + response.data.id + ";path=/";
-                try {
-                    if (response.data.roles[0].name)
-                        document.cookie = 'user_role' + "=" + response.data.roles[0].name + ";path=/";
-                    else {
-                        document.cookie = 'user_role' + "=" + 'unconfirmed' + ";path=/"; // If user exists but he doesn't have a role yet (he is unconfirmed)
-                    }
-                } catch {
+                // try {
+                if (response.data.roles[0].name)
+                    document.cookie = 'user_role' + "=" + response.data.roles[0].name + ";path=/";
+                else {
                     document.cookie = 'user_role' + "=" + 'unconfirmed' + ";path=/"; // If user exists but he doesn't have a role yet (he is unconfirmed)
                 }
+                // } catch {
+                //     document.cookie = 'user_role' + "=" + 'unconfirmed' + ";path=/"; // If user exists but he doesn't have a role yet (he is unconfirmed)
+                // }
             },
             (error) => {
                 console.log("You failed AGAIN");

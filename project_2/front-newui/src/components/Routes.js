@@ -1,5 +1,5 @@
-import React, { Header } from "react";
-import { Link, Switch, Route } from "react-router-dom";
+import React from "react";
+import { Switch, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import OwnerRoute from "./OwnerRoute";
 import AdminRoute from "./AdminRoute";
@@ -7,7 +7,7 @@ import UserRoute from "./UserRoute";
 
 import Register from "../pages/Register";
 import Login from "../pages/Login";
-import { Logout } from "../pages/Logout";
+import { Logout } from "../components/Logout";
 
 import Home from "../pages/Home";
 import Movies from "../pages/Movies"

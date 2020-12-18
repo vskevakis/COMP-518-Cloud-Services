@@ -6,9 +6,7 @@ class Admin extends Component {
 
     render() {
         return (
-            <Animate type="fade" duration="1000" show={this.state.show}>
-                <h2> Please visit keyrock on port 3001 to access the admin panel </h2>
-            </Animate>
+            <h2> Please visit keyrock on port 3001 to access the admin panel </h2>
         );
     }
 }
