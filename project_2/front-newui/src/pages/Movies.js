@@ -103,7 +103,7 @@ class Movies extends Component {
 
 
     render() {
-        if (checkUser() !== "Cinema Owner" || "Admin" || "User") {
+        if (checkUser() !== "Cinema Owner" && checkUser() !== "Admin" && checkUser() !== "User") {
             return <Redirect to="/logout" />;
         }
         return (

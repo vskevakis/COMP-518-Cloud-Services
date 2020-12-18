@@ -140,7 +140,7 @@ class CinemaOwner extends Component {
     }
 
     render() {
-        if (checkUser() !== "Cinema Owner" || "Admin") {
+        if (checkUser() !== "Cinema Owner" && checkUser() !== "Cinema Owner") {
             return <Redirect to="/home" />;
         }
         return (
