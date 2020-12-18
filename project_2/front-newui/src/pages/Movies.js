@@ -103,9 +103,9 @@ class Movies extends Component {
 
 
     render() {
-        if (checkUser() !== "Cinema Owner" && checkUser() !== "Admin" && checkUser() !== "User") {
-            return <Redirect to="/logout" />;
-        }
+        // if (checkUser() !== "Cinema Owner" && checkUser() !== "Admin" && checkUser() !== "User") {
+        //     return <Redirect to="/logout" />;
+        // }
         return (
             <Animate type='fade' duration="1000" show={this.state.show}>
                 <div class="flex flex-auto justify-center bg-light dark:bg-dark-dark">
