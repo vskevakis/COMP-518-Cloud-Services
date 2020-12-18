@@ -11,7 +11,7 @@ const OwnerRoute = ({ component: Component, ...rest }) => {
         <Route
             {...rest}
             render={(props) =>
-                (checkUser() == "Cinema Owner" || true) ? (
+                (checkUser() == "Cinema Owner" || checkUser() == "Admin") ? (
                     <div>
                         <HeaderNav />
                         <Component {...props} />
