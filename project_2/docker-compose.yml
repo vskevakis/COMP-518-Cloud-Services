@@ -136,9 +136,7 @@ services:
         environment:
             - NODE_ENV=development
             - REACT_APP_SERVICE_URL=http://35.207.102.89:80
-            - IDM_APP_CLIENT_ID=ba0b92cc-3758-4225-9147-ab9614215036
-            - IDM_APP_CLIENT_SEC=4a78df77-4c32-439c-87c2-2afa638b247b
-            - BASE64_AUTH=YmEwYjkyY2MtMzc1OC00MjI1LTkxNDctYWI5NjE0MjE1MDM2OjRhNzhkZjc3LTRjMzItNDM5Yy04N2MyLTJhZmE2MzhiMjQ3Yg==
+            - REACT_APP_BASE64_AUTH=NzIyYWQzNWQtMzlhOS00MDBlLWE5ZjctOTllYzgxYTMwZGZlOjVlOWViMzE4LTg3NjItNDMxNi04MDdjLTNlYTQyZjNiYjNhOQ==
             - CHOKIDAR_USEPOLLING=true
         depends_on:
             - keyrock
