@@ -140,6 +140,9 @@ class CinemaOwner extends Component {
     }
 
     render() {
+        if (checkUser() !== "Cinema Owner" || "Admin") {
+            return <Redirect to="/home" />;
+        }
         return (
             <Animate type="fade" duration="1000" show={this.state.show}>
                 {/* <div class="dark:bg-black min-h-screen max-w-7xl mx-auto py-6 sm:px-6 lg:px-8"> */}

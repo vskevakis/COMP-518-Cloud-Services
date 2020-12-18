@@ -66,12 +66,6 @@ class HeaderNav extends Component {
 
     componentDidMount() {
         var that = this;
-        // socket.on('connect', function () {
-        //     // console.log("Socket ID", socket.io.engine.id);     // old ID
-        //     // socket.io.engine.id = checkUserID();
-        //     // console.log("New Socket ID", socket.io.engine.id);     // new ID
-        //     socket.emit('userConnected', checkUserID());
-        // });
         if (this.state.notification == false) {
             socket.on('notification', function (response) {
                 // console.log(this.state.user_id);

@@ -27,6 +27,9 @@ class Home extends Component {
     }
 
     render() {
+        if (checkUser() !== "Cinema Owner" || "Admin" || "User") {
+            return <Redirect to="/logout" />;
+        }
         return (
             <Animate type='fade' duration="500" show={this.state.show}>
                 <div class="relative dark:bg-dark-dark bg-white min-h-full">
