@@ -69,8 +69,8 @@ def add_movie():
         "title": title,
         "cinema_name": cinema_name,
         "category": category,
-        "start_date": datetime.datetime.strptime(start_date, '%Y-%m-%d'),
-        "end_date": datetime.datetime.strptime(end_date, '%Y-%m-%d'),
+        "start_date": start_date,
+        "end_date": end_date,
         "poster_path": poster_path
     }
     movie_id = movies.insert_one(movie).inserted_id
