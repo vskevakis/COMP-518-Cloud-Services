@@ -22,6 +22,7 @@ export function setCookie(access_token, refresh_token) {
     else {
         const headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + base64key
         }
         axios({
             method: 'get', //you can set what request you want to be
@@ -56,7 +57,7 @@ export function renewToken() {
     const user_data = 'grant_type=refresh_token&refresh_token=' + refresh_token;
     const headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Basic ' + base64key //+ base64(client_id: client_secret);
+        'Authorization': 'Basic ' + base64key
     }
 
     axios({
