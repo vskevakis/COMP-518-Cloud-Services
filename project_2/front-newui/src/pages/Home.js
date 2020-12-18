@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Animate } from 'react-animate-mount'
 
-import { checkCookie, checkUser, setCookie } from "../components/Cookies";
+import { checkCookie, checkUser, renewToken } from "../components/Cookies";
 import cinema_poster from "../assets/cinema.jpg"
 class Home extends Component {
     constructor() {
@@ -24,6 +24,7 @@ class Home extends Component {
 
     componentDidMount() {
         this.setState({ show: true });
+        () => renewToken();
     }
 
     render() {

@@ -6,7 +6,7 @@ import moment from "moment";
 import { Animate } from 'react-animate-mount'
 import { DeleteMovieModal, AddMovieModal, EditMovieModal, AddCinemaModal, DeleteCinemaModal } from '../components/Modals'
 
-import { checkCookie, checkUser, setCookie, checkToken, checkUserID } from "../components/Cookies";
+import { renewToken, checkToken, checkUserID } from "../components/Cookies";
 import io from "socket.io-client";
 
 const socket = io.connect();
@@ -103,10 +103,11 @@ class CinemaOwner extends Component {
     componentDidMount() {
         this.fetchCinemas();
         this.searchMovies();
-        this.setState({ show: true })
+        this.setState({ show: true });
         socket.on('notification', () => {
             this.searchMovies();
-        })
+        });
+        () => renewToken();
     }
 
     componentDidUpdate(prevProps, prevState) {

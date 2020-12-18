@@ -7,8 +7,6 @@ import './App.css';
 import { renewToken } from "./components/Cookies";
 
 function App() {
-
-  renewToken();
   return (
     <Router >
       <Routes />

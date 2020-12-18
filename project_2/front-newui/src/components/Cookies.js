@@ -52,7 +52,7 @@ export function setCookie(access_token, refresh_token) {
 }
 
 
-export function renewToken() {
+export async function renewToken() {
     let refresh_token = getCookie("refresh_token")
     const user_data = 'grant_type=refresh_token&refresh_token=' + refresh_token;
     const headers = {
@@ -60,7 +60,7 @@ export function renewToken() {
         'Authorization': 'Basic ' + base64key
     }
 
-    axios({
+    await axios({
         method: 'post', //you can set what request you want to be
         url: url_prefix + "/idm/oauth2/token",
         data: user_data,

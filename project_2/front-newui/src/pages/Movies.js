@@ -6,7 +6,7 @@ import { Animate } from 'react-animate-mount'
 import io from "socket.io-client";
 
 
-import { checkCookie, checkUser, setCookie, checkUserID, checkToken } from "../components/Cookies";
+import { renewToken, checkUserID, checkToken } from "../components/Cookies";
 import { Movie } from "../components/Movie";
 import SearchBar from "../components/SearchBar";
 const url_prefix = process.env.REACT_APP_SERVICE_URL;
@@ -75,6 +75,7 @@ class Movies extends Component {
     }
 
     componentDidMount() {
+        () => renewToken();
         this.searchMovies();
         this.setState({ show: true });
         console.log("Favs Only", this.state.favs_only)
