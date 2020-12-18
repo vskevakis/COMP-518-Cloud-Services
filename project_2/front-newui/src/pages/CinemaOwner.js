@@ -107,7 +107,7 @@ class CinemaOwner extends Component {
         socket.on('notification', () => {
             this.searchMovies();
         });
-        () => renewToken();
+        renewToken();
     }
 
     componentDidUpdate(prevProps, prevState) {

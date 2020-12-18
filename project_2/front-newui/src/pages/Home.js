@@ -24,7 +24,7 @@ class Home extends Component {
 
     componentDidMount() {
         this.setState({ show: true });
-        () => renewToken();
+        renewToken();
     }
 
     render() {

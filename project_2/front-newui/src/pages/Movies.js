@@ -75,13 +75,13 @@ class Movies extends Component {
     }
 
     componentDidMount() {
-        () => renewToken();
         this.searchMovies();
         this.setState({ show: true });
         console.log("Favs Only", this.state.favs_only)
         socket.on('movie_change', () => {
             this.searchMovies();
-        })
+        });
+        renewToken();
     }
 
     handleInputChange = (event) => {
