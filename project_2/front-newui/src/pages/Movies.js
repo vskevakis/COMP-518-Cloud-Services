@@ -24,7 +24,8 @@ class Movies extends Component {
             fav_list: [],
             favs_only: false,
             show: false,
-            notification: false
+            notification: false,
+            update: false
             // items: 10,
         };
     }
@@ -67,25 +68,7 @@ class Movies extends Component {
             (error) => {
                 console.log("GET /movies - ERROR");
                 this.setState({
-                    movies_list: [
-                        {
-                            "title": "This is the End",
-                            "movie_id": "1234",
-                            "category": "Comedy",
-                            "start_date": "2020-10-10",
-                            "end_date": "2020-11-11",
-                            "cinema_name": "Attikon",
-                            "poster_path": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/kwh9dYvZLn7yJ9nfU5sPj2h9O7l.jpg"
-                        },
-                        {
-                            "title": "This was the End",
-                            "category": "Comedy",
-                            "start_date": "2020-10-10",
-                            "end_date": "2020-11-11",
-                            "cinema_name": "Ellinis",
-                            "poster_path": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/kwh9dYvZLn7yJ9nfU5sPj2h9O7l.jpg"
-                        }
-                    ]
+                    movies_list: []
                 });
             }
         );
@@ -96,6 +79,9 @@ class Movies extends Component {
         this.searchMovies();
         this.setState({ show: true });
         console.log("Favs Only", this.state.favs_only)
+        socket.on('movie_change', () => {
+            this.searchMovies();
+        })
     }
 
     handleInputChange = (event) => {
@@ -117,6 +103,9 @@ class Movies extends Component {
 
 
     render() {
+        if (checkUser() !== "Cinema Owner" || "Admin" || "User") {
+            return <Redirect to="/logout" />;
+        }
         return (
             <Animate type='fade' duration="1000" show={this.state.show}>
                 <div class="flex flex-auto justify-center bg-light dark:bg-dark-dark">

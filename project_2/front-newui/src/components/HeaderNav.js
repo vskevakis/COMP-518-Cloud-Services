@@ -66,12 +66,6 @@ class HeaderNav extends Component {
 
     componentDidMount() {
         var that = this;
-        // socket.on('connect', function () {
-        //     // console.log("Socket ID", socket.io.engine.id);     // old ID
-        //     // socket.io.engine.id = checkUserID();
-        //     // console.log("New Socket ID", socket.io.engine.id);     // new ID
-        //     socket.emit('userConnected', checkUserID());
-        // });
         if (this.state.notification == false) {
             socket.on('notification', function (response) {
                 // console.log(this.state.user_id);
@@ -117,16 +111,7 @@ class HeaderNav extends Component {
             (error) => {
                 console.log("GET /notification - ERROR");
                 setTimeout(() => this.setState({
-                    notification_list: [
-                        {
-                            "title": "Rubber",
-                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg"
-                        },
-                        {
-                            "title": "Rubber",
-                            "poster_path": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/y8Bd0twmeLpdbHn2ZBlrhzfddUf.jpg"
-                        }
-                    ],
+                    notification_list: [],
                     show_not: true
                 }), 4000);
                 setTimeout(
@@ -205,7 +190,7 @@ class HeaderNav extends Component {
                                             </div>
                                             }
                                         </div>
-                                        <a class="text-md px-4 py-2 text-white ">username</a>
+                                        <a class="text-md px-4 py-2 text-white ">{this.state.username}</a>
                                         <div class="dark:bg-gray-300 rounded-md shadow-lg py-1 bg-gray-200 ring-1 ring-black ring-opacity-5">
                                             <a href="/login" onClick={() => this.handleLogout()} class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
                                         </div>

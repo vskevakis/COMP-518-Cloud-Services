@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import './App.css';
 import { BrowserRouter as Router } from "react-router-dom";
 import Routes from "./components/Routes";
@@ -7,7 +7,8 @@ import './App.css';
 import { renewToken } from "./components/Cookies";
 
 function App() {
-  // renewToken();
+
+  renewToken();
   return (
     <Router >
       <Routes />

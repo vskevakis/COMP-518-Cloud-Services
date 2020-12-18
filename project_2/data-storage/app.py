@@ -24,7 +24,7 @@ client = MongoClient(os.environ['MONGO_HOST'], int(os.environ['MONGO_PORT']))
 # Create Database
 db = client['MONGO_DB_NAME']
 
-# Database Movie Model
+# Database Movie Model - Not Needed ..?
 collection = db['movies-collection']
 favs_collection = db['favourites-collection']
 db.movies.create_index(
@@ -49,6 +49,7 @@ def get_poster(title):
         tmdb_poster = "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-38-picture-grey-c2ebdbb057f2a7614185931650f8cee23fa137b93812ccb132b9df511df1cfac.svg"
         return tmdb_poster
 
+##### MOVIES API AND ENDPOINTS #####
 # CreateMovie API
 @app.route("/movies", methods=["POST"])
 def add_movie():
@@ -106,6 +107,7 @@ def add_movie():
     }
     response = requests.request(
         "POST", url, headers=headers, data=json.dumps(payload))
+    socketio.emit('movie_change')
     return Response('Movie ID is: ' + str(movie_id) + "and Orion response " + str(response), status=200)
 
 
@@ -118,6 +120,7 @@ def delete_movie():
         url = "http://orion-proxy:1027/v2/entities/"+movie_id
         response = requests.request(
             "DELETE", url, headers={'X-Auth-Token': os.environ['PEP_PROXY_MAGIC_KEY']}, data={})
+        socketio.emit('movie_change')
         return Response('Deleted Movie ' + str(movie_id) + 'and Orion response' + str(response), status=200)
     else:
         return Response('Movie not found', status=404)
@@ -175,6 +178,7 @@ def edit_movie():
                              data=json.dumps(payload))
         except:
             return Response("Error on patching", status=400)
+        socketio.emit('movie_change')
         return Response('Movie edited with success', status=200)
 
 
@@ -303,6 +307,8 @@ def get_movies():
     else:
         return Response("No movies found", status=404)
 
+##### FAVOURITES API AND ENDPOINTS #####
+
 
 @app.route("/favourites", methods=["POST"])
 def add_fav():
@@ -402,6 +408,8 @@ def get_favs():
         #                              'movie_id': favourite['movie_id']})
 
 
+##### NOTIFICATION API AND ENDPOINTS #####
+
 @app.route("/notification", methods=["POST"])
 def send_notification():
     response = request.json["data"]
@@ -456,6 +464,62 @@ def get_notifications():
                               "poster_path": favourite["poster_path"]
                               })
     return jsonify(notifications)
+
+
+##### CINEMAS API AND ENDPOINTS #####
+@app.route("/cinemas", methods=["POST"])
+def add_cinema():
+    user_id = request.json['user_id']
+    cinema_name = request.json['cinema_name']
+    cinema = {
+        "user_id": user_id,
+        "cinema_name": cinema_name
+    }
+    if (db.cinemas.find_one({'cinema_name': cinema_name}) is not None):
+        return Response('Cinema name already exits', status=400)
+    else:
+        db.cinemas.insert_one(cinema).inserted_id
+        return Response('Cinema added', status=200)
+
+
+@app.route("/cinemas", methods=["GET"])
+def get_cinema():
+    user_id = request.args['user_id']
+    cinema_list = []
+    for cinema in db.cinemas.find({"user_id": user_id}):
+        cinema_list.append({
+            "cinema_name": cinema["cinema_name"]
+        })
+    return jsonify(cinema_list)
+
+
+@app.route("/cinemas", methods=["DELETE"])
+def del_cinema():
+    try:
+        cinema_name = request.args['cinema_name']
+        db.movies.delete_many({"cinema_name": cinema_name})
+        # for movie in db.movies.find({"cinema_name": cinema_name}):
+        #     db.movies.delete_one({"title": movie['title']})
+        #     # Delete entity in ORION
+        #     url = "http://orion-proxy:1027/v2/entities/" + movie["movie_id"]
+        #     response = requests.request(
+        #         "DELETE", url, headers={'X-Auth-Token': os.environ['PEP_PROXY_MAGIC_KEY']}, data={})
+        db.cinemas.delete_one({"cinema_name": cinema_name})
+        socketio.emit('movie_change')
+        return Response('Cinema deleted', status=200)
+    except:
+        # user_id = request.args['user_id']
+        # for cinema in db.cinemas.find({'user_id': user_id}):
+        #     for movie in db.movies.find({'user_id': user_id}):
+        #         db.movies.delete_one({"title": movie['title']})
+        #         # Delete entity in ORION
+        #         url = "http://orion-proxy:1027/v2/entities/"+movie["movie_id"]
+        #         response = requests.request(
+        #             "DELETE", url, headers={'X-Auth-Token': os.environ['PEP_PROXY_MAGIC_KEY']}, data={})
+        #     db.cinemas.delete_one({'cinema_name': cinema["cinema_name"]})
+        # socketio.emit('movie_change')
+        # return Response('All user\'s cinema\'s deleted', status=200)
+        return Response('Thats a fail', status=401)
 
 
 if __name__ == "__main__":

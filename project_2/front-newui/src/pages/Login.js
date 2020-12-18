@@ -17,12 +17,6 @@ class Login extends Component {
     constructor() {
         super();
         this.state = {
-            // bgStyle: {
-            //     height: "100%",
-            //     backgroundPosition: "center",
-            //     backgroundRepeat: "no-repeat",
-            //     backgroundSize: "cover",
-            // },
             email: "",
             password: "",
             isAuthenticated: checkUser(),
@@ -38,31 +32,9 @@ class Login extends Component {
         // and use it to target the key on our `state` object with the same name, using bracket syntax
         this.setState({ [event.target.name]: event.target.value });
     }
-    // componentWillMount() {
-    //     this.setbgPic()
-    // }
-
-    // setbgPic() {
-    //     const pictureArray = [background1, background2, background3, background4, background5, background6, background7, background8, background9, background10, background11, background12];
-    //     const randomIndex = Math.floor(Math.random() * pictureArray.length);
-    //     const selectedPicture = pictureArray[randomIndex];
-
-    //     this.setState({
-    //         bgStyle: {
-    //             backgroundImage: `url(${selectedPicture})`,
-    //             height: "100vh",
-    //             backgroundPosition: "center",
-    //             backgroundRepeat: "no-repeat",
-    //             backgroundSize: "cover",
-    //         }
-    //     })
-    // }
 
     componentDidMount() {
         this.setState({ show: true })
-        // setInterval(() => {
-        //     this.setbgPic()
-        // }, 5000)
     }
 
     handleSubmit = async (event) => {
@@ -80,13 +52,11 @@ class Login extends Component {
             headers: headers
         }).then(
             (response) => {
-                console.log(response);
                 setCookie(response.data.access_token, response.data.refresh_token);
                 this.setState({ isAuthenticated: true });
             },
             (error) => {
                 setCookie(null, null);
-                console.log("You failed AGAIN");
                 console.log(error);
             }
         );
@@ -114,7 +84,6 @@ class Login extends Component {
                                     register via Keyrock IDM
                                 </a>
                             </p>
-
                         </div>
                         <form onSubmit={this.handleSubmit} class="mt-8 space-y-6" action="" method="POST">
                             <input type="hidden" name="remember" value="true" />
