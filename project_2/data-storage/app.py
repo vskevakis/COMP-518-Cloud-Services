@@ -199,14 +199,23 @@ def get_movies():
         cinema_name = None
     movies_list = []
     if (search_query and date_query):
-        for movie in movies.find({"$or": [
-            {"title": {"$regex": search_query}},
-            {"category": {"$regex": search_query}},
-            {"cinema_name": {"$regex": search_query}},
-            {"$and": [
+        # for movie in movies.find({"$or": [
+        #     {"title": {"$regex": search_query}},
+        #     {"category": {"$regex": search_query}},
+        #     {"cinema_name": {"$regex": search_query}},
+        #     {"$and": [
+        #         {"start_date": {"$lte": date_query}},
+        #         {"end_date": {"$gte": date_query}}
+        #     ]}
+        # ]}):
+        for movie in movies.find({"$and": [
                 {"start_date": {"$lte": date_query}},
-                {"end_date": {"$gte": date_query}}
-            ]}
+                {"end_date": {"$gte": date_query}},
+                {"$or": [
+                    {"title": {"$regex": search_query}},
+                    {"category": {"$regex": search_query}},
+                    {"cinema_name": {"$regex": search_query}}
+                ]}
         ]}):
             # If we give cinema_name as argument we want only the movies on this cinema
             if (cinema_name):
