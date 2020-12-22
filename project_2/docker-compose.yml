@@ -135,7 +135,7 @@ services:
             - "3000"
         environment:
             - NODE_ENV=development
-            - REACT_APP_SERVICE_URL=http://35.207.102.89:80
+            - REACT_APP_SERVICE_URL=http://35.207.127.219:80
             - REACT_APP_BASE64_AUTH=NTM4OTE4YjgtYjYyMS00YTc5LWI4YTctZTU5YWYxYjdlZWY1OmU5NzBmYjY3LWI1OWEtNDAwNS04NGQ3LTRlYmFjZWRhNjYxMg==
             - CHOKIDAR_USEPOLLING=true
         depends_on:
